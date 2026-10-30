@@ -505,6 +505,11 @@ window.addEventListener("beforeunload",function(){
 });
 
 // HTML yakuni
+  function startNewChat(){
+  document.getElementById("messages").innerHTML = "";
+  document.getElementById("messages").classList.add("hidden-view");
+  document.getElementById("empty").classList.remove("hidden-view");
+  closeDrawer()
 </script>
 </body>
 </html>
