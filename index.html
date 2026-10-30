@@ -92,7 +92,6 @@ select option{background:#14091f}
       <button onclick="closeDrawer()" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
       <button onclick="renderArchive()" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived <span id="archiveCount" class="text-xs bg-purple-900 px-1.5 py-0.5 rounded-full ml-auto">0</span></button>
       <button onclick="goHome()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
-      <!-- Admin tugmasi boshqalar uchun yashirin -->
       <button id="adminNavBtn" onclick="openModal('admin')" class="hidden ghost rounded-lg px-3 py-2.5 text-left border-transparent text-amber-400 font-bold"><i class="fa-solid fa-shield-halved w-6"></i>Admin Panel</button>
     </nav>
 
@@ -151,8 +150,8 @@ select option{background:#14091f}
   <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
     <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-3">
-      <input id="authEmail" type="email" placeholder="Email (Admin uchun: dilmurat)" class="px-4 py-3">
-      <input id="authPass" type="password" placeholder="Parol (Admin uchun: dilmurat2026)" class="px-4 py-3">
+      <input id="authEmail" type="email" placeholder="Email" class="px-4 py-3">
+      <input id="authPass" type="password" placeholder="Parol" class="px-4 py-3">
       <input id="authPass2" type="password" placeholder="Parolni tasdiqlang" class="px-4 py-3 hidden-view">
       <p id="authErr" class="text-sm text-pink-300 min-h-[1.25rem]"></p>
       <button onclick="submitAuth()" class="btn rounded-xl py-3 font-semibold text-white">Kirish</button>
@@ -220,7 +219,6 @@ window.onload = function() {
   checkMaintenanceUI();
   renderArchive();
   
-  // URL da #admin bo'lsa yoki localStorage'da saqlangan bo'lsa
   if(window.location.hash === "#admin" || localStorage.getItem("dima_owner") === "true") {
     state.isAdmin = true;
     if(document.getElementById("adminNavBtn")) document.getElementById("adminNavBtn").classList.remove("hidden");
@@ -297,7 +295,6 @@ function submitAuth(){
   var err = document.getElementById("authErr");
   if(!email || !pass){ err.textContent = "Maydonlarni to'ldiring."; return; }
   
-  // Dilmurat uchun maxsus admin tekshiruvi
   if(email === "dilmurat" && pass === "dilmurat2026"){
     state.isAdmin = true;
     localStorage.setItem("dima_owner", "true");
@@ -360,4 +357,10 @@ function updateLimitUI(){
 
 function toggleMaintenance(){
   state.maintenance = !state.maintenance;
-  localStorage.setItem("dima_maint", state.mainten
+  localStorage.setItem("dima_maint", state.maintenance);
+  checkMaintenanceUI();
+  toast(state.maintenance ? "Texnik ishlar rejimi yoqildi" : "Texnik ishlar o'chirildi");
+}
+
+function checkMaintenanceUI(){
+  var banner = document.getElementById("maintenanceBanner")
