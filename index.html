@@ -6,28 +6,35 @@
 <title>Dima AI</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 :root{--bg:#07030f;--glass:rgba(124,58,237,.10);--line:rgba(167,139,250,.22);--neon:#c084fc;--pink:#f0abfc}
-*{-webkit-tap-highlight-color:transparent}
-html,body{height:100%;margin:0}
+*{-webkit-tap-highlight-color:transparent;box-sizing:border-box}
+html,body{height:100%;margin:0;padding:0}
 body{background:var(--bg);color:#f3e8ff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+
 .glass{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line)}
-.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(60% 50% at 20% 0%,rgba(124,58,237,.35),transparent),radial-gradient(50% 40% at 90% 100%,rgba(217,70,239,.22),transparent)}
-.orb{border-radius:9999px;background:radial-gradient(circle at 32% 28%,#f5d0fe,#a855f7 45%,#4c1d95 85%);box-shadow:0 0 60px 10px rgba(168,85,247,.55),0 0 140px 40px rgba(217,70,239,.25);animation:pulse 3.4s ease-in-out infinite;pointer-events:none}
+.bg-glow{position:fixed;inset:0;pointer-events:none!important;z-index:0;background:radial-gradient(60% 50% at 20% 0%,rgba(124,58,237,.35),transparent),radial-gradient(50% 40% at 90% 100%,rgba(217,70,239,.22),transparent)}
+
+.orb{border-radius:9999px;background:radial-gradient(circle at 32% 28%,#f5d0fe,#a855f7 45%,#4c1d95 85%);box-shadow:0 0 60px 10px rgba(168,85,247,.55),0 0 140px 40px rgba(217,70,239,.25);animation:pulse 3.4s ease-in-out infinite;pointer-events:none!important}
 @keyframes pulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.07);filter:brightness(1.2)}}
-.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 22px rgba(192,132,252,.45);transition:transform .15s,box-shadow .15s;cursor:pointer;position:relative;z-index:20}
-.btn:hover{box-shadow:0 0 32px rgba(240,171,252,.7)}.btn:active{transform:scale(.97)}
-.ghost{border:1px solid var(--line);transition:background .15s;cursor:pointer;position:relative;z-index:20}.ghost:hover{background:rgba(167,139,250,.15)}
+
+.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 22px rgba(192,132,252,.45);transition:transform .15s,box-shadow .15s;cursor:pointer!important;position:relative;z-index:30!important}
+.btn:hover{box-shadow:0 0 32px rgba(240,171,252,.7)}.btn:active{transform:scale(.95)}
+
+.ghost{border:1px solid var(--line);transition:background .15s;cursor:pointer!important;position:relative;z-index:30!important}
+.ghost:hover{background:rgba(167,139,250,.15)}
+
 .hidden-view{display:none!important}
-.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.85);backdrop-filter:blur(6px)}
+.modal{position:fixed;inset:0;z-index:100!important;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.85);backdrop-filter:blur(8px)}
 .modal.open{display:flex!important}
-input,textarea,select{background:rgba(255,255,255,.05);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px;position:relative;z-index:21}
+
+input,textarea,select{background:rgba(255,255,255,.05);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px;position:relative;z-index:31!important}
 input:focus,textarea:focus,select:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(192,132,252,.25)}
-select option{background:#14091f}
-#drawer{transition:transform .25s;z-index:70}
+
+#drawer{transition:transform .25s;z-index:70!important}
 @media(max-width:1023px){#drawer{position:fixed;top:0;left:0;bottom:0;transform:translateX(-105%);width:80%;max-width:300px}#drawer.open{transform:none!important}}
-#overlay{display:none;position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6)}#overlay.open{display:block!important}
+#overlay{display:none;position:fixed;inset:0;z-index:60!important;background:rgba(0,0,0,.6)}#overlay.open{display:block!important}
+
 .msg-u{background:linear-gradient(135deg,#7c3aed,#c026d3);border-radius:18px 18px 4px 18px}
 .msg-a{background:rgba(124,58,237,.14);border:1px solid var(--line);border-radius:18px 18px 18px 4px}
 .toggle{width:44px;height:24px;border-radius:99px;background:#3b2a55;position:relative;cursor:pointer;transition:.2s;flex:none}
@@ -77,30 +84,30 @@ select option{background:#14091f}
   <aside id="drawer" class="glass flex flex-col p-4 lg:w-64 lg:flex-none lg:relative" style="background:rgba(14,6,28,.98)">
     <div class="flex items-center justify-between mb-5">
       <div class="flex items-center gap-2 font-bold text-lg"><span class="orb w-7 h-7 inline-block" style="animation:none;box-shadow:0 0 14px #a855f7"></span>Dima AI</div>
-      <button onclick="closeDrawer()" class="lg:hidden ghost rounded-lg w-9 h-9 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+      <button onclick="closeDrawer()" class="lg:hidden ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <button onclick="startNewChat()" class="btn rounded-xl py-2.5 font-semibold text-white mb-5 cursor-pointer"><i class="fa-solid fa-plus mr-2"></i>New Chat</button>
+    <button onclick="startNewChat()" class="btn rounded-xl py-2.5 font-semibold text-white mb-5"><i class="fa-solid fa-plus mr-2"></i>New Chat</button>
     <nav class="flex flex-col gap-1 text-sm">
-      <button onclick="closeDrawer()" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20 cursor-pointer"><i class="fa-regular fa-comment w-6"></i>Chat</button>
-      <button onclick="toast('Arxiv bo\'sh')" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent cursor-pointer"><i class="fa-solid fa-box-archive w-6"></i>Archived</button>
-      <button onclick="goHome()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent cursor-pointer"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
+      <button onclick="closeDrawer()" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
+      <button onclick="toast('Arxiv hozircha bo\'sh')" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived</button>
+      <button onclick="goHome()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
     </nav>
     <div class="mt-auto glass rounded-2xl p-4 text-center">
       <i class="fa-solid fa-crown text-yellow-300"></i>
       <p class="font-semibold mt-1">Upgrade to Premium</p>
       <p class="text-xs text-violet-200/70 mt-1">Cheksiz xabarlar va tezroq javoblar.</p>
-      <button onclick="openModal('pricing')" class="btn w-full rounded-lg py-2 mt-3 text-sm font-semibold text-white cursor-pointer">Upgrade</button>
+      <button onclick="openModal('pricing')" class="btn w-full rounded-lg py-2 mt-3 text-sm font-semibold text-white">Upgrade</button>
     </div>
   </aside>
 
   <section class="flex-1 min-w-0 flex flex-col">
     <div class="glass flex items-center gap-2 px-3 sm:px-5 py-2.5">
-      <button onclick="openDrawer()" class="lg:hidden ghost rounded-lg w-10 h-10 cursor-pointer"><i class="fa-solid fa-bars"></i></button>
-      <select id="modelTop" class="px-3 py-2 text-sm cursor-pointer">
+      <button onclick="openDrawer()" class="lg:hidden ghost rounded-lg w-10 h-10"><i class="fa-solid fa-bars"></i></button>
+      <select id="modelTop" class="px-3 py-2 text-sm">
         <option>Gemini 1.5 Flash</option><option>ChatGPT v4.0</option><option>Claude</option>
       </select>
       <span id="userEmail" class="ml-auto text-xs sm:text-sm text-violet-200/80 truncate max-w-[40%]"></span>
-      <button onclick="handleLogout()" class="ghost rounded-lg px-3 py-2 text-sm cursor-pointer"><i class="fa-solid fa-right-from-bracket sm:mr-1"></i><span class="hidden sm:inline">Logout</span></button>
+      <button onclick="handleLogout()" class="ghost rounded-lg px-3 py-2 text-sm"><i class="fa-solid fa-right-from-bracket sm:mr-1"></i><span class="hidden sm:inline">Logout</span></button>
     </div>
 
     <div id="chatArea" class="flex-1 overflow-y-auto px-4 py-5">
@@ -117,15 +124,15 @@ select option{background:#14091f}
           <textarea id="prompt" rows="2" placeholder="Ask Anything..." class="w-full resize-none p-2 bg-transparent border-0"></textarea>
           <input type="file" id="fileInput" class="hidden" onchange="handleFile(this)">
           <div class="flex items-center gap-2 mt-1">
-            <button onclick="triggerAttach()" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm cursor-pointer"><i class="fa-solid fa-paperclip mr-1"></i>Attach</button>
-            <button onclick="openModal('settings')" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm cursor-pointer"><i class="fa-solid fa-sliders mr-1"></i>Settings</button>
-            <button onclick="sendMsg()" class="btn ml-auto w-10 h-10 rounded-full text-white cursor-pointer"><i class="fa-solid fa-arrow-up"></i></button>
+            <button onclick="triggerAttach()" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm"><i class="fa-solid fa-paperclip mr-1"></i>Attach</button>
+            <button onclick="openModal('settings')" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm"><i class="fa-solid fa-sliders mr-1"></i>Settings</button>
+            <button onclick="sendMsg()" class="btn ml-auto w-10 h-10 rounded-full text-white"><i class="fa-solid fa-arrow-up"></i></button>
           </div>
         </div>
         <div class="grid grid-cols-3 gap-2 mt-3 text-left">
-          <button onclick="setSuggestion('Menga bir rasm yarat: kechki Samarqand, neon uslubida')" class="sug glass rounded-xl p-2.5 sm:p-3 cursor-pointer"><i class="fa-regular fa-image text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Image Generator</p></button>
-          <button onclick="setSuggestion('Suniy intellekt haqida 5 slaydlik taqdimot rejasini tuz')" class="sug glass rounded-xl p-2.5 sm:p-3 cursor-pointer"><i class="fa-regular fa-file-powerpoint text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">AI Presentation</p></button>
-          <button onclick="setSuggestion('JavaScript da oddiy kalkulyator kodini yozib ber')" class="sug glass rounded-xl p-2.5 sm:p-3 cursor-pointer"><i class="fa-solid fa-code text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Dev Assistant</p></button>
+          <button onclick="setSuggestion('Menga bir rasm yarat: kechki Samarqand, neon uslubida')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-regular fa-image text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Image Generator</p></button>
+          <button onclick="setSuggestion('Suniy intellekt haqida 5 slaydlik taqdimot rejasini tuz')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-regular fa-file-powerpoint text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">AI Presentation</p></button>
+          <button onclick="setSuggestion('JavaScript da oddiy kalkulyator kodini yozib ber')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-solid fa-code text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Dev Assistant</p></button>
         </div>
       </div>
     </div>
@@ -135,72 +142,95 @@ select option{background:#14091f}
 <!-- ============ MODALS ============ -->
 <div id="m-auth" class="modal">
   <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9 cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-3">
       <input id="authEmail" type="email" placeholder="Email" class="px-4 py-3">
       <input id="authPass" type="password" placeholder="Parol (kamida 6 belgi)" class="px-4 py-3">
       <input id="authPass2" type="password" placeholder="Parolni tasdiqlang" class="px-4 py-3 hidden-view">
       <p id="authErr" class="text-sm text-pink-300 min-h-[1.25rem]"></p>
-      <button onclick="submitAuth()" class="btn rounded-xl py-3 font-semibold text-white cursor-pointer">Kirish</button>
-      <button onclick="switchAuthMode()" id="authSwitchText" class="text-sm text-violet-300 underline cursor-pointer">Akkauntingiz yo'qmi? Ro'yxatdan o'tish</button>
+      <button onclick="submitAuth()" class="btn rounded-xl py-3 font-semibold text-white">Kirish</button>
+      <button onclick="switchAuthMode()" id="authSwitchText" class="text-sm text-violet-300 underline">Akkauntingiz yo'qmi? Ro'yxatdan o'tish</button>
     </div>
   </div>
 </div>
 
 <div id="m-pricing" class="modal">
   <div class="glass rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Tariflar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9 cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Tariflar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="grid sm:grid-cols-2 gap-4">
       <div class="glass rounded-2xl p-5"><h4 class="font-bold text-lg">Free</h4><p class="text-3xl font-extrabold mt-2">0 <span class="text-sm font-normal">so'm</span></p>
         <ul class="text-sm mt-3 space-y-1.5 text-violet-100/85"><li>Kuniga 20 ta xabar</li><li>Oddiy modellar</li></ul>
-        <button onclick="toast('Siz Free tarifdasiz')" class="ghost w-full rounded-xl py-2.5 mt-4 font-semibold cursor-pointer">Joriy tarif</button></div>
+        <button onclick="toast('Siz Free tarifdasiz')" class="ghost w-full rounded-xl py-2.5 mt-4 font-semibold">Joriy tarif</button></div>
       <div class="rounded-2xl p-5" style="border:1px solid #d946ef;background:rgba(124,58,237,.2)"><h4 class="font-bold text-lg">Pro</h4><p class="text-3xl font-extrabold mt-2">49,000 <span class="text-sm font-normal">so'm/oy</span></p>
         <ul class="text-sm mt-3 space-y-1.5 text-violet-100/85"><li>Cheksiz xabarlar</li><li>Barcha modellar</li></ul>
-        <button onclick="toast('Pro tarif tez kunda ishga tushadi')" class="btn w-full rounded-xl py-2.5 mt-4 font-semibold text-white cursor-pointer">Pro'ni tanlash</button></div>
+        <button onclick="toast('Pro tarif tez kunda ishga tushadi')" class="btn w-full rounded-xl py-2.5 mt-4 font-semibold text-white">Pro'ni tanlash</button></div>
     </div>
   </div>
 </div>
 
 <div id="m-settings" class="modal">
   <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Sozlamalar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9 cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Sozlamalar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-4">
       <div class="flex items-center justify-between"><span>Ovozli xabarlar</span><div id="tVoice" onclick="toggleVoice()" class="toggle" role="switch"></div></div>
       <label class="flex flex-col gap-1.5 text-sm">Gemini API Key
         <input id="apiKeySet" type="password" placeholder="AIzaSy..." class="px-3 py-2 text-sm"></label>
-      <button onclick="saveSettings()" class="btn rounded-xl py-2.5 font-semibold text-white cursor-pointer">Saqlash</button>
+      <button onclick="saveSettings()" class="btn rounded-xl py-2.5 font-semibold text-white">Saqlash</button>
     </div>
   </div>
 </div>
 
 <div id="toast" class="fixed left-1/2 -translate-x-1/2 z-[200] glass rounded-full px-5 py-2.5 text-sm hidden-view" style="bottom:90px;background:rgba(16,7,30,.98)"></div>
 
+<!-- ============ LOGIC ============ -->
 <script>
-var SUPABASE_URL = "https://qjgnwremgeyajzpwybvb.supabase.co";
-var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU5NTgsImV4cCI6MjEwODkyMTk1OH0.ztJTRZOF8FFt159K-0eVkre7vbKjXeDf5yukLjVJ-iE";
-var sb = null;
-try { if (window.supabase) sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
-
 var state = { user: null, mode: "login", voice: false, busy: false, apiKey: localStorage.getItem("dima_gemini_key") || "" };
 
-if(document.getElementById("apiKeySet")) document.getElementById("apiKeySet").value = state.apiKey;
+function toast(t){
+  var el = document.getElementById("toast");
+  if(!el) return;
+  el.textContent = t;
+  el.classList.remove("hidden-view");
+  clearTimeout(toast.t);
+  toast.t = setTimeout(function(){ el.classList.add("hidden-view"); }, 2400);
+}
 
-function toast(t){ var el=document.getElementById("toast"); el.textContent=t; el.classList.remove("hidden-view"); clearTimeout(toast.t); toast.t=setTimeout(function(){el.classList.add("hidden-view")},2400); }
-function openModal(name){ closeModals(); document.getElementById("m-"+name).classList.add("open"); }
-function openModalWithMode(name, mode){ setAuthMode(mode); openModal(name); }
-function closeModals(){ document.querySelectorAll(".modal").forEach(function(m){m.classList.remove("open")}); }
-function openDrawer(){ document.getElementById("drawer").classList.add("open"); document.getElementById("overlay").classList.add("open"); }
-function closeDrawer(){ document.getElementById("drawer").classList.remove("open"); document.getElementById("overlay").classList.remove("open"); }
+function openModal(name){
+  closeModals();
+  var m = document.getElementById("m-" + name);
+  if(m) m.classList.add("open");
+}
+
+function openModalWithMode(name, mode){
+  setAuthMode(mode);
+  openModal(name);
+}
+
+function closeModals(){
+  document.querySelectorAll(".modal").forEach(function(m){ m.classList.remove("open"); });
+}
+
+function openDrawer(){
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("overlay").classList.add("open");
+}
+
+function closeDrawer(){
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("overlay").classList.remove("open");
+}
 
 function goToDashboard(){
   if(state.user) showDashboard();
   else openModalWithMode('auth', 'login');
 }
+
 function goHome(){
   document.getElementById("dashboard").classList.add("hidden-view");
   document.getElementById("landing").classList.remove("hidden-view");
   closeDrawer();
 }
+
 function showDashboard(){
   document.getElementById("landing").classList.add("hidden-view");
   document.getElementById("dashboard").classList.remove("hidden-view");
@@ -215,29 +245,21 @@ function setAuthMode(m){
   document.getElementById("authPass2").classList.toggle("hidden-view", !reg);
   document.getElementById("authSwitchText").textContent = reg ? "Akkauntingiz bormi? Kirish" : "Akkauntingiz yo'qmi? Ro'yxatdan o'tish";
 }
+
 function switchAuthMode(){
   setAuthMode(state.mode === "login" ? "register" : "login");
 }
 
-async function submitAuth(){
+function submitAuth(){
   var email = document.getElementById("authEmail").value.trim();
   var pass = document.getElementById("authPass").value;
   var err = document.getElementById("authErr");
-  if(!email || !pass){ err.textContent="Maydonlarni to'ldiring."; return; }
-  try {
-    if(sb){
-      var r = state.mode === "register" ? await sb.auth.signUp({email: email, password: pass}) : await sb.auth.signInWithPassword({email: email, password: pass});
-      if(r.error) throw r.error;
-      state.user = r.data.user || {email: email};
-    } else {
-      state.user = {email: email};
-    }
-    closeModals();
-    showDashboard();
-    toast("Muvaffaqiyatli bajarildi!");
-  } catch(e){
-    err.textContent = e.message || "Xatolik yuz berdi.";
-  }
+  if(!email || !pass){ err.textContent = "Maydonlarni to'ldiring."; return; }
+  
+  state.user = { email: email };
+  closeModals();
+  showDashboard();
+  toast("Muvaffaqiyatli kirdingiz!");
 }
 
 function handleLogout(){
@@ -246,19 +268,28 @@ function handleLogout(){
   toast("Tizimdan chiqdingiz");
 }
 
-function triggerAttach(){ document.getElementById("fileInput").click(); }
+function triggerAttach(){
+  document.getElementById("fileInput").click();
+}
+
 function handleFile(input){
   if(input.files && input.files[0]){
     document.getElementById("prompt").value += " [Fayl: " + input.files[0].name + "]";
   }
 }
-function setSuggestion(txt){ document.getElementById("prompt").value = txt; document.getElementById("prompt").focus(); }
+
+function setSuggestion(txt){
+  var p = document.getElementById("prompt");
+  p.value = txt;
+  p.focus();
+}
 
 function toggleVoice(){
   state.voice = !state.voice;
   document.getElementById("tVoice").classList.toggle("on", state.voice);
   toast(state.voice ? "Ovozli xabarlar yoqildi" : "Ovozli xabarlar o'chirildi");
 }
+
 function saveSettings(){
   state.apiKey = document.getElementById("apiKeySet").value.trim();
   localStorage.setItem("dima_gemini_key", state.apiKey);
@@ -285,4 +316,37 @@ function addMsg(text, role){
   document.getElementById("messages").appendChild(d);
   var c = document.getElementById("chatArea");
   c.scrollTop = c.scrollHeight;
-  return
+  return b;
+}
+
+async function sendMsg(){
+  var ta = document.getElementById("prompt");
+  var text = ta.value.trim();
+  if(!text || state.busy) return;
+  ta.value = "";
+  addMsg(text, "u");
+  state.busy = true;
+
+  var bubble = addMsg("O'ylamoqda...", "a");
+  var reply = "Salom! Dima AI ishlamoqda. Savolingiz: " + text;
+
+  if(state.apiKey){
+    try {
+      var res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + state.apiKey, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({contents: [{parts: [{text: text}]}]})
+      });
+      var data = await res.json();
+      if(data.candidates) reply = data.candidates[0].content.parts[0].text;
+    } catch(e){
+      reply = "API xatosi yuz berdi.";
+    }
+  }
+
+  bubble.textContent = reply;
+  state.busy = false;
+}
+</script>
+</body>
+</html>
