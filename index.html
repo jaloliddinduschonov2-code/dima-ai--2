@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dima AI</title>
+<title>Dima AI - Pro SaaS Platform</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 :root{--bg:#07030f;--glass:rgba(124,58,237,.10);--line:rgba(167,139,250,.22);--neon:#c084fc;--pink:#f0abfc}
 *{-webkit-tap-highlight-color:transparent;box-sizing:border-box}
@@ -30,6 +31,7 @@ body{background:var(--bg);color:#f3e8ff;font-family:system-ui,-apple-system,"Seg
 
 input,textarea,select{background:rgba(255,255,255,.05);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px;position:relative;z-index:31!important}
 input:focus,textarea:focus,select:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(192,132,252,.25)}
+select option{background:#14091f}
 
 #drawer{transition:transform .25s;z-index:70!important}
 @media(max-width:1023px){#drawer{position:fixed;top:0;left:0;bottom:0;transform:translateX(-105%);width:80%;max-width:300px}#drawer.open{transform:none!important}}
@@ -37,13 +39,15 @@ input:focus,textarea:focus,select:focus{border-color:var(--neon);box-shadow:0 0 
 
 .msg-u{background:linear-gradient(135deg,#7c3aed,#c026d3);border-radius:18px 18px 4px 18px}
 .msg-a{background:rgba(124,58,237,.14);border:1px solid var(--line);border-radius:18px 18px 18px 4px}
-.toggle{width:44px;height:24px;border-radius:99px;background:#3b2a55;position:relative;cursor:pointer;transition:.2s;flex:none}
-.toggle::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
-.toggle.on{background:#a855f7}.toggle.on::after{left:23px}
 </style>
 </head>
 <body>
 <div class="bg-glow"></div>
+
+<!-- Maintenance Banner -->
+<div id="maintenanceBanner" class="hidden-view fixed top-0 left-0 right-0 z-[250] bg-amber-600 text-slate-950 font-bold text-center py-2 px-4 text-xs">
+  ⚠️ Diqqat: Platformada hozirda texnik ishlar olib borilmoqda. Ayrim funksiyalar vaqtinchalik cheklanishi mumkin.
+</div>
 
 <!-- ============ LANDING ============ -->
 <div id="landing" class="relative z-10 min-h-screen flex flex-col">
@@ -87,24 +91,31 @@ input:focus,textarea:focus,select:focus{border-color:var(--neon);box-shadow:0 0 
       <button onclick="closeDrawer()" class="lg:hidden ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <button onclick="startNewChat()" class="btn rounded-xl py-2.5 font-semibold text-white mb-5"><i class="fa-solid fa-plus mr-2"></i>New Chat</button>
+    
     <nav class="flex flex-col gap-1 text-sm">
-      <button onclick="closeDrawer()" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
-      <button onclick="toast('Arxiv hozircha bo\'sh')" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived</button>
+      <button onclick="switchTab('chat')" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
+      <button onclick="switchTab('archived')" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived <span id="archiveCount" class="text-xs bg-purple-900 px-1.5 py-0.5 rounded-full ml-auto">0</span></button>
       <button onclick="goHome()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
+      <button id="adminNavBtn" onclick="openModal('admin')" class="hidden ghost rounded-lg px-3 py-2.5 text-left border-transparent text-amber-400"><i class="fa-solid fa-shield-halved w-6"></i>Admin Panel</button>
     </nav>
+
+    <div id="archiveContainer" class="mt-2 text-xs text-violet-300/80 overflow-y-auto max-h-40 space-y-1"></div>
+
     <div class="mt-auto glass rounded-2xl p-4 text-center">
       <i class="fa-solid fa-crown text-yellow-300"></i>
-      <p class="font-semibold mt-1">Upgrade to Premium</p>
-      <p class="text-xs text-violet-200/70 mt-1">Cheksiz xabarlar va tezroq javoblar.</p>
-      <button onclick="openModal('pricing')" class="btn w-full rounded-lg py-2 mt-3 text-sm font-semibold text-white">Upgrade</button>
+      <p id="planBadge" class="font-semibold mt-1">Free Plan (<span id="limitCount">20</span> qoldi)</p>
+      <p class="text-xs text-violet-200/70 mt-1">Cheksiz xabarlar uchun Proga o'ting.</p>
+      <button onclick="openModal('pricing')" class="btn w-full rounded-lg py-2 mt-3 text-sm font-semibold text-white">Upgrade (49,000 so'm)</button>
     </div>
   </aside>
 
   <section class="flex-1 min-w-0 flex flex-col">
     <div class="glass flex items-center gap-2 px-3 sm:px-5 py-2.5">
       <button onclick="openDrawer()" class="lg:hidden ghost rounded-lg w-10 h-10"><i class="fa-solid fa-bars"></i></button>
-      <select id="modelTop" class="px-3 py-2 text-sm">
-        <option>Gemini 1.5 Flash</option><option>ChatGPT v4.0</option><option>Claude</option>
+      <select id="modelTop" class="px-3 py-2 text-sm" onchange="changeModel(this.value)">
+        <option value="Gemini 1.5 Flash">Gemini 1.5 Flash</option>
+        <option value="ChatGPT v4.0">ChatGPT v4.0</option>
+        <option value="Claude">Claude</option>
       </select>
       <span id="userEmail" class="ml-auto text-xs sm:text-sm text-violet-200/80 truncate max-w-[40%]"></span>
       <button onclick="handleLogout()" class="ghost rounded-lg px-3 py-2 text-sm"><i class="fa-solid fa-right-from-bracket sm:mr-1"></i><span class="hidden sm:inline">Logout</span></button>
@@ -140,12 +151,13 @@ input:focus,textarea:focus,select:focus{border-color:var(--neon);box-shadow:0 0 
 </div>
 
 <!-- ============ MODALS ============ -->
+<!-- Auth Modal -->
 <div id="m-auth" class="modal">
   <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
     <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-3">
-      <input id="authEmail" type="email" placeholder="Email" class="px-4 py-3">
-      <input id="authPass" type="password" placeholder="Parol (kamida 6 belgi)" class="px-4 py-3">
+      <input id="authEmail" type="email" placeholder="Email (admin@dima.ai uchun admin)" class="px-4 py-3">
+      <input id="authPass" type="password" placeholder="Parol" class="px-4 py-3">
       <input id="authPass2" type="password" placeholder="Parolni tasdiqlang" class="px-4 py-3 hidden-view">
       <p id="authErr" class="text-sm text-pink-300 min-h-[1.25rem]"></p>
       <button onclick="submitAuth()" class="btn rounded-xl py-3 font-semibold text-white">Kirish</button>
@@ -154,37 +166,66 @@ input:focus,textarea:focus,select:focus{border-color:var(--neon);box-shadow:0 0 
   </div>
 </div>
 
+<!-- Pricing / Payment Modal -->
 <div id="m-pricing" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Tariflar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="grid sm:grid-cols-2 gap-4">
-      <div class="glass rounded-2xl p-5"><h4 class="font-bold text-lg">Free</h4><p class="text-3xl font-extrabold mt-2">0 <span class="text-sm font-normal">so'm</span></p>
-        <ul class="text-sm mt-3 space-y-1.5 text-violet-100/85"><li>Kuniga 20 ta xabar</li><li>Oddiy modellar</li></ul>
-        <button onclick="toast('Siz Free tarifdasiz')" class="ghost w-full rounded-xl py-2.5 mt-4 font-semibold">Joriy tarif</button></div>
-      <div class="rounded-2xl p-5" style="border:1px solid #d946ef;background:rgba(124,58,237,.2)"><h4 class="font-bold text-lg">Pro</h4><p class="text-3xl font-extrabold mt-2">49,000 <span class="text-sm font-normal">so'm/oy</span></p>
-        <ul class="text-sm mt-3 space-y-1.5 text-violet-100/85"><li>Cheksiz xabarlar</li><li>Barcha modellar</li></ul>
-        <button onclick="toast('Pro tarif tez kunda ishga tushadi')" class="btn w-full rounded-xl py-2.5 mt-4 font-semibold text-white">Pro'ni tanlash</button></div>
+  <div class="glass rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto" style="background:rgba(16,7,30,.98)">
+    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Tarifni tanlash</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="grid gap-4">
+      <div class="rounded-2xl p-5" style="border:1px solid #d946ef;background:rgba(124,58,237,.2)">
+        <h4 class="font-bold text-lg text-fuchsia-300">Dima AI Pro - 49,000 so'm / oy</h4>
+        <p class="text-xs text-violet-200 mt-1">Cheksiz xabarlar, Gemini, ChatGPT v4.0, Claude modellari va yuqori tezlik.</p>
+        <button onclick="processPayment()" class="btn w-full rounded-xl py-3 mt-4 font-semibold text-white">Click / Payme orqali to'lash</button>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- Settings Modal -->
 <div id="m-settings" class="modal">
   <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
     <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Sozlamalar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-4">
-      <div class="flex items-center justify-between"><span>Ovozli xabarlar</span><div id="tVoice" onclick="toggleVoice()" class="toggle" role="switch"></div></div>
-      <label class="flex flex-col gap-1.5 text-sm">Gemini API Key
+      <label class="flex flex-col gap-1.5 text-sm">Gemini / Optus5.5 API Key
         <input id="apiKeySet" type="password" placeholder="AIzaSy..." class="px-3 py-2 text-sm"></label>
       <button onclick="saveSettings()" class="btn rounded-xl py-2.5 font-semibold text-white">Saqlash</button>
     </div>
   </div>
 </div>
 
-<div id="toast" class="fixed left-1/2 -translate-x-1/2 z-[200] glass rounded-full px-5 py-2.5 text-sm hidden-view" style="bottom:90px;background:rgba(16,7,30,.98)"></div>
+<!-- Admin Panel Modal -->
+<div id="m-admin" class="modal">
+  <div class="glass rounded-2xl p-6 w-full max-w-md" style="background:rgba(16,7,30,.98)">
+    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved mr-2"></i>Admin Panel</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="flex flex-col gap-4 text-sm">
+      <div class="flex items-center justify-between p-3 glass rounded-xl">
+        <span>Texnik ishlar rejimi (Maintenance)</span>
+        <button id="maintenanceToggleBtn" onclick="toggleMaintenance()" class="px-3 py-1.5 rounded-lg bg-slate-700 text-xs font-bold text-white">Yoqish</button>
+      </div>
+      <p class="text-xs text-slate-400">Texnik ishlar yoqilganda barcha foydalanuvchilar ekranida ogohlantirish banneri ko'rsatiladi.</p>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed left-1/2 -translate-x-1/2 z-[300] glass rounded-full px-5 py-2.5 text-sm hidden-view" style="bottom:90px;background:rgba(16,7,30,.98)"></div>
 
 <!-- ============ LOGIC ============ -->
 <script>
-var state = { user: null, mode: "login", voice: false, busy: false, apiKey: localStorage.getItem("dima_gemini_key") || "" };
+var state = { 
+  user: null, 
+  mode: "login", 
+  model: "Gemini 1.5 Flash", 
+  limit: parseInt(localStorage.getItem("dima_limit") || "20"),
+  isPro: localStorage.getItem("dima_pro") === "true",
+  maintenance: localStorage.getItem("dima_maint") === "true",
+  history: JSON.parse(localStorage.getItem("dima_history") || "[]"),
+  apiKey: localStorage.getItem("dima_gemini_key") || "" 
+};
+
+// Init UI states
+if(document.getElementById("apiKeySet")) document.getElementById("apiKeySet").value = state.apiKey;
+updateLimitUI();
+checkMaintenanceUI();
+renderArchive();
 
 function toast(t){
   var el = document.getElementById("toast");
@@ -234,7 +275,15 @@ function goHome(){
 function showDashboard(){
   document.getElementById("landing").classList.add("hidden-view");
   document.getElementById("dashboard").classList.remove("hidden-view");
-  document.getElementById("userEmail").textContent = (state.user && state.user.email) ? state.user.email : "Mehmon";
+  var email = (state.user && state.user.email) ? state.user.email : "Mehmon";
+  document.getElementById("userEmail").textContent = email;
+  
+  // Check if admin
+  if(email === "admin@dima.ai") {
+    document.getElementById("adminNavBtn").classList.remove("hidden");
+  } else {
+    document.getElementById("adminNavBtn").classList.add("hidden");
+  }
   closeDrawer();
 }
 
@@ -268,26 +317,21 @@ function handleLogout(){
   toast("Tizimdan chiqdingiz");
 }
 
-function triggerAttach(){
-  document.getElementById("fileInput").click();
+function changeModel(m){
+  state.model = m;
+  toast("Model o'zgardi: " + m);
 }
 
+function triggerAttach(){ document.getElementById("fileInput").click(); }
 function handleFile(input){
   if(input.files && input.files[0]){
     document.getElementById("prompt").value += " [Fayl: " + input.files[0].name + "]";
   }
 }
-
 function setSuggestion(txt){
   var p = document.getElementById("prompt");
   p.value = txt;
   p.focus();
-}
-
-function toggleVoice(){
-  state.voice = !state.voice;
-  document.getElementById("tVoice").classList.toggle("on", state.voice);
-  toast(state.voice ? "Ovozli xabarlar yoqildi" : "Ovozli xabarlar o'chirildi");
 }
 
 function saveSettings(){
@@ -297,56 +341,14 @@ function saveSettings(){
   toast("Sozlamalar saqlandi!");
 }
 
-function startNewChat(){
-  document.getElementById("messages").innerHTML = "";
-  document.getElementById("messages").classList.add("hidden-view");
-  document.getElementById("empty").classList.remove("hidden-view");
-  closeDrawer();
+function processPayment(){
+  state.isPro = true;
+  localStorage.setItem("dima_pro", "true");
+  closeModals();
+  updateLimitUI();
+  toast("Tabriklaymiz! Siz Pro tarifga o'tdingiz 🚀");
 }
 
-function addMsg(text, role){
-  document.getElementById("empty").classList.add("hidden-view");
-  document.getElementById("messages").classList.remove("hidden-view");
-  var d = document.createElement("div");
-  d.className = "flex " + (role === "u" ? "justify-end" : "justify-start");
-  var b = document.createElement("div");
-  b.className = (role === "u" ? "msg-u" : "msg-a") + " px-4 py-3 max-w-[85%] text-sm whitespace-pre-wrap break-words";
-  b.textContent = text;
-  d.appendChild(b);
-  document.getElementById("messages").appendChild(d);
-  var c = document.getElementById("chatArea");
-  c.scrollTop = c.scrollHeight;
-  return b;
-}
-
-async function sendMsg(){
-  var ta = document.getElementById("prompt");
-  var text = ta.value.trim();
-  if(!text || state.busy) return;
-  ta.value = "";
-  addMsg(text, "u");
-  state.busy = true;
-
-  var bubble = addMsg("O'ylamoqda...", "a");
-  var reply = "Salom! Dima AI ishlamoqda. Savolingiz: " + text;
-
-  if(state.apiKey){
-    try {
-      var res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + state.apiKey, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({contents: [{parts: [{text: text}]}]})
-      });
-      var data = await res.json();
-      if(data.candidates) reply = data.candidates[0].content.parts[0].text;
-    } catch(e){
-      reply = "API xatosi yuz berdi.";
-    }
-  }
-
-  bubble.textContent = reply;
-  state.busy = false;
-}
-</script>
-</body>
-</html>
+function updateLimitUI(){
+  var badge = document.getElementById("planBadge");
+  var countEl = document.g
