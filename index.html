@@ -14,20 +14,20 @@ html,body{height:100%;margin:0}
 body{background:var(--bg);color:#f3e8ff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
 .glass{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line)}
 .bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(60% 50% at 20% 0%,rgba(124,58,237,.35),transparent),radial-gradient(50% 40% at 90% 100%,rgba(217,70,239,.22),transparent)}
-.orb{border-radius:9999px;background:radial-gradient(circle at 32% 28%,#f5d0fe,#a855f7 45%,#4c1d95 85%);box-shadow:0 0 60px 10px rgba(168,85,247,.55),0 0 140px 40px rgba(217,70,239,.25);animation:pulse 3.4s ease-in-out infinite}
+.orb{border-radius:9999px;background:radial-gradient(circle at 32% 28%,#f5d0fe,#a855f7 45%,#4c1d95 85%);box-shadow:0 0 60px 10px rgba(168,85,247,.55),0 0 140px 40px rgba(217,70,239,.25);animation:pulse 3.4s ease-in-out infinite;pointer-events:none}
 @keyframes pulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.07);filter:brightness(1.2)}}
-.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 22px rgba(192,132,252,.45);transition:transform .15s,box-shadow .15s;cursor:pointer}
+.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 22px rgba(192,132,252,.45);transition:transform .15s,box-shadow .15s;cursor:pointer;position:relative;z-index:20}
 .btn:hover{box-shadow:0 0 32px rgba(240,171,252,.7)}.btn:active{transform:scale(.97)}
-.ghost{border:1px solid var(--line);transition:background .15s;cursor:pointer}.ghost:hover{background:rgba(167,139,250,.15)}
+.ghost{border:1px solid var(--line);transition:background .15s;cursor:pointer;position:relative;z-index:20}.ghost:hover{background:rgba(167,139,250,.15)}
 .hidden-view{display:none!important}
-.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.8);backdrop-filter:blur(6px)}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.85);backdrop-filter:blur(6px)}
 .modal.open{display:flex!important}
-input,textarea,select{background:rgba(255,255,255,.05);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px}
+input,textarea,select{background:rgba(255,255,255,.05);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px;position:relative;z-index:21}
 input:focus,textarea:focus,select:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(192,132,252,.25)}
 select option{background:#14091f}
-#drawer{transition:transform .25s}
-@media(max-width:1023px){#drawer{position:fixed;top:0;left:0;bottom:0;z-index:60;transform:translateX(-105%);width:80%;max-width:300px}#drawer.open{transform:none!important}}
-#overlay{display:none;position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.6)}#overlay.open{display:block!important}
+#drawer{transition:transform .25s;z-index:70}
+@media(max-width:1023px){#drawer{position:fixed;top:0;left:0;bottom:0;transform:translateX(-105%);width:80%;max-width:300px}#drawer.open{transform:none!important}}
+#overlay{display:none;position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6)}#overlay.open{display:block!important}
 .msg-u{background:linear-gradient(135deg,#7c3aed,#c026d3);border-radius:18px 18px 4px 18px}
 .msg-a{background:rgba(124,58,237,.14);border:1px solid var(--line);border-radius:18px 18px 18px 4px}
 .toggle{width:44px;height:24px;border-radius:99px;background:#3b2a55;position:relative;cursor:pointer;transition:.2s;flex:none}
@@ -43,23 +43,23 @@ select option{background:#14091f}
   <header class="glass sticky top-0 z-40 flex items-center justify-between px-4 sm:px-8 py-3">
     <div class="flex items-center gap-2 font-bold text-lg"><span class="orb w-7 h-7 inline-block" style="animation:none;box-shadow:0 0 14px #a855f7"></span>Dima AI</div>
     <div class="flex gap-2">
-      <button onclick="openModalWithMode('auth', 'login')" class="ghost rounded-full px-4 py-2 text-sm cursor-pointer">Kirish</button>
-      <button onclick="openModalWithMode('auth', 'register')" class="btn rounded-full px-4 py-2 text-sm font-semibold text-white cursor-pointer">Boshlash</button>
+      <button onclick="openModalWithMode('auth', 'login')" class="ghost rounded-full px-4 py-2 text-sm">Kirish</button>
+      <button onclick="openModalWithMode('auth', 'register')" class="btn rounded-full px-4 py-2 text-sm font-semibold text-white">Boshlash</button>
     </div>
   </header>
 
   <main class="flex-1">
-    <section class="text-center px-5 pt-14 pb-16 max-w-3xl mx-auto">
+    <section class="text-center px-5 pt-14 pb-16 max-w-3xl mx-auto relative">
       <div class="orb w-32 h-32 sm:w-44 sm:h-44 mx-auto mb-10"></div>
-      <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight">Kelajak Sun'iy Intellekti Dima AI Bilan</h1>
-      <p class="mt-5 text-violet-200/80 text-base sm:text-lg">Savol bering, rasm yarating, taqdimot va kod yozdiring. Hammasi bitta joyda, o'zbek tilida.</p>
-      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-        <button onclick="goToDashboard()" class="btn rounded-full px-7 py-3 font-semibold text-white cursor-pointer">Dashboardga O'tish</button>
-        <button onclick="openModal('pricing')" class="ghost glass rounded-full px-7 py-3 font-semibold cursor-pointer">Tariflarni Ko'rish</button>
+      <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight relative z-10">Kelajak Sun'iy Intellekti Dima AI Bilan</h1>
+      <p class="mt-5 text-violet-200/80 text-base sm:text-lg relative z-10">Savol bering, rasm yarating, taqdimot va kod yozdiring. Hammasi bitta joyda, o'zbek tilida.</p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center relative z-20">
+        <button onclick="goToDashboard()" class="btn rounded-full px-7 py-3 font-semibold text-white">Dashboardga O'tish</button>
+        <button onclick="openModal('pricing')" class="ghost glass rounded-full px-7 py-3 font-semibold">Tariflarni Ko'rish</button>
       </div>
     </section>
 
-    <section class="px-5 pb-16 max-w-5xl mx-auto">
+    <section class="px-5 pb-16 max-w-5xl mx-auto relative z-10">
       <h2 class="text-2xl font-bold text-center mb-8">Foydalanuvchilar fikri</h2>
       <div class="grid gap-4 md:grid-cols-3">
         <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-sm text-violet-100/90">Dars tayyorlashda juda yordam berdi. Javoblar tez va tushunarli.</p><p class="mt-3 font-semibold">Jasurbek T.</p></div>
@@ -74,7 +74,7 @@ select option{background:#14091f}
 <!-- ============ DASHBOARD ============ -->
 <div id="dashboard" class="hidden-view relative z-10 h-screen flex" style="height:100dvh">
   <div id="overlay" onclick="closeDrawer()"></div>
-  <aside id="drawer" class="glass flex flex-col p-4 lg:w-64 lg:flex-none lg:relative" style="background:rgba(14,6,28,.95)">
+  <aside id="drawer" class="glass flex flex-col p-4 lg:w-64 lg:flex-none lg:relative" style="background:rgba(14,6,28,.98)">
     <div class="flex items-center justify-between mb-5">
       <div class="flex items-center gap-2 font-bold text-lg"><span class="orb w-7 h-7 inline-block" style="animation:none;box-shadow:0 0 14px #a855f7"></span>Dima AI</div>
       <button onclick="closeDrawer()" class="lg:hidden ghost rounded-lg w-9 h-9 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
@@ -178,7 +178,7 @@ select option{background:#14091f}
 
 <script>
 var SUPABASE_URL = "https://qjgnwremgeyajzpwybvb.supabase.co";
-var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU5NTgsImV4cCI6MjEwODkyMTk1OH0.ztJTRZOF8FFt159K-0eVkre7vbKjXeDf5yukLjVJ-iE";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU5NTgsImV4cCI6MjEwODkyMTk1OH0.ztJTRZOF8FFt159K-0eVkre7vbKjXeDf5yukLjVJ-iE";
 var sb = null;
 try { if (window.supabase) sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
 
@@ -284,9 +284,4 @@ function addMsg(text, role){
   b.textContent = text;
   d.appendChild(b);
   document.getElementById("messages").appendChild(d);
-  var c = document.getElementById("chatArea");
-  c.scrollTop = c.scrollHeight;
-  return b;
-}
-
-async function sendMsg
+  var c = document.getElementById("chatArea
