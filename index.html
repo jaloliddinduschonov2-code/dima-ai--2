@@ -1,180 +1,48 @@
-<!DOCTYPE html>
-<html lang="uz" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dima AI - Zamonaviy Sun'iy Intellekt Platformasi</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-    </style>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
+// Chat va bazaga log yozish (yangilangan versiya)
+async function sendPrompt() {
+    const input = document.getElementById('userInput');
+    const chatBox = document.getElementById('chatBox');
+    if(!input.value.trim()) return;
 
-    <!-- Header / Navbar -->
-    <header class="sticky top-0 z-40 w-full glass border-b border-slate-800/80 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-white text-lg shadow-lg shadow-cyan-500/30">
-                    D
-                </div>
-                <span class="text-lg font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-indigo-300">
-                    Dima AI
-                </span>
-            </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="toggleAuthModal('login')" class="px-3 py-1.5 text-xs font-semibold text-slate-200">Kirish</button>
-                <button onclick="toggleAuthModal('register')" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg">Boshlash</button>
-            </div>
-        </div>
-    </header>
+    const query = input.value;
+    input.value = '';
 
-    <!-- AI Sandbox Section -->
-    <section id="sandbox" class="py-10 px-4 bg-slate-900/50 border-b border-slate-800">
-        <div class="max-w-2xl mx-auto">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-extrabold text-white">AI Sandbox (Demo Chat)</h2>
-                <p class="text-slate-400 text-xs mt-1">Haqiqiy Supabase bazasiga ulangan chat</p>
-            </div>
+    const userMsg = document.createElement('div');
+    userMsg.className = "flex justify-end";
+    userMsg.innerHTML = `<div class="bg-cyan-600 p-3 rounded-2xl max-w-[85%] text-white text-xs">${query}</div>`;
+    chatBox.appendChild(userMsg);
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-            <div class="glass rounded-2xl overflow-hidden border border-slate-800">
-                <div id="chatBox" class="h-72 p-4 overflow-y-auto space-y-3 text-xs sm:text-sm">
-                    <div class="flex items-start space-x-2.5">
-                        <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0">AI</div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl max-w-[85%] text-slate-200">
-                            Salom! Tizimga ulandi. Menga istalgan savolingizni bering!
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-3 border-t border-slate-800 bg-slate-950/50 flex gap-2">
-                    <input id="userInput" type="text" placeholder="Savolingizni yozing..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500">
-                    <button onclick="sendPrompt()" class="px-4 py-2.5 bg-cyan-500 text-white rounded-xl font-semibold text-xs shrink-0">Yuborish</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Auth Modal -->
-    <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="glass p-6 rounded-2xl w-full max-w-sm border border-slate-800 relative">
-            <button onclick="toggleAuthModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <h3 id="modalTitle" class="text-xl font-bold text-white mb-4">Tizimga kirish</h3>
-            <form onsubmit="handleAuthSubmit(event)" class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Email manzil</label>
-                    <input id="authEmail" type="email" required placeholder="example@gmail.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Parol</label>
-                    <input id="authPassword" type="password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                </div>
-                <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl text-xs">Tasdiqlash</button>
-            </form>
-        </div>
-    </div>
-
-    <footer class="py-6 text-center text-xs text-slate-500">
-        <p>© 2026 Dima AI.</p>
-    </footer>
-
-    <!-- Supabase Initialization & Logic -->
-    <script>
-        // Sizning Supabase kalitlaringiz avtomatik ulandi:
-        const SUPABASE_URL = 'https://qjgnwremgeyajzpwybvb.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU5NTgsImV4cCI6MjEwODkyMTk1OH0.ztJTRZOF8FFt159K-0eVkre7vbKjXeDf5yukLjVJ-iE';
-
-        // Supabase client yaratish
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let authMode = 'login';
-
-        function toggleAuthModal(mode = 'login') {
-            authMode = mode;
-            const modal = document.getElementById('authModal');
-            const title = document.getElementById('modalTitle');
-            if(modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                title.innerText = mode === 'login' ? 'Tizimga kirish' : "Ro'yxatdan o'tish";
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
-
-        // Ro'yxatdan o'tish / Kirish funksiyasi
-        async function handleAuthSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-
-            if (authMode === 'register') {
-                const { data, error } = await supabaseClient.auth.signUp({ email, password });
-                if (error) {
-                    alert("Xatolik: " + error.message);
-                } else {
-                    alert("Muvaffaqiyatli ro'yxatdan o'tdingiz! Emailingizni tekshiring.");
-                    toggleAuthModal();
-                }
-            } else {
-                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-                if (error) {
-                    alert("Kirishda xatolik: " + error.message);
-                } else {
-                    alert("Tizimga muvaffaqiyatli kirdingiz!");
-                    toggleAuthModal();
-                }
-            }
-        }
-
-        // Chat va bazaga log yozish
-        async function sendPrompt() {
-            const input = document.getElementById('userInput');
-            const chatBox = document.getElementById('chatBox');
-            if(!input.value.trim()) return;
-
-            const query = input.value;
-            input.value = '';
-
-            const userMsg = document.createElement('div');
-            userMsg.className = "flex justify-end";
-            userMsg.innerHTML = `<div class="bg-cyan-600 p-3 rounded-2xl max-w-[85%] text-white text-xs">${query}</div>`;
-            chatBox.appendChild(userMsg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Supabase bazasiga log yozish (agar foydalanuvchi kiritilgan bo'lsa)
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if (user) {
-                await supabaseClient.from('usage_logs').insert([
-                    { user_id: user.id, prompt: query, tokens_used: 10 }
-                ]);
-            }
-
-            setTimeout(() => {
-                const aiMsg = document.createElement('div');
-                aiMsg.className = "flex items-start space-x-2.5";
-                aiMsg.innerHTML = `
-                    <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0">AI</div>
-                    <div class="bg-slate-800/80 p-3 rounded-2xl max-w-[85%] text-slate-200 text-xs">
-                        Savolingiz qabul qilindi va Supabase bazasiga ulandi!
-                    </div>
-                `;
-                chatBox.appendChild(aiMsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 700);
-        }
-    </script>
-</body>
-  </html>
+    // 1. Foydalanuvchini tekshiramiz
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
     
+    if (!user) {
+        alert("Diqqat: Siz tizimga kirmagansiz yoki sessiya topilmadi! Avval 'Kirish' tugmasini bosing.");
+        return;
+    }
+
+    // 2. Bazaga yozamiz va xatolikni tekshiramiz
+    const { error: insertError } = await supabaseClient.from('usage_logs').insert([
+        { user_id: user.id, prompt: query, tokens_used: 10 }
+    ]);
+
+    if (insertError) {
+        alert("Bazaga yozishda xatolik: " + insertError.message);
+        console.error(insertError);
+    } else {
+        console.log("Muvaffaqiyatli yozildi!");
+    }
+
+    setTimeout(() => {
+        const aiMsg = document.createElement('div');
+        aiMsg.className = "flex items-start space-x-2.5";
+        aiMsg.innerHTML = `
+            <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0">AI</div>
+            <div class="bg-slate-800/80 p-3 rounded-2xl max-w-[85%] text-slate-200 text-xs">
+                Xabaringiz qabul qilindi!
+            </div>
+        `;
+        chatBox.appendChild(aiMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 700);
+}
