@@ -1,285 +1,239 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dima AI - Next-Gen Smart Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #07030f; color: #f8fafc; }
-        .glass { background: rgba(20, 10, 35, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.2); }
-        .glass-card { background: rgba(30, 15, 50, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(168, 85, 247, 0.15); }
-        .glow-orb { box-shadow: 0 0 60px 20px rgba(168, 85, 247, 0.4); animation: orb-pulse 3s ease-in-out infinite alternate; }
-        @keyframes orb-pulse { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 1; } }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dima AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+:root{--bg:#07030f;--glass:rgba(124,58,237,.10);--line:rgba(167,139,250,.22);--neon:#c084fc;--pink:#f0abfc}
+*{-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:#f3e8ff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+.glass{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line)}
+.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(60% 50% at 20% 0%,rgba(124,58,237,.35),transparent),radial-gradient(50% 40% at 90% 100%,rgba(217,70,239,.22),transparent)}
+.orb{border-radius:9999px;background:radial-gradient(circle at 32% 28%,#f5d0fe,#a855f7 45%,#4c1d95 85%);box-shadow:0 0 60px 10px rgba(168,85,247,.55),0 0 140px 40px rgba(217,70,239,.25);animation:pulse 3.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.07);filter:brightness(1.2)}}
+.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 22px rgba(192,132,252,.45);transition:transform .15s,box-shadow .15s}
+.btn:hover{box-shadow:0 0 32px rgba(240,171,252,.7)}.btn:active{transform:scale(.97)}
+.ghost{border:1px solid var(--line);transition:background .15s}.ghost:hover{background:rgba(167,139,250,.15)}
+.hidden-view{display:none!important}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.75);backdrop-filter:blur(6px)}
+.modal.open{display:flex}
+input,textarea,select{background:rgba(255,255,255,.05);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px}
+input:focus,textarea:focus,select:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(192,132,252,.25)}
+select option{background:#14091f}
+#drawer{transition:transform .25s}
+@media(max-width:1023px){#drawer{position:fixed;top:0;left:0;bottom:0;z-index:60;transform:translateX(-105%);width:80%;max-width:300px}#drawer.open{transform:none}}
+#overlay{display:none;position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.6)}#overlay.open{display:block}
+.msg-u{background:linear-gradient(135deg,#7c3aed,#c026d3);border-radius:18px 18px 4px 18px}
+.msg-a{background:rgba(124,58,237,.14);border:1px solid var(--line);border-radius:18px 18px 18px 4px}
+.toggle{width:44px;height:24px;border-radius:99px;background:#3b2a55;position:relative;cursor:pointer;transition:.2s;flex:none}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
+.toggle.on{background:#a855f7}.toggle.on::after{left:23px}
+body.light{background:#f5eefe;color:#2a1344}body.light .glass{background:rgba(255,255,255,.65)}body.light .bg-glow{opacity:.4}
+body.light input,body.light textarea,body.light select{color:#2a1344;background:rgba(255,255,255,.7)}
+@media(prefers-reduced-motion:reduce){.orb{animation:none}}
+</style>
 </head>
-<body class="min-h-screen flex flex-col overflow-x-hidden">
+<body>
+<div class="bg-glow"></div>
 
-    <!-- ================= 1. LANDING PAGE (KIRISH & MAQTOVULAR) ================= -->
-    <div id="landingPage" class="flex-1 flex flex-col">
-        <header class="sticky top-0 z-40 w-full glass border-b border-purple-900/30">
-            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-bold text-white shadow-lg">D</div>
-                    <span class="text-lg font-extrabold">Dima AI</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <button type="button" onclick="openAuthModal('login')" class="px-4 py-2 text-xs font-bold text-slate-300 hover:text-white cursor-pointer">Kirish</button>
-                    <button type="button" onclick="openAuthModal('register')" class="px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl shadow-lg cursor-pointer">Boshlash</button>
-                </div>
-            </div>
-        </header>
+<!-- ============ LANDING ============ -->
+<div id="landing" class="relative z-10 min-h-screen flex flex-col">
+  <header class="glass sticky top-0 z-40 flex items-center justify-between px-4 sm:px-8 py-3" style="padding-top:max(.75rem,env(safe-area-inset-top))">
+    <div class="flex items-center gap-2 font-bold text-lg"><span class="orb w-7 h-7 inline-block" style="animation:none;box-shadow:0 0 14px #a855f7"></span>Dima AI</div>
+    <div class="flex gap-2">
+      <button data-auth="login" class="ghost rounded-full px-4 py-2 text-sm">Kirish</button>
+      <button data-auth="register" class="btn rounded-full px-4 py-2 text-sm font-semibold text-white">Boshlash</button>
+    </div>
+  </header>
 
-        <main class="flex-1 max-w-5xl mx-auto px-4 py-16 text-center space-y-12">
-            <div class="space-y-6 max-w-2xl mx-auto">
-                <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center glow-orb">
-                    <i class="fa-solid fa-wand-magic-sparkles text-2xl text-white"></i>
-                </div>
-                <h1 class="text-4xl sm:text-6xl font-black leading-tight">Kelajak Sun'iy Intellekti <br><span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Bilols & Dima AI Bilan</span></h1>
-                <p class="text-slate-400 text-sm sm:text-base">Savollaringizga soniyalar ichida professional javoblar oling, kod yozing va g'oyalaringizni hayotga tatbiq eting.</p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                    <button type="button" onclick="enterDashboard()" class="px-8 py-4 text-xs font-extrabold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl shadow-xl cursor-pointer">Dashboardga O'tish ➔</button>
-                    <button type="button" onclick="togglePricingModal()" class="px-8 py-4 text-xs font-bold text-purple-200 glass rounded-2xl cursor-pointer">Tariflarni Ko'rish</button>
-                </div>
-            </div>
+  <main class="flex-1">
+    <section class="text-center px-5 pt-14 pb-16 max-w-3xl mx-auto">
+      <div class="orb w-32 h-32 sm:w-44 sm:h-44 mx-auto mb-10"></div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight">Kelajak Sun'iy Intellekti Dima AI Bilan</h1>
+      <p class="mt-5 text-violet-200/80 text-base sm:text-lg">Savol bering, rasm yarating, taqdimot va kod yozdiring. Hammasi bitta joyda, o'zbek tilida.</p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+        <button id="ctaDash" class="btn rounded-full px-7 py-3 font-semibold text-white">Dashboardga O'tish</button>
+        <button id="ctaPrice" class="ghost glass rounded-full px-7 py-3 font-semibold">Tariflarni Ko'rish</button>
+      </div>
+    </section>
 
-            <!-- Foydalanuvchilarning Maqtovlari -->
-            <div class="space-y-6 pt-10 border-t border-purple-900/30">
-                <h2 class="text-xl sm:text-2xl font-bold">Foydalanuvchilarimiz nima deydi?</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
-                    <div class="glass-card p-5 rounded-2xl space-y-3">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <p class="text-xs text-slate-300">"Dima AI orqali dasturlashdagi xatolarimni bir zumda topib To'g'rilayapman. Ajoyib!"</p>
-                        <p class="text-[11px] font-bold text-purple-300">— Jasurbek T.</p>
-                    </div>
-                    <div class="glass-card p-5 rounded-2xl space-y-3">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <p class="text-xs text-slate-300">"Dizayni va ish tezligi huddi Bilols.ai kabi mukammal. Premium juda qulay."</p>
-                        <p class="text-[11px] font-bold text-purple-300">— Madina K.</p>
-                    </div>
-                    <div class="glass-card p-5 rounded-2xl space-y-3">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <p class="text-xs text-slate-300">"Matnlar tarjima qilish va maqolalar yozishda eng yaqin yordamchimga aylandi."</p>
-                        <p class="text-[11px] font-bold text-purple-300">— Bobur M.</p>
-                    </div>
-                </div>
-            </div>
-        </main>
-        
-        <footer class="py-6 text-center text-xs text-slate-500 border-t border-purple-900/20">
-            <p>© 2026 Dima AI. Barcha huquqlar himoyalangan.</p>
-        </footer>
+    <section class="px-5 pb-16 max-w-5xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-8">Foydalanuvchilar fikri</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-sm text-violet-100/90">Dars tayyorlashda juda yordam berdi. Javoblar tez va tushunarli.</p><p class="mt-3 font-semibold">Jasurbek T.</p></div>
+        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-sm text-violet-100/90">Dizayni chiroyli, telefonda ham qulay ishlaydi. Rasm yaratish menga yoqdi.</p><p class="mt-3 font-semibold">Madina K.</p></div>
+        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div><p class="text-sm text-violet-100/90">Kod yozishda yordamchi sifatida ishlataman. Vaqtimni tejaydi.</p><p class="mt-3 font-semibold">Bobur M.</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="text-center text-sm text-violet-300/60 py-6 px-4">&copy; 2026 Dima AI. Barcha huquqlar himoyalangan.</footer>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard" class="hidden-view relative z-10 h-screen flex" style="height:100dvh">
+  <div id="overlay"></div>
+  <aside id="drawer" class="glass flex flex-col p-4 lg:w-64 lg:flex-none lg:relative" style="background:rgba(14,6,28,.92)">
+    <div class="flex items-center justify-between mb-5">
+      <div class="flex items-center gap-2 font-bold text-lg"><span class="orb w-7 h-7 inline-block" style="animation:none;box-shadow:0 0 14px #a855f7"></span>Dima AI</div>
+      <button id="closeDrawer" class="lg:hidden ghost rounded-lg w-9 h-9" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <button id="newChat" class="btn rounded-xl py-2.5 font-semibold text-white mb-5"><i class="fa-solid fa-plus mr-2"></i>New Chat</button>
+    <nav class="flex flex-col gap-1 text-sm">
+      <button data-nav="chat" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
+      <button data-nav="archived" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived</button>
+      <button id="goHome" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
+    </nav>
+    <div id="archiveList" class="mt-3 text-xs text-violet-300/70 overflow-y-auto"></div>
+    <div class="mt-auto glass rounded-2xl p-4 text-center">
+      <i class="fa-solid fa-crown text-yellow-300"></i>
+      <p class="font-semibold mt-1">Upgrade to Premium</p>
+      <p class="text-xs text-violet-200/70 mt-1">Cheksiz xabarlar va tezroq javoblar.</p>
+      <button data-open="pricing" class="btn w-full rounded-lg py-2 mt-3 text-sm font-semibold text-white">Upgrade</button>
+    </div>
+  </aside>
+
+  <section class="flex-1 min-w-0 flex flex-col">
+    <div class="glass flex items-center gap-2 px-3 sm:px-5 py-2.5" style="padding-top:max(.6rem,env(safe-area-inset-top))">
+      <button id="burger" class="lg:hidden ghost rounded-lg w-10 h-10" aria-label="Menyu"><i class="fa-solid fa-bars"></i></button>
+      <select id="modelTop" class="px-3 py-2 text-sm">
+        <option>Gemini 1.5 Flash</option><option>ChatGPT v4.0</option><option>Claude</option>
+      </select>
+      <span id="userEmail" class="ml-auto text-xs sm:text-sm text-violet-200/80 truncate max-w-[40%]"></span>
+      <button id="logout" class="ghost rounded-lg px-3 py-2 text-sm"><i class="fa-solid fa-right-from-bracket sm:mr-1"></i><span class="hidden sm:inline">Logout</span></button>
     </div>
 
-    <!-- ================= 2. DASHBOARD VIEW (CHAT) ================= -->
-    <div id="dashboardView" style="display: none;" class="flex-1 h-screen overflow-hidden flex flex-col md:flex-row">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="fixed md:relative top-0 left-0 h-full w-72 md:w-64 glass border-r border-purple-900/30 flex flex-col justify-between p-4 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
-            <div class="space-y-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-bold text-white">D</div>
-                        <span class="text-lg font-extrabold">Dima AI</span>
-                    </div>
-                    <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-slate-400 hover:text-white cursor-pointer">✕</button>
-                </div>
-
-                <button type="button" onclick="resetChat(); toggleMobileMenu();" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-purple-950/60 text-purple-200 text-xs font-semibold border border-purple-500/30 cursor-pointer">
-                    <i class="fa-solid fa-plus text-[10px]"></i> New Chat
-                </button>
-
-                <div class="space-y-1 text-xs">
-                    <p class="text-[10px] font-bold text-slate-500 uppercase px-2 mb-2">Features</p>
-                    <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-purple-600/20 text-purple-300 font-medium border border-purple-500/20"><i class="fa-regular fa-message"></i> Chat</a>
-                    <a href="#" onclick="backToLanding()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-house"></i> Asosiy Sahifa</a>
-                </div>
-            </div>
-
-            <div class="p-4 rounded-2xl glass-card border border-amber-500/30 bg-gradient-to-b from-amber-500/10 to-transparent space-y-2">
-                <div class="flex justify-between items-center">
-                    <span class="text-amber-400 font-bold text-xs">Premium Plan</span>
-                    <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
-                </div>
-                <button type="button" onclick="togglePricingModal()" class="w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-extrabold rounded-xl text-xs shadow-md cursor-pointer">Upgrade</button>
-            </div>
-        </aside>
-
-        <!-- Main Workspace -->
-        <main class="flex-1 flex flex-col h-full relative overflow-hidden">
-            <header class="p-3 sm:p-4 flex items-center justify-between glass border-b border-purple-900/20 z-10 shrink-0">
-                <div class="flex items-center gap-3">
-                    <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-purple-300 text-lg p-1 cursor-pointer"><i class="fa-solid fa-bars"></i></button>
-                    <span class="px-3 py-1.5 rounded-xl bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-semibold">ChatGPT v4.0</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span id="userEmailDisplay" class="text-xs text-slate-300 hidden sm:inline"></span>
-                    <button type="button" onclick="handleLogout()" class="px-3 py-1.5 bg-red-500/20 text-red-300 font-semibold rounded-lg text-xs cursor-pointer">Chiqish</button>
-                </div>
-            </header>
-
-            <!-- Scrollable Chat & Welcome Container -->
-            <div id="scrollArea" class="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center">
-                <div class="w-full max-w-2xl my-auto text-center" id="welcomeSection">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-gradient-to-tr from-purple-500 via-fuchsia-500 to-pink-500 flex items-center justify-center glow-orb mb-4">
-                        <i class="fa-solid fa-atom text-2xl text-white"></i>
-                    </div>
-                    <h2 class="text-xl sm:text-3xl font-extrabold">Ready to Create Something New?</h2>
-                </div>
-
-                <div id="chatBox" class="w-full max-w-2xl space-y-3 hidden pb-4"></div>
-            </div>
-
-            <!-- Bottom Fixed Input Area -->
-            <div class="p-4 border-t border-purple-900/30 glass shrink-0">
-                <div class="w-full max-w-2xl mx-auto space-y-2">
-                    <input type="file" id="fileInput" class="hidden" onchange="handleFileAttach(this)">
-
-                    <div class="glass-card p-3 rounded-2xl border border-purple-500/30 shadow-2xl">
-                        <textarea id="userInput" rows="1" placeholder="+ Ask Anything..." onkeypress="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); sendPrompt(); }" class="w-full bg-transparent text-xs sm:text-sm placeholder-slate-500 focus:outline-none resize-none pr-8"></textarea>
-                        
-                        <div class="flex items-center justify-between border-t border-purple-900/30 pt-2 text-slate-400 text-xs">
-                            <div class="flex items-center gap-3">
-                                <button type="button" onclick="triggerAttach()" class="hover:text-purple-300 transition cursor-pointer"><i class="fa-solid fa-paperclip"></i> Attach</button>
-                                <button type="button" onclick="toggleSettingsModal()" class="hover:text-purple-300 transition cursor-pointer"><i class="fa-solid fa-sliders"></i> Settings</button>
-                            </div>
-                            <button type="button" onclick="sendPrompt()" class="w-8 h-8 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white hover:opacity-90 transition cursor-pointer">
-                                <i class="fa-solid fa-arrow-up text-xs"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2 text-left">
-                        <div onclick="setPrompt('Generate high-quality image concept')" class="p-2 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
-                            <p class="font-bold text-[10px]">Image Generator</p>
-                        </div>
-                        <div onclick="setPrompt('Create an engaging presentation outline')" class="p-2 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
-                            <p class="font-bold text-[10px]">AI Presentation</p>
-                        </div>
-                        <div onclick="setPrompt('Write production ready code')" class="p-2 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
-                            <p class="font-bold text-[10px]">Dev Assistant</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <div id="chatArea" class="flex-1 overflow-y-auto px-4 py-5">
+      <div id="empty" class="h-full flex flex-col items-center justify-center text-center">
+        <div class="orb w-24 h-24 mb-6"></div>
+        <h2 class="text-2xl sm:text-3xl font-semibold">Ready to Create Something New?</h2>
+      </div>
+      <div id="messages" class="hidden-view max-w-3xl mx-auto flex flex-col gap-3"></div>
     </div>
 
-    <!-- ================= 3. MODALS ================= -->
-    <div id="authModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass p-6 rounded-2xl w-full max-w-sm border border-purple-500/30 relative">
-            <button type="button" onclick="closeAuthModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white cursor-pointer">✕</button>
-            <h3 id="modalTitle" class="text-lg font-bold mb-4">Tizimga kirish</h3>
-            <form onsubmit="handleAuthSubmit(event)" class="space-y-3 text-xs">
-                <div>
-                    <label class="block text-slate-300 font-semibold mb-1">Email</label>
-                    <input id="authEmail" type="email" required placeholder="example@gmail.com" class="w-full bg-purple-950/40 border border-purple-500/30 rounded-lg p-2.5 text-white focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-slate-300 font-semibold mb-1">Parol</label>
-                    <input id="authPassword" type="password" required placeholder="••••••••" class="w-full bg-purple-950/40 border border-purple-500/30 rounded-lg p-2.5 text-white focus:outline-none">
-                </div>
-                <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg shadow-md cursor-pointer">Tasdiqlash</button>
-            </form>
+    <div class="px-3 sm:px-6 pb-3" style="padding-bottom:max(.75rem,env(safe-area-inset-top))">
+      <div class="max-w-3xl mx-auto">
+        <div class="glass rounded-2xl p-3">
+          <textarea id="prompt" rows="2" placeholder="Ask Anything..." class="w-full resize-none p-2 bg-transparent border-0"></textarea>
+          <input type="file" id="fileInput" class="hidden">
+          <div class="flex items-center gap-2 mt-1">
+            <button id="attach" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm"><i class="fa-solid fa-paperclip mr-1"></i>Attach</button>
+            <button data-open="settings" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm"><i class="fa-solid fa-sliders mr-1"></i>Settings</button>
+            <button id="send" class="btn ml-auto w-10 h-10 rounded-full text-white" aria-label="Yuborish"><i class="fa-solid fa-arrow-up"></i></button>
+          </div>
         </div>
-    </div>
-
-    <div id="pricingModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass p-6 rounded-2xl w-full max-w-md border border-purple-500/30 relative text-center">
-            <button type="button" onclick="togglePricingModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white cursor-pointer">✕</button>
-            <h3 class="text-lg font-bold mb-4">Tarifni Tanlang</h3>
-            <div class="space-y-3 text-left text-xs">
-                <div class="p-3 glass-card rounded-xl border border-purple-500/20">
-                    <p class="font-bold">Free Plan - 0 so'm</p>
-                    <p class="text-slate-400">Kuniga 10 ta bepul xabar.</p>
-                </div>
-                <div class="p-3 glass-card rounded-xl border border-amber-500/50 bg-amber-500/10">
-                    <p class="font-bold text-amber-400">Dima AI Pro - 49,000 so'm / oy</p>
-                    <p class="text-slate-300">Cheksiz xabarlar va tezkor sun'iy intellekt.</p>
-                </div>
-            </div>
+        <div class="grid grid-cols-3 gap-2 mt-3 text-left">
+          <button class="sug glass rounded-xl p-2.5 sm:p-3" data-p="Menga bir rasm yarat: kechki Samarqand, neon uslubida"><i class="fa-regular fa-image text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Image Generator</p><p class="hidden sm:block text-xs text-violet-200/60">Matndan rasm yarating</p></button>
+          <button class="sug glass rounded-xl p-2.5 sm:p-3" data-p="Sun'iy intellekt haqida 5 slaydlik taqdimot rejasini tuz"><i class="fa-regular fa-file-powerpoint text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">AI Presentation</p><p class="hidden sm:block text-xs text-violet-200/60">Slaydlar tayyorlang</p></button>
+          <button class="sug glass rounded-xl p-2.5 sm:p-3" data-p="JavaScript'da oddiy kalkulyator kodini yozib ber"><i class="fa-solid fa-code text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Dev Assistant</p><p class="hidden sm:block text-xs text-violet-200/60">Toza kod yozing</p></button>
         </div>
+      </div>
     </div>
+  </section>
+</div>
 
-    <div id="settingsModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass p-6 rounded-2xl w-full max-w-sm border border-purple-500/30 relative text-xs">
-            <button type="button" onclick="toggleSettingsModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white cursor-pointer">✕</button>
-            <h3 class="text-lg font-bold mb-4">Sozlamalar (Settings)</h3>
-            <div class="space-y-4 text-slate-300">
-                <div class="flex items-center justify-between">
-                    <span>Ovozli xabarlar</span>
-                    <input type="checkbox" class="accent-purple-600 w-4 h-4 cursor-pointer">
-                </div>
-                <div class="flex items-center justify-between">
-                    <span>Qorong'i rejim (Dark Vibe)</span>
-                    <input type="checkbox" checked class="accent-purple-600 w-4 h-4 cursor-pointer">
-                </div>
-                <div>
-                    <label class="block font-semibold mb-1">AI Model Versiyasi</label>
-                    <select class="w-full bg-purple-950/60 border border-purple-500/30 rounded-lg p-2 text-white">
-                        <option>ChatGPT v4.0 (Optimal)</option>
-                        <option>Dima AI Ultra v1</option>
-                    </select>
-                </div>
-                <button type="button" onclick="toggleSettingsModal(); alert('Sozlamalar saqlandi!');" class="w-full py-2 bg-purple-600 text-white font-bold rounded-lg cursor-pointer">Saqlash</button>
-            </div>
-        </div>
-    </div>
+<!-- ============ MODALS ============ -->
+<div id="m-auth" class="modal"><div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.95)">
+  <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button data-close class="ghost rounded-lg w-9 h-9" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="flex flex-col gap-3">
+    <input id="authEmail" type="email" placeholder="Email" class="px-4 py-3" autocomplete="email">
+    <input id="authPass" type="password" placeholder="Parol (kamida 6 belgi)" class="px-4 py-3" autocomplete="current-password">
+    <input id="authPass2" type="password" placeholder="Parolni tasdiqlang" class="px-4 py-3 hidden-view">
+    <p id="authErr" class="text-sm text-pink-300 min-h-[1.25rem]"></p>
+    <button id="authSubmit" class="btn rounded-xl py-3 font-semibold text-white">Kirish</button>
+    <button id="authSwitch" class="text-sm text-violet-300 underline">Akkauntingiz yo'qmi? Ro'yxatdan o'tish</button>
+  </div></div></div>
 
-    <!-- ================= 4. JAVASCRIPT LOGIC ================= -->
-    <script>
-        let authMode = 'login';
-        const SUPABASE_URL = 'https://qjgnwremgeyajzpwybvb.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU5NTgsImV4cCI6MjEwODkyMTk1OH0.ztJTRZOF8FFt159K-0eVkre7vbKjXeDf5yukLjVJ-iE';
+<div id="m-pricing" class="modal"><div class="glass rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto" style="background:rgba(16,7,30,.95)">
+  <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Tariflar</h3><button data-close class="ghost rounded-lg w-9 h-9" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="grid sm:grid-cols-2 gap-4">
+    <div class="glass rounded-2xl p-5"><h4 class="font-bold text-lg">Free</h4><p class="text-3xl font-extrabold mt-2">0 <span class="text-sm font-normal">so'm</span></p>
+      <ul class="text-sm mt-3 space-y-1.5 text-violet-100/85"><li><i class="fa-solid fa-check text-fuchsia-300 mr-2"></i>Kuniga 20 ta xabar</li><li><i class="fa-solid fa-check text-fuchsia-300 mr-2"></i>Oddiy modellar</li><li><i class="fa-solid fa-check text-fuchsia-300 mr-2"></i>Asosiy chat</li></ul>
+      <button data-plan="Free" class="ghost w-full rounded-xl py-2.5 mt-4 font-semibold">Joriy tarif</button></div>
+    <div class="rounded-2xl p-5" style="border:1px solid #d946ef;box-shadow:0 0 28px rgba(217,70,239,.35);background:rgba(124,58,237,.18)"><h4 class="font-bold text-lg">Pro</h4><p class="text-3xl font-extrabold mt-2">49,000 <span class="text-sm font-normal">so'm/oy</span></p>
+      <ul class="text-sm mt-3 space-y-1.5 text-violet-100/85"><li><i class="fa-solid fa-check text-fuchsia-300 mr-2"></i>Cheksiz xabarlar</li><li><i class="fa-solid fa-check text-fuchsia-300 mr-2"></i>Barcha modellar</li><li><i class="fa-solid fa-check text-fuchsia-300 mr-2"></i>Rasm va taqdimot</li></ul>
+      <button data-plan="Pro" class="btn w-full rounded-xl py-2.5 mt-4 font-semibold text-white">Pro'ni tanlash</button></div>
+  </div></div></div>
 
-        let supabaseClient = null;
-        if (window.supabase) {
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
+<div id="m-settings" class="modal"><div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.95)">
+  <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Sozlamalar</h3><button data-close class="ghost rounded-lg w-9 h-9" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="flex flex-col gap-4">
+    <div class="flex items-center justify-between"><span>Ovozli xabarlar</span><div id="tVoice" class="toggle" role="switch" tabindex="0"></div></div>
+    <div class="flex items-center justify-between"><span>Qorong'i rejim</span><div id="tDark" class="toggle on" role="switch" tabindex="0"></div></div>
+    <label class="flex flex-col gap-1.5 text-sm">Gemini API Key (Haqiqiy AI uchun)
+      <input id="apiKeySet" type="password" placeholder="AIzaSy..." class="px-3 py-2 text-sm"></label>
+    <label class="flex flex-col gap-1.5 text-sm">AI modeli
+      <select id="modelSet" class="px-3 py-2.5 text-base"><option>Gemini 1.5 Flash</option><option>ChatGPT v4.0</option><option>Claude</option></select></label>
+    <button id="saveSettings" data-close class="btn rounded-xl py-2.5 font-semibold text-white">Saqlash</button>
+  </div></div></div>
 
-        function enterDashboard() {
-            document.getElementById('landingPage').style.display = 'none';
-            document.getElementById('dashboardView').style.display = 'flex';
-        }
+<div id="toast" class="fixed left-1/2 -translate-x-1/2 z-[200] glass rounded-full px-5 py-2.5 text-sm hidden-view" style="bottom:90px;background:rgba(16,7,30,.95)"></div>
 
-        function backToLanding() {
-            document.getElementById('dashboardView').style.display = 'none';
-            document.getElementById('landingPage').style.display = 'flex';
-        }
+<script>
+(function(){
+  // ---- Supabase ----
+  var SUPABASE_URL = "https://qjgnwremgeyajzpwybvb.supabase.co";
+  var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU5NTgsImV4cCI6MjEwODkyMTk1OH0.ztJTRZOF8FFt159K-0eVkre7vbKjXeDf5yukLjVJ-iE";
+  var sb = null;
+  try { if (SUPABASE_KEY && window.supabase) sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){ console.warn(e); }
 
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
-        }
+  var $ = function(id){ return document.getElementById(id); };
+  var state = { user:null, mode:"login", voice:false, busy:false, history:[], apiKey: localStorage.getItem("dima_gemini_key") || "" };
+  var authBusy = false;
 
-        function openAuthModal(mode) {
-            authMode = mode;
-            document.getElementById('modalTitle').innerText = mode === 'login' ? 'Tizimga kirish' : "Ro'yxatdan o'tish";
-            document.getElementById('authModal').style.display = 'flex';
-        }
+  if($("apiKeySet")) $("apiKeySet").value = state.apiKey;
 
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
+  function toast(t){ var el=$("toast"); el.textContent=t; el.classList.remove("hidden-view"); clearTimeout(toast.t); toast.t=setTimeout(function(){el.classList.add("hidden-view")},2400); }
+  function openModal(n){ closeModals(); $("m-"+n).classList.add("open"); }
+  function closeModals(){ document.querySelectorAll(".modal").forEach(function(m){m.classList.remove("open")}); }
+  function closeDrawer(){ $("drawer").classList.remove("open"); $("overlay").classList.remove("open"); }
+  function show(view){
+    $("landing").classList.toggle("hidden-view", view!=="landing");
+    $("dashboard").classList.toggle("hidden-view", view!=="dashboard");
+    closeDrawer(); window.scrollTo(0,0);
+  }
+  function setAuthMode(m){
+    state.mode=m; var reg=m==="register";
+    $("authTitle").textContent = reg?"Ro'yxatdan o'tish":"Kirish";
+    $("authSubmit").textContent = reg?"Boshlash":"Kirish";
+    $("authSwitch").textContent = reg?"Akkauntingiz bormi? Kirish":"Akkauntingiz yo'qmi? Ro'yxatdan o'tish";
+    $("authPass2").classList.toggle("hidden-view", !reg);
+    $("authPass").autocomplete = reg?"new-password":"current-password";
+    $("authErr").textContent="";
+  }
+  function enterDashboard(user){
+    state.user=user; $("userEmail").textContent=user.email||"Mehmon";
+    show("dashboard");
+  }
 
-        function togglePricingModal() {
-            const modal = document.getElementById('pricingModal');
-            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
-        }
+  // ---- Landing buttons ----
+  document.querySelectorAll("[data-auth]").forEach(function(b){ b.addEventListener("click",function(){ setAuthMode(b.dataset.auth); openModal("auth"); }); });
+  $("ctaDash").addEventListener("click",function(){ if(state.user) enterDashboard(state.user); else { setAuthMode("login"); openModal("auth"); } });
+  $("ctaPrice").addEventListener("click",function(){ openModal("pricing"); });
+  document.querySelectorAll("[data-open]").forEach(function(b){ b.addEventListener("click",function(){ closeDrawer(); openModal(b.dataset.open); }); });
+  document.querySelectorAll("[data-close]").forEach(function(b){ b.addEventListener("click",closeModals); });
+  document.querySelectorAll(".modal").forEach(function(m){ m.addEventListener("mousedown",function(e){ if(e.target===m) closeModals(); }); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ closeModals(); closeDrawer(); } });
+  document.querySelectorAll("[data-plan]").forEach(function(b){ b.addEventListener("click",function(){ closeModals(); toast(b.dataset.plan==="Pro"?"Pro tarif tez kunda ishga tushadi":"Siz Free tarifdasiz"); }); });
 
-        function toggleSettingsModal() {
-            const modal = document.getElementById('settingsModal');
-            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
-        }
-
-        function triggerAttach() {
-            document.getElementById('fileInput').click();
-        }
-
-        function handleFileAttach(input) {
-            if (input.file
+  // ---- Auth ----
+  $("authSwitch").addEventListener("click",function(){ setAuthMode(state.mode==="login"?"register":"login"); });
+  async function submitAuth(){
+    if(authBusy) return;
+    var email=$("authEmail").value.trim(), pass=$("authPass").value, err=$("authErr");
+    if(!/^\S+@\S+\.\S+$/.test(email)){ err.textContent="Email noto'g'ri kiritilgan."; return; }
+    if(pass.length<6){ err.textContent="Parol kamida 6 belgidan iborat bo'lsin."; return; }
+    if(state.mode==="register" && pass!==$("authPass2").value){ err.textContent="Parollar bir xil emas."; return; }
+    authBusy=true; $("authSubmit").disabled=true; err.textContent="";
+    try{
+      if(sb){
+        var r = state.mode==="register" ? await sb.auth.signUp({email:email,password:pass}) : await sb.auth.signInWithPassword({email:email,password:pass});
+        if(r.error) throw r.error;
+        if(!r.data.session && state.mode==="register"){ toast("Emailingizga tasdiqlash xati yuborildi"); closeModals(); return; }
+        closeModals(); enterDashboard(r.data.user||{email:email});
+      } else {
+    
