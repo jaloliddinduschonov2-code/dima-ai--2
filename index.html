@@ -505,11 +505,99 @@ window.addEventListener("beforeunload",function(){
 });
 
 // HTML yakuni
-  function startNewChat(){
+
+function startNewChat() {
   document.getElementById("messages").innerHTML = "";
   document.getElementById("messages").classList.add("hidden-view");
   document.getElementById("empty").classList.remove("hidden-view");
-  closeDrawer()
+  document.getElementById("prompt").value = "";
+  closeDrawer();
+}
+
+function renderArchive() {
+  var container = document.getElementById("archiveContainer");
+  var count = document.getElementById("archiveCount");
+
+  if (!container || !count) return;
+
+  count.textContent = state.history.length;
+  container.innerHTML = "";
+
+  if (state.history.length === 0) {
+    container.textContent = "Hozircha chat tarixi yo‘q.";
+    return;
+  }
+
+  state.history.forEach(function(chat, index) {
+    var item = document.createElement("button");
+    item.className = "w-full text-left p-2 rounded-lg ghost truncate";
+    item.textContent = chat.title || "Yangi chat";
+
+    item.onclick = function() {
+      document.getElementById("messages").innerHTML = "";
+      document.getElementById("messages").classList.remove("hidden-view");
+      document.getElementById("empty").classList.add("hidden-view");
+
+      (chat.messages || []).forEach(function(msg) {
+        addMessage(msg.text, msg.role);
+      });
+
+      closeDrawer();
+    };
+
+    container.appendChild(item);
+  });
+}
+
+function addMessage(text, role) {
+  var messages = document.getElementById("messages");
+  var item = document.createElement("div");
+
+  item.className = role === "user"
+    ? "msg-u self-end max-w-[85%] p-3"
+    : "msg-a self-start max-w-[85%] p-3";
+
+  item.textContent = text;
+  messages.appendChild(item);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function sendMsg() {
+  var prompt = document.getElementById("prompt");
+  var message = prompt.value.trim();
+
+  if (!message) {
+    toast("Avval xabar yozing!");
+    return;
+  }
+
+  if (!document.getElementById("messages").classList.contains("hidden-view")) {
+    // Joriy chat davom etmoqda
+  } else {
+    document.getElementById("messages").innerHTML = "";
+  }
+
+  document.getElementById("messages").classList.remove("hidden-view");
+  document.getElementById("empty").classList.add("hidden-view");
+
+  addMessage(message, "user");
+  prompt.value = "";
+
+  toast("AI serveri hali ulanmagan. Keyingi bosqichda ulaymiz.");
+}
+
+document.getElementById("prompt").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMsg();
+  }
+});
+
+window.addEventListener("beforeunload", function() {
+  localStorage.setItem("dima_history", JSON.stringify(state.history));
+});
+
 </script>
 </body>
 </html>
+
