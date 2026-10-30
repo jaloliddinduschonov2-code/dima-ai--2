@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dima AI - Next-Gen AI Platform</title>
+    <title>Dima AI - Next-Gen Smart Platform</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS Client CDN -->
@@ -12,65 +12,86 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #07030f; }
+        
+        /* Glassmorphism */
         .glass {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(18, 10, 30, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(26, 15, 43, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.1);
         }
-        .glow-effect {
-            box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.3);
+        
+        /* Glowing Orbs & Gradients */
+        .glow-orb {
+            box-shadow: 0 0 50px 10px rgba(168, 85, 247, 0.35);
+            animation: pulse-glow 4s ease-in-out infinite alternate;
         }
+        @keyframes pulse-glow {
+            0% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 30px 5px rgba(168, 85, 247, 0.3); }
+            100% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 60px 15px rgba(217, 70, 239, 0.4); }
+        }
+
         .gradient-text {
-            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            background: linear-gradient(135deg, #e879f9 0%, #a855f7 50%, #38bdf8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        ::-webkit-scrollbar { width: 5px; }
+        
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #2e1065; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col selection:bg-cyan-500 selection:text-white">
+<body class="text-slate-100 min-h-screen antialiased flex flex-col selection:bg-purple-500 selection:text-white">
 
-    <!-- ================= 1. LANDING PAGE ================= -->
-    <div id="landingView" class="flex-1 flex flex-col">
-        <header class="sticky top-0 z-40 w-full glass border-b border-slate-800/80">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <!-- ================= 1. LANDING / AUTH VIEW ================= -->
+    <div id="landingView" class="flex-1 flex flex-col relative overflow-hidden">
+        <!-- Background Ambient Glows -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[550px] h-[350px] sm:h-[550px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <!-- Header -->
+        <header class="sticky top-0 z-40 w-full glass border-b border-purple-900/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-600 flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-cyan-500/20">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-purple-500/30">
                         D
                     </div>
                     <span class="text-xl font-extrabold tracking-tight gradient-text">Dima AI</span>
                 </div>
                 <div class="flex items-center space-x-3">
                     <button onclick="openAuthModal('login')" class="px-4 py-2 text-xs font-bold text-slate-300 hover:text-white transition">Kirish</button>
-                    <button onclick="openAuthModal('register')" class="px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 rounded-xl shadow-lg shadow-cyan-500/25 transition duration-300">Boshlash</button>
+                    <button onclick="openAuthModal('register')" class="px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 rounded-xl shadow-lg shadow-purple-500/30 transition transform hover:scale-105">Boshlash</button>
                 </div>
             </div>
         </header>
 
-        <main class="flex-1 flex items-center justify-center px-4 py-16">
+        <!-- Hero Section -->
+        <main class="flex-1 flex items-center justify-center px-4 py-16 z-10">
             <div class="max-w-4xl mx-auto text-center space-y-6">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass border border-cyan-500/30 text-cyan-400 text-xs font-semibold">
-                    <i class="fa-solid fa-bolt text-amber-400"></i> Sun'iy Intellektning Yangi Avlodi
+                <!-- Glowing Orb Icon -->
+                <div class="mx-auto w-20 h-20 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center glow-orb mb-4">
+                    <i class="fa-solid fa-wand-magic-sparkles text-2xl text-white"></i>
+                </div>
+
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-purple-500/30 text-purple-300 text-xs font-semibold">
+                    <i class="fa-solid fa-sparkles text-pink-400"></i> Next-Gen Smart Chat Experience
                 </div>
                 <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
-                    Aqlli Yordamchingiz <br><span class="gradient-text">Dima AI Bilan Ishlang</span>
+                    Aqlli Yordamchingiz <br><span class="gradient-text">Dima AI Bilan Tanishing</span>
                 </h1>
-                <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto font-medium">
-                    Savollaringizga soniyalar ichida aniq va aqlli javoblarni oling. Bepul foydalaning yoki Premium imkoniyatlaridan bahramand bo'ling!
+                <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto font-medium">
+                    Savollaringizga zumda mukammal javob oling. Bepul foydalaning yoki Premium imkoniyatlarni kashf eting.
                 </p>
                 <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button onclick="openAuthModal('register')" class="w-full sm:w-auto px-8 py-4 text-sm font-extrabold text-white bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 rounded-2xl shadow-xl shadow-cyan-500/20 transition">
-                        Hoziroq Bepul Boshlash <i class="fa-solid fa-arrow-right ml-2"></i>
+                    <button onclick="openAuthModal('register')" class="w-full sm:w-auto px-8 py-4 text-sm font-extrabold text-white bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 rounded-2xl shadow-xl shadow-purple-500/25 transition transform hover:scale-105">
+                        Hoziroq Boshlash <i class="fa-solid fa-arrow-right ml-2"></i>
                     </button>
-                    <button onclick="togglePricingModal()" class="w-full sm:w-auto px-8 py-4 text-sm font-bold text-slate-300 glass hover:bg-slate-800/60 rounded-2xl transition">
+                    <button onclick="togglePricingModal()" class="w-full sm:w-auto px-8 py-4 text-sm font-bold text-purple-200 glass hover:bg-purple-950/40 rounded-2xl transition">
                         Tariflarni Ko'rish
                     </button>
                 </div>
@@ -78,30 +99,40 @@
         </main>
     </div>
 
-    <!-- ================= 2. DASHBOARD VIEW ================= -->
-    <div id="dashboardView" class="hidden flex-1 flex h-screen overflow-hidden bg-slate-950">
-        <aside class="w-64 glass border-r border-slate-800/80 flex flex-col justify-between hidden md:flex">
+    <!-- ================= 2. DASHBOARD VIEW (CHAT) ================= -->
+    <div id="dashboardView" class="hidden flex-1 flex h-screen overflow-hidden bg-[#07030f]">
+        <!-- Sidebar -->
+        <aside class="w-64 glass border-r border-purple-900/30 flex flex-col justify-between hidden md:flex">
             <div class="p-4 space-y-6">
                 <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center font-bold text-white text-lg">D</div>
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-bold text-white text-lg shadow-md shadow-purple-500/30">D</div>
                     <span class="text-lg font-extrabold gradient-text">Dima AI</span>
                 </div>
 
-                <div class="p-3.5 rounded-2xl glass-card border border-cyan-500/20">
+                <!-- Plan Card -->
+                <div class="p-3.5 rounded-2xl glass-card border border-purple-500/30 relative overflow-hidden">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-400 text-[10px] font-bold uppercase tracking-wider">Free Plan</span>
+                        <span class="px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 text-[10px] font-bold uppercase tracking-wider">Free Plan</span>
                         <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
                     </div>
-                    <p class="text-[11px] text-slate-400">Kunlik xabarlar cheklangan.</p>
-                    <button onclick="togglePricingModal()" class="mt-3 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold rounded-xl text-xs transition">
-                        PRO statusga o'tish
+                    <p class="text-[11px] text-slate-400">Kunlik xabarlar faol.</p>
+                    <button onclick="togglePricingModal()" class="mt-3 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold rounded-xl text-xs shadow-md shadow-amber-500/20 hover:opacity-90 transition">
+                        PRO ga o'tish
+                    </button>
+                </div>
+
+                <div class="space-y-1">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2">Suhbatlar</p>
+                    <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-purple-950/40 text-purple-300 text-xs font-semibold border border-purple-500/20">
+                        <i class="fa-regular fa-message"></i> Yangi Suhbat
                     </button>
                 </div>
             </div>
 
-            <div class="p-4 border-t border-slate-800/80 flex items-center justify-between">
+            <!-- Profile Footer -->
+            <div class="p-4 border-t border-purple-900/30 flex items-center justify-between">
                 <div class="flex items-center space-x-2.5 overflow-hidden">
-                    <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-cyan-400 font-bold text-xs shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-purple-900/50 border border-purple-500/30 flex items-center justify-center text-purple-300 font-bold text-xs shrink-0">
                         <i class="fa-regular fa-user"></i>
                     </div>
                     <div class="truncate">
@@ -114,10 +145,12 @@
             </div>
         </aside>
 
-        <div class="flex-1 flex flex-col h-full bg-slate-950 relative">
-            <div class="md:hidden glass p-3 border-b border-slate-800 flex items-center justify-between">
+        <!-- Main Chat Area -->
+        <div class="flex-1 flex flex-col h-full relative">
+            <!-- Mobile Topbar -->
+            <div class="md:hidden glass p-3 border-b border-purple-900/30 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                    <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-white font-bold text-xs">D</div>
+                    <div class="w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center text-white font-bold text-xs">D</div>
                     <span class="font-bold text-sm text-white">Dima AI</span>
                 </div>
                 <div class="flex items-center gap-2">
@@ -126,22 +159,24 @@
                 </div>
             </div>
 
+            <!-- Chat Box -->
             <div id="chatBox" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 max-w-4xl mx-auto w-full">
                 <div class="flex items-start space-x-3">
-                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shrink-0 glow-effect">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center text-white font-bold text-xs shrink-0 glow-orb">
                         AI
                     </div>
-                    <div class="glass-card p-4 rounded-2xl max-w-[85%] text-slate-200 text-xs sm:text-sm border border-slate-800 space-y-2">
-                        <p class="font-semibold text-cyan-400">Salom! Dima AI tizimiga xush kelibsiz 👋</p>
-                        <p class="text-slate-300">Men sizga savollaringizga javob berishda yordam beraman.</p>
+                    <div class="glass-card p-4 rounded-2xl max-w-[85%] text-slate-200 text-xs sm:text-sm border border-purple-500/20 space-y-2">
+                        <p class="font-semibold text-purple-300">Salom! Dima AI platformasiga xush kelibsiz ✨</p>
+                        <p class="text-slate-300">Menga istalgan savolingizni yuboring, bazaga muvaffaqiyatli saqlanadi!</p>
                     </div>
                 </div>
             </div>
 
-            <div class="p-4 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
+            <!-- Input Area -->
+            <div class="p-4 border-t border-purple-900/30 bg-[#07030f]/80 backdrop-blur-md">
                 <div class="max-w-4xl mx-auto relative flex items-center">
-                    <input id="userInput" type="text" onkeypress="if(event.key==='Enter') sendPrompt()" placeholder="Dima AI'dan biror narsa so'rang..." class="w-full bg-slate-900/90 border border-slate-800 rounded-2xl pl-4 pr-12 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition">
-                    <button onclick="sendPrompt()" class="absolute right-2 px-3 py-2 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white rounded-xl transition">
+                    <input id="userInput" type="text" onkeypress="if(event.key==='Enter') sendPrompt()" placeholder="Dima AI dan biror narsa so'rang..." class="w-full bg-purple-950/30 border border-purple-500/30 rounded-2xl pl-4 pr-12 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition shadow-inner">
+                    <button onclick="sendPrompt()" class="absolute right-2 px-3.5 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:opacity-90 transition shadow-lg shadow-purple-500/30">
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
                 </div>
@@ -150,8 +185,9 @@
     </div>
 
     <!-- ================= 3. MODALS ================= -->
+    <!-- Auth Modal -->
     <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
-        <div class="glass p-6 sm:p-8 rounded-3xl w-full max-w-sm border border-slate-800 relative shadow-2xl">
+        <div class="glass p-6 sm:p-8 rounded-3xl w-full max-w-sm border border-purple-500/30 relative shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -160,60 +196,63 @@
             
             <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Email</label>
-                    <input id="authEmail" type="email" required placeholder="nomi@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition">
+                    <label class="block text-[11px] font-bold text-purple-300 uppercase tracking-wider mb-1.5">Email</label>
+                    <input id="authEmail" type="email" required placeholder="nomi@gmail.com" class="w-full bg-purple-950/40 border border-purple-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 transition">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Parol</label>
-                    <input id="authPassword" type="password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition">
+                    <label class="block text-[11px] font-bold text-purple-300 uppercase tracking-wider mb-1.5">Parol</label>
+                    <input id="authPassword" type="password" required placeholder="••••••••" class="w-full bg-purple-950/40 border border-purple-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 transition">
                 </div>
-                <button type="submit" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-cyan-500/20 transition">
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-purple-500/30 hover:opacity-90 transition">
                     Tasdiqlash
                 </button>
             </form>
         </div>
     </div>
 
+    <!-- Pricing Modal -->
     <div id="pricingModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
-        <div class="glass p-6 sm:p-8 rounded-3xl w-full max-w-2xl border border-slate-800 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="glass p-6 sm:p-8 rounded-3xl w-full max-w-2xl border border-purple-500/30 relative shadow-2xl max-h-[90vh] overflow-y-auto">
             <button onclick="togglePricingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center mb-8">
                 <h3 class="text-2xl font-extrabold text-white">Tarifingizni Tanlang</h3>
-                <p class="text-slate-400 text-xs mt-1">O'zingizga mos keladigan rejani tanlang</p>
+                <p class="text-purple-300 text-xs mt-1">O'zingizga mos keladigan rejani tanlang</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="glass-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <!-- Free -->
+                <div class="glass-card p-5 rounded-2xl border border-purple-500/20 flex flex-col justify-between">
                     <div>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Free</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Free Plan</span>
                         <div class="text-2xl font-black text-white my-2">0 <span class="text-xs font-normal text-slate-400">so'm / oy</span></div>
                         <ul class="text-xs text-slate-300 space-y-2.5 my-4">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400"></i> Kuniga 10 ta AI xabar</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400"></i> Standart AI tezligi</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Kuniga 10 ta AI xabar</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Standart tezlik</li>
                         </ul>
                     </div>
-                    <button onclick="togglePricingModal()" class="w-full py-2.5 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs">Hozirgi Rejangiz</button>
+                    <button onclick="togglePricingModal()" class="w-full py-2.5 bg-purple-950/60 text-purple-300 font-bold rounded-xl text-xs border border-purple-500/30">Hozirgi Rejangiz</button>
                 </div>
 
-                <div class="glass-card p-5 rounded-2xl border-2 border-amber-500/50 relative flex flex-col justify-between bg-gradient-to-b from-amber-500/10 to-transparent">
-                    <span class="absolute -top-3 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-[9px] px-2.5 py-0.5 rounded-full uppercase">Tavsiya etiladi</span>
+                <!-- PRO -->
+                <div class="glass-card p-5 rounded-2xl border-2 border-amber-500/60 relative flex flex-col justify-between bg-gradient-to-b from-amber-500/10 to-transparent">
+                    <span class="absolute -top-3 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-[9px] px-2.5 py-0.5 rounded-full uppercase shadow-md">Tavsiya etiladi</span>
                     <div>
                         <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Dima AI Pro</span>
                         <div class="text-2xl font-black text-white my-2">49,000 <span class="text-xs font-normal text-slate-400">so'm / oy</span></div>
                         <ul class="text-xs text-slate-200 space-y-2.5 my-4">
                             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Cheksiz AI xabarlar</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> O'ta yuqori tezlik</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> O'ta yuqori tezlik & VIP</li>
                         </ul>
                     </div>
-                    <button onclick="alert('To\'lov tizimi tez orada ulanadi!')" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl text-xs shadow-lg shadow-amber-500/20">PRO xarid qilish</button>
+                    <button onclick="alert('To\'lov tizimi tez orada ulanadi!')" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl text-xs shadow-lg shadow-amber-500/30 hover:opacity-90 transition">PRO xarid qilish</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ================= 4. SCRIPT LOGIC ================= -->
+    <!-- ================= 4. LOGIC ================= -->
     <script>
         const SUPABASE_URL = 'https://qjgnwremgeyajzpwybvb.supabase.co'; 
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU5NTgsImV4cCI6MjEwODkyMTk1OH0.ztJTRZOF8FFt159K-0eVkre7vbKjXeDf5yukLjVJ-iE';
@@ -282,49 +321,4 @@
                     alert("Kirishda xatolik: " + error.message);
                 } else {
                     closeAuthModal();
-                    if (data && data.user) showDashboard(data.user);
-                }
-            }
-        }
-
-        async function handleLogout() {
-            await supabaseClient.auth.signOut();
-            window.location.reload();
-        }
-
-        async function sendPrompt() {
-            const input = document.getElementById('userInput');
-            const chatBox = document.getElementById('chatBox');
-            if (!input || !input.value.trim()) return;
-
-            const query = input.value;
-            input.value = '';
-
-            const userMsg = document.createElement('div');
-            userMsg.className = "flex justify-end";
-            userMsg.innerHTML = `<div class="bg-gradient-to-r from-cyan-600 to-indigo-600 p-3.5 rounded-2xl max-w-[85%] text-white text-xs sm:text-sm shadow-md">${query}</div>`;
-            chatBox.appendChild(userMsg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            const { data: { user } } = await supabaseClient.auth.getUser();
-
-            await supabaseClient.from('usage_logs').insert([
-                { user_id: user ? user.id : null, prompt: query, tokens_used: 10 }
-            ]);
-
-            setTimeout(() => {
-                const aiMsg = document.createElement('div');
-                aiMsg.className = "flex items-start space-x-3";
-                aiMsg.innerHTML = `
-                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shrink-0">AI</div>
-                    <div class="glass-card p-4 rounded-2xl max-w-[85%] text-slate-200 text-xs sm:text-sm border border-slate-800">
-                        Xabaringiz qabul qilindi va bazaga saqlandi!
-                    </div>
-                `;
-                chatBox.appendChild(aiMsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 600);
-        }
-    </script>
-</body>
-</html>
+        
