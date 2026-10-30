@@ -3,101 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dima AI - Zamonaviy Sun'iy Intellekt Platformasi</title>
+    <title>Dima AI - Next-Gen AI Platform</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.3);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col selection:bg-cyan-500 selection:text-white">
 
-    <!-- Header / Navbar -->
-    <header class="sticky top-0 z-40 w-full glass border-b border-slate-800/80 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-white text-lg shadow-lg shadow-cyan-500/30">
-                    D
+    <!-- ================= 1. LANDING PAGE (MEHMONDAR IKKANLAR UCHUN) ================= -->
+    <div id="landingView" class="flex-1 flex flex-col">
+        <!-- Header -->
+        <header class="sticky top-0 z-40 w-full glass border-b border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-600 flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-cyan-500/20">
+                        D
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight gradient-text">Dima AI</span>
                 </div>
-                <span class="text-lg font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-indigo-300">
-                    Dima AI
-                </span>
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleAuthModal('login')" class="px-4 py-2 text-xs font-bold text-slate-300 hover:text-white transition">Kirish</button>
+                    <button onclick="toggleAuthModal('register')" class="px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 rounded-xl shadow-lg shadow-cyan-500/25 transition duration-300 hover:scale-105">Boshlash</button>
+                </div>
             </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="toggleAuthModal('login')" class="px-3 py-1.5 text-xs font-semibold text-slate-200">Kirish</button>
-                <button onclick="toggleAuthModal('register')" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg">Boshlash</button>
-            </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- AI Sandbox Section -->
-    <section id="sandbox" class="py-10 px-4 bg-slate-900/50 border-b border-slate-800">
-        <div class="max-w-2xl mx-auto">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-extrabold text-white">AI Sandbox (Demo Chat)</h2>
-                <p class="text-slate-400 text-xs mt-1">Haqiqiy Supabase bazasiga ulangan chat</p>
+        <!-- Hero Section -->
+        <main class="flex-1 flex items-center justify-center px-4 py-16">
+            <div class="max-w-4xl mx-auto text-center space-y-6">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass border border-cyan-500/30 text-cyan-400 text-xs font-semibold">
+                    <i class="fa-solid fa-bolt text-amber-400"></i> Sun'iy Intellektning Yangi Avlodi
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+                    Aqlli Yordamchingiz <br><span class="gradient-text">Dima AI Bilan Ishlang</span>
+                </h1>
+                <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto font-medium">
+                    Savollaringizga soniyalar ichida aniq va aqlli javoblarni oling. Bepul foydalaning yoki Premium imkoniyatlaridan bahramand bo'ling!
+                </p>
+                <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="toggleAuthModal('register')" class="w-full sm:w-auto px-8 py-4 text-sm font-extrabold text-white bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 rounded-2xl shadow-xl shadow-cyan-500/20 hover:scale-105 transition duration-300">
+                        Hoziroq Bepul Boshlash <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                    <button onclick="togglePricingModal()" class="w-full sm:w-auto px-8 py-4 text-sm font-bold text-slate-300 glass hover:bg-slate-800/60 rounded-2xl transition">
+                        Tariflarni Ko'rish
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= 2. DASHBOARD VIEW (RO'YXATDAN O'TGANLAR UCHUN) ================= -->
+    <div id="dashboardView" class="hidden flex-1 flex h-screen overflow-hidden bg-slate-950">
+        <!-- Sidebar -->
+        <aside class="w-64 glass border-r border-slate-800/80 flex flex-col justify-between hidden md:flex">
+            <div class="p-4 space-y-6">
+                <!-- Brand -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center font-bold text-white text-lg">D</div>
+                    <span class="text-lg font-extrabold gradient-text">Dima AI</span>
+                </div>
+
+                <!-- Plan Card -->
+                <div class="p-3.5 rounded-2xl glass-card border border-cyan-500/20 relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-2">
+                        <span id="userPlanBadge" class="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-400 text-[10px] font-bold uppercase tracking-wider">Free Plan</span>
+                        <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Kunlik xabarlar cheklangan.</p>
+                    <button onclick="togglePricingModal()" class="mt-3 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold rounded-xl text-xs hover:opacity-90 transition shadow-md shadow-amber-500/20">
+                        PRO statusga o'tish
+                    </button>
+                </div>
+
+                <!-- Chat Nav -->
+                <div class="space-y-1">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2">Suhbatlar</p>
+                    <button class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-800/60 text-cyan-400 text-xs font-semibold">
+                        <i class="fa-regular fa-message"></i> Yangi Chat
+                    </button>
+                </div>
             </div>
 
-            <div class="glass rounded-2xl overflow-hidden border border-slate-800">
-                <div id="chatBox" class="h-72 p-4 overflow-y-auto space-y-3 text-xs sm:text-sm">
-                    <div class="flex items-start space-x-2.5">
-                        <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0">AI</div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl max-w-[85%] text-slate-200">
-                            Salom! Tizimga ulandi. Menga istalgan savolingizni bering!
-                        </div>
+            <!-- Profile & Logout -->
+            <div class="p-4 border-t border-slate-800/80 flex items-center justify-between">
+                <div class="flex items-center space-x-2.5 overflow-hidden">
+                    <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-cyan-400 font-bold text-xs shrink-0">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div class="truncate">
+                        <p id="userEmailDisplay" class="text-xs font-semibold text-slate-200 truncate">user@gmail.com</p>
                     </div>
                 </div>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-400 text-sm p-1.5 transition" title="Chiqish">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
+            </div>
+        </aside>
 
-                <div class="p-3 border-t border-slate-800 bg-slate-950/50 flex gap-2">
-                    <input id="userInput" type="text" placeholder="Savolingizni yozing..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500">
-                    <button onclick="sendPrompt()" class="px-4 py-2.5 bg-cyan-500 text-white rounded-xl font-semibold text-xs shrink-0">Yuborish</button>
+        <!-- Main Chat Area -->
+        <div class="flex-1 flex flex-col h-full bg-slate-950 relative">
+            <!-- Mobile Topbar -->
+            <div class="md:hidden glass p-3 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-white font-bold text-xs">D</div>
+                    <span class="font-bold text-sm text-white">Dima AI</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="togglePricingModal()" class="px-2.5 py-1 bg-amber-500 text-slate-950 font-bold text-[10px] rounded-lg">PRO</button>
+                    <button onclick="handleLogout()" class="text-slate-400 text-xs"><i class="fa-solid fa-power-off"></i></button>
+                </div>
+            </div>
+
+            <!-- Chat Messages Container -->
+            <div id="chatBox" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 max-w-4xl mx-auto w-full">
+                <!-- Welcome Message -->
+                <div class="flex items-start space-x-3 animate-fade-in">
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shrink-0 glow-effect">
+                        AI
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl max-w-[85%] text-slate-200 text-xs sm:text-sm border border-slate-800 space-y-2">
+                        <p class="font-semibold text-cyan-400">Salom! Dima AI tizimiga xush kelibsiz 👋</p>
+                        <p class="text-slate-300">Men sizga kod yozish, matnlarni tahlil qilish va savollaringizga javob berishda yordam beraman. Menga istalgan savolingizni berishingiz mumkin!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Box -->
+            <div class="p-4 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
+                <div class="max-w-4xl mx-auto relative flex items-center">
+                    <input id="userInput" type="text" onkeypress="if(event.key==='Enter') sendPrompt()" placeholder="Dima AI'dan biror narsa so'rang..." class="w-full bg-slate-900/90 border border-slate-800 rounded-2xl pl-4 pr-12 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition shadow-inner">
+                    <button onclick="sendPrompt()" class="absolute right-2 px-3 py-2 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white rounded-xl hover:scale-105 active:scale-95 transition shadow-lg shadow-cyan-500/20">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
+    <!-- ================= 3. MODALS (AUTH & PRICING) ================= -->
     <!-- Auth Modal -->
-    <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="glass p-6 rounded-2xl w-full max-w-sm border border-slate-800 relative">
-            <button onclick="toggleAuthModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+    <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="glass p-6 sm:p-8 rounded-3xl w-full max-w-sm border border-slate-800 relative shadow-2xl">
+            <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-            <h3 id="modalTitle" class="text-xl font-bold text-white mb-4">Tizimga kirish</h3>
-            <form onsubmit="handleAuthSubmit(event)" class="space-y-3">
+            <h3 id="modalTitle" class="text-2xl font-extrabold text-white mb-1">Tizimga kirish</h3>
+            <p class="text-slate-400 text-xs mb-6">Dima AI imkoniyatlaridan to'liq foydalaning</p>
+            
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Email manzil</label>
-                    <input id="authEmail" type="email" required placeholder="example@gmail.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Email</label>
+                    <input id="authEmail" type="email" required placeholder="nomi@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Parol</label>
-                    <input id="authPassword" type="password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Parol</label>
+                    <input id="authPassword" type="password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition">
                 </div>
-                <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl text-xs">Tasdiqlash</button>
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-cyan-500/20 hover:opacity-90 transition">
+                    Davom etish
+                </button>
             </form>
         </div>
     </div>
 
-    <footer class="py-6 text-center text-xs text-slate-500">
-        <p>© 2026 Dima AI.</p>
-    </footer>
+    <!-- Pricing Modal -->
+    <div id="pricingModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="glass p-6 sm:p-8 rounded-3xl w-full max-w-2xl border border-slate-800 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="togglePricingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-extrabold text-white">Tarifingizni Tanlang</h3>
+                <p class="text-slate-400 text-xs mt-1">O'zingizga mos keladigan rejani faollashtiring</p>
+            </div>
 
-    <!-- Supabase Initialization & Logic -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Free Plan Card -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Free</span>
+                        <div class="text-2xl font-black text-white my-2">0 <span class="text-xs font-normal text-slate-400">so'm / oy</span></div>
+                        <ul class="text-xs text-slate-300 space-y-2.5 my-4">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400"></i> Kuniga 10 ta AI xabar</li>
+                            <li class="flex items-center gap-2"><li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400"></i> Standart AI tezligi</li>
+                            <li class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-xmark"></i> Cheksiz xabarlar yo'q</li>
+                        </ul>
+                    </div>
+                    <button onclick="togglePricingModal()" class="w-full py-2.5 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs hover:bg-slate-700 transition">Hozirgi Rejangiz</button>
+                </div>
+
+                <!-- Premium Plan Card -->
+                <div class="glass-card p-5 rounded-2xl border-2 border-amber-500/50 relative flex flex-col justify-between bg-gradient-to-b from-amber-500/10 to-transparent">
+                    <span class="absolute -top-3 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-[9px] px-2.5 py-0.5 rounded-full uppercase">Tavsiya etiladi</span>
+                    <div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Dima AI Pro</span>
+                        <div class="text-2xl font-black text-white my-2">49,000 <span class="text-xs font-normal text-slate-400">so'm / oy</span></div>
+                        <ul class="text-xs text-slate-200 space-y-2.5 my-4">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Cheksiz AI xabarlar</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> O'ta yuqori tezlik</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> VIP Qo'llab-quvvatlash</li>
+                        </ul>
+                    </div>
+                    <button onclick="alert('To\'lov tizimi tez orada ulanadi!')" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl text-xs shadow-lg shadow-amber-500/20 hover:opacity-90 transition">PRO xarid qilish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 4. JAVASCRIPT LOGIC ================= -->
     <script>
         const SUPABASE_URL = 'https://qjgnwremgeyajzpwybvb.supabase.co'; 
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZ253cmVtZ2V5YWp6cHd5YnZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU5NTgsImV4cCI6MjEwODkyMTk1OH0.ztJTRZOF8FFt159K-0eVkre7vbKjXeDf5yukLjVJ-iE';
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         let authMode = 'login';
+
+        // Sahifa yuklanganda sessiyani tekshirish
+        window.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                showDashboard(session.user);
+            }
+        });
 
         function toggleAuthModal(mode = 'login') {
             authMode = mode;
@@ -109,6 +265,17 @@
             } else {
                 modal.classList.add('hidden');
             }
+        }
+
+        function togglePricingModal() {
+            const modal = document.getElementById('pricingModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function showDashboard(user) {
+            document.getElementById('landingView').classList.add('hidden');
+            document.getElementById('dashboardView').classList.remove('hidden');
+            document.getElementById('userEmailDisplay').innerText = user.email;
         }
 
         async function handleAuthSubmit(e) {
@@ -123,16 +290,22 @@
                 } else {
                     alert("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
                     toggleAuthModal();
+                    if(data.user) showDashboard(data.user);
                 }
             } else {
                 const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) {
                     alert("Kirishda xatolik: " + error.message);
                 } else {
-                    alert("Tizimga muvaffaqiyatli kirdingiz!");
                     toggleAuthModal();
+                    if(data.user) showDashboard(data.user);
                 }
             }
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            window.location.reload();
         }
 
         async function sendPrompt() {
@@ -143,43 +316,7 @@
             const query = input.value;
             input.value = '';
 
+            // Foydalanuvchi xabari UI
             const userMsg = document.createElement('div');
             userMsg.className = "flex justify-end";
-            userMsg.innerHTML = `<div class="bg-cyan-600 p-3 rounded-2xl max-w-[85%] text-white text-xs">${query}</div>`;
-            chatBox.appendChild(userMsg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-            
-            if (!user) {
-                alert("Diqqat: Siz tizimga kirmagansiz yoki sessiya topilmadi! Avval 'Kirish' tugmasini bosing.");
-                return;
-            }
-
-            const { error: insertError } = await supabaseClient.from('usage_logs').insert([
-                { user_id: user.id, prompt: query, tokens_used: 10 }
-            ]);
-
-            if (insertError) {
-                alert("Bazaga yozishda xatolik: " + insertError.message);
-                console.error(insertError);
-            } else {
-                console.log("Muvaffaqiyatli yozildi!");
-            }
-
-            setTimeout(() => {
-                const aiMsg = document.createElement('div');
-                aiMsg.className = "flex items-start space-x-2.5";
-                aiMsg.innerHTML = `
-                    <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0">AI</div>
-                    <div class="bg-slate-800/80 p-3 rounded-2xl max-w-[85%] text-slate-200 text-xs">
-                        Xabaringiz qabul qilindi va bazaga yozildi!
-                    </div>
-                `;
-                chatBox.appendChild(aiMsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 700);
-        }
-    </script>
-</body>
-</html>
+            userMsg.innerHTML = `<div class="bg-gradient-to-r from-cyan-600 to-indigo-600 p-3.5 rounded-2xl max-w-[85%]
