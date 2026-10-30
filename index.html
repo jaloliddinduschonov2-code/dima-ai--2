@@ -2,359 +2,131 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dima AI - Pro SaaS Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dima AI</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{--bg:#07030f;--glass:rgba(124,58,237,.12);--line:rgba(167,139,250,.25);--neon:#c084fc}
-*{-webkit-tap-highlight-color:transparent;box-sizing:border-box}
-html,body{height:100%;margin:0;padding:0}
-body{background:var(--bg);color:#f3e8ff;font-family:system-ui,-apple-system,sans-serif;overflow-x:hidden}
-
-.glass{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line)}
-.bg-glow{position:fixed;inset:0;pointer-events:none!important;z-index:0;background:radial-gradient(60% 50% at 20% 0%,rgba(124,58,237,.35),transparent),radial-gradient(50% 40% at 90% 100%,rgba(217,70,239,.22),transparent)}
-
-.orb{border-radius:9999px;background:radial-gradient(circle at 32% 28%,#f5d0fe,#a855f7 45%,#4c1d95 85%);box-shadow:0 0 60px 10px rgba(168,85,247,.55);animation:pulse 3.4s ease-in-out infinite;pointer-events:none!important}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-
-.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 22px rgba(192,132,252,.45);cursor:pointer!important;position:relative;z-index:99!important}
-.ghost{border:1px solid var(--line);cursor:pointer!important;position:relative;z-index:99!important}
-.ghost:hover{background:rgba(167,139,250,.15)}
-
-.hidden-view{display:none!important}
-.modal{position:fixed;inset:0;z-index:1000!important;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.88);backdrop-filter:blur(8px)}
-.modal.open{display:flex!important}
-
-input,textarea,select{background:rgba(255,255,255,.08);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px;position:relative;z-index:100!important}
-select option{background:#14091f}
-
-#drawer{transition:transform .25s;z-index:700!important}
-@media(max-width:1023px){#drawer{position:fixed;top:0;left:0;bottom:0;transform:translateX(-105%);width:80%;max-width:300px}#drawer.open{transform:none!important}}
-#overlay{display:none;position:fixed;inset:0;z-index:600!important;background:rgba(0,0,0,.6)}#overlay.open{display:block!important}
-
-.msg-u{background:linear-gradient(135deg,#7c3aed,#c026d3);border-radius:18px 18px 4px 18px}
-.msg-a{background:rgba(124,58,237,.14);border:1px solid var(--line);border-radius:18px 18px 18px 4px}
+body { background: #07030f; color: #f3e8ff; font-family: sans-serif; margin: 0; padding: 0; }
+.glass { background: rgba(124,58,237,0.12); backdrop-filter: blur(15px); border: 1px solid rgba(167,139,250,0.25); }
+.btn { background: linear-gradient(135deg, #9333ea, #d946ef); color: #fff; cursor: pointer; }
+.modal { display: none; position: fixed; inset: 0; background: rgba(5,2,12,0.85); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
+.modal.active { display: flex; }
+input, textarea { background: rgba(255,255,255,0.1); border: 1px solid rgba(167,139,250,0.3); color: #fff; border-radius: 8px; padding: 10px; width: 100%; outline: none; }
 </style>
 </head>
-<body>
-<div class="bg-glow"></div>
+<body class="min-h-screen flex flex-col">
 
-<!-- Maintenance Banner -->
-<div id="maintenanceBanner" class="hidden-view fixed top-0 left-0 right-0 z-[2500] bg-amber-500 text-slate-950 font-bold text-center py-2 px-4 text-xs">
-  ⚠️ Diqqat: Saytda hozirda texnik ishlar olib borilmoqda.
-</div>
-
-<!-- ============ LANDING ============ -->
-<div id="landing" class="relative z-10 min-h-screen flex flex-col">
-  <header class="glass sticky top-0 z-40 flex items-center justify-between px-4 sm:px-8 py-3">
-    <div class="flex items-center gap-2 font-bold text-lg"><span class="orb w-7 h-7 inline-block" style="animation:none;box-shadow:0 0 14px #a855f7"></span>Dima AI</div>
+<!-- LANDING PAGE -->
+<div id="landing" class="flex-1 flex flex-col">
+  <header class="glass flex items-center justify-between p-4 sticky top-0 z-50">
+    <div class="font-bold text-lg flex items-center gap-2"><span>🟣</span> Dima AI</div>
     <div class="flex gap-2">
-      <button onclick="openModalWithMode('auth', 'login')" class="ghost rounded-full px-4 py-2 text-sm">Kirish</button>
-      <button onclick="openModalWithMode('auth', 'register')" class="btn rounded-full px-4 py-2 text-sm font-semibold text-white">Boshlash</button>
+      <button onclick="openModal('auth')" class="glass px-4 py-2 rounded-full text-sm cursor-pointer">Kirish</button>
+      <button onclick="openModal('auth')" class="btn px-4 py-2 rounded-full text-sm font-bold cursor-pointer">Boshlash</button>
     </div>
   </header>
 
-  <main class="flex-1">
-    <section class="text-center px-5 pt-14 pb-16 max-w-3xl mx-auto relative">
-      <div class="orb w-32 h-32 sm:w-44 sm:h-44 mx-auto mb-10"></div>
-      <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight relative z-10">Kelajak Sun'iy Intellekti Dima AI Bilan</h1>
-      <p class="mt-5 text-violet-200/80 text-base sm:text-lg relative z-10">Savol bering, rasm yarating, taqdimot va kod yozdiring. Hammasi bitta joyda, o'zbek tilida.</p>
-      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center relative z-20">
-        <button onclick="goToDashboard()" class="btn rounded-full px-7 py-3 font-semibold text-white">Dashboardga O'tish</button>
-        <button onclick="openModal('pricing')" class="ghost glass rounded-full px-7 py-3 font-semibold">Tariflarni Ko'rish</button>
-      </div>
-    </section>
-
-    <section class="px-5 pb-16 max-w-5xl mx-auto relative z-10">
-      <h2 class="text-2xl font-bold text-center mb-8">Foydalanuvchilar fikri</h2>
-      <div class="grid gap-4 md:grid-cols-3">
-        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-sm text-violet-100/90">Dars tayyorlashda juda yordam berdi. Javoblar tez va tushunarli.</p><p class="mt-3 font-semibold">Jasurbek T.</p></div>
-        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-sm text-violet-100/90">Dizayni chiroyli, telefonda ham qulay ishlaydi. Rasm yaratish menga yoqdi.</p><p class="mt-3 font-semibold">Madina K.</p></div>
-        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div><p class="text-sm text-violet-100/90">Kod yozishda yordamchi sifatida ishlataman. Vaqtimni tejaydi.</p><p class="mt-3 font-semibold">Bobur M.</p></div>
-      </div>
-    </section>
+  <main class="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-xl mx-auto">
+    <h1 class="text-3xl sm:text-5xl font-black mb-4">Kelajak Sun'iy Intellekti Dima AI Bilan</h1>
+    <p class="text-violet-200/80 mb-8 text-sm sm:text-base">Savol bering, rasm yarating va kod yozdiring. Hammasi o'zbek tilida.</p>
+    <div class="flex flex-col sm:flex-row gap-3 w-full">
+      <button onclick="goToDashboard()" class="btn py-3 px-6 rounded-2xl font-bold cursor-pointer flex-1">Dashboardga O'tish</button>
+      <button onclick="openModal('pricing')" class="glass py-3 px-6 rounded-2xl font-bold cursor-pointer flex-1">Tariflar</button>
+    </div>
   </main>
-  <footer class="text-center text-sm text-violet-300/60 py-6 px-4">&copy; 2026 Dima AI. Barcha huquqlar himoyalangan.</footer>
 </div>
 
-<!-- ============ DASHBOARD ============ -->
-<div id="dashboard" class="hidden-view relative z-10 h-screen flex" style="height:100dvh">
-  <div id="overlay" onclick="closeDrawer()"></div>
-  <aside id="drawer" class="glass flex flex-col p-4 lg:w-64 lg:flex-none lg:relative" style="background:rgba(14,6,28,.98)">
-    <div class="flex items-center justify-between mb-5">
-      <div class="flex items-center gap-2 font-bold text-lg"><span class="orb w-7 h-7 inline-block" style="animation:none;box-shadow:0 0 14px #a855f7"></span>Dima AI</div>
-      <button onclick="closeDrawer()" class="lg:hidden ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button>
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden h-screen flex flex-col">
+  <header class="glass flex items-center justify-between p-4">
+    <span class="font-bold">Dima AI Dashboard</span>
+    <div class="flex gap-2 items-center">
+      <span id="userEmail" class="text-xs text-violet-300"></span>
+      <button onclick="goHome()" class="glass px-3 py-1.5 rounded-lg text-xs cursor-pointer">Chiqish</button>
     </div>
-    <button onclick="startNewChat()" class="btn rounded-xl py-2.5 font-semibold text-white mb-5"><i class="fa-solid fa-plus mr-2"></i>New Chat</button>
-    
-    <nav class="flex flex-col gap-1 text-sm">
-      <button onclick="closeDrawer()" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
-      <button onclick="renderArchive()" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived <span id="archiveCount" class="text-xs bg-purple-900 px-1.5 py-0.5 rounded-full ml-auto">0</span></button>
-      <button onclick="goHome()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
-      <button id="adminNavBtn" onclick="checkAdminAuth()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent text-amber-400 font-bold"><i class="fa-solid fa-shield-halved w-6"></i>Admin Panel</button>
-    </nav>
+  </header>
 
-    <div id="archiveContainer" class="mt-2 text-xs text-violet-300/80 overflow-y-auto max-h-40 space-y-1"></div>
+  <div id="chatArea" class="flex-1 overflow-y-auto p-4 space-y-3 max-w-2xl mx-auto w-full">
+    <div class="text-center text-violet-400 my-auto py-10" id="emptyText">Savol yozing va sun'iy intellekt bilan muloqotni boshlang!</div>
+    <div id="messages" class="space-y-3"></div>
+  </div>
 
-    <div class="mt-auto glass rounded-2xl p-4 text-center">
-      <i class="fa-solid fa-crown text-yellow-300"></i>
-      <p id="planBadge" class="font-semibold mt-1">Free Plan (<span id="limitCount">20</span> qoldi)</p>
-      <button onclick="openModal('pricing')" class="btn w-full rounded-lg py-2 mt-3 text-sm font-semibold text-white">Upgrade (49,000 so'm)</button>
-    </div>
-  </aside>
-
-  <section class="flex-1 min-w-0 flex flex-col">
-    <div class="glass flex items-center gap-2 px-3 sm:px-5 py-2.5">
-      <button onclick="openDrawer()" class="lg:hidden ghost rounded-lg w-10 h-10"><i class="fa-solid fa-bars"></i></button>
-      <select id="modelTop" class="px-3 py-2 text-sm" onchange="changeModel(this.value)">
-        <option value="Gemini 1.5 Flash">Gemini 1.5 Flash</option>
-        <option value="ChatGPT v4.0">ChatGPT v4.0</option>
-        <option value="Claude">Claude</option>
-      </select>
-      <span id="userEmail" class="ml-auto text-xs sm:text-sm text-violet-200/80 truncate max-w-[40%]"></span>
-      <button onclick="handleLogout()" class="ghost rounded-lg px-3 py-2 text-sm"><i class="fa-solid fa-right-from-bracket sm:mr-1"></i><span class="hidden sm:inline">Logout</span></button>
-    </div>
-
-    <div id="chatArea" class="flex-1 overflow-y-auto px-4 py-5">
-      <div id="empty" class="h-full flex flex-col items-center justify-center text-center">
-        <div class="orb w-24 h-24 mb-6"></div>
-        <h2 class="text-2xl sm:text-3xl font-semibold">Ready to Create Something New?</h2>
-      </div>
-      <div id="messages" class="hidden-view max-w-3xl mx-auto flex flex-col gap-3"></div>
-    </div>
-
-    <div class="px-3 sm:px-6 pb-3">
-      <div class="max-w-3xl mx-auto">
-        <div class="glass rounded-2xl p-3">
-          <textarea id="prompt" rows="2" placeholder="Ask Anything..." class="w-full resize-none p-2 bg-transparent border-0"></textarea>
-          <input type="file" id="fileInput" class="hidden" onchange="handleFile(this)">
-          <div class="flex items-center gap-2 mt-1">
-            <button onclick="triggerAttach()" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm"><i class="fa-solid fa-paperclip mr-1"></i>Attach</button>
-            <button onclick="openModal('settings')" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm"><i class="fa-solid fa-sliders mr-1"></i>Settings</button>
-            <button onclick="sendMsg()" class="btn ml-auto w-10 h-10 rounded-full text-white"><i class="fa-solid fa-arrow-up"></i></button>
-          </div>
-        </div>
-        <div class="grid grid-cols-3 gap-2 mt-3 text-left">
-          <button onclick="setSuggestion('Menga bir rasm yarat: kechki Samarqand, neon uslubida')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-regular fa-image text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Image Generator</p></button>
-          <button onclick="setSuggestion('Suniy intellekt haqida 5 slaydlik taqdimot rejasini tuz')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-regular fa-file-powerpoint text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">AI Presentation</p></button>
-          <button onclick="setSuggestion('JavaScript da oddiy kalkulyator kodini yozib ber')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-solid fa-code text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Dev Assistant</p></button>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<!-- ============ MODALS ============ -->
-<div id="m-auth" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="flex flex-col gap-3">
-      <input id="authEmail" type="email" placeholder="Email" class="px-4 py-3">
-      <input id="authPass" type="password" placeholder="Parol" class="px-4 py-3">
-      <input id="authPass2" type="password" placeholder="Parolni tasdiqlang" class="px-4 py-3 hidden-view">
-      <p id="authErr" class="text-sm text-pink-300 min-h-[1.25rem]"></p>
-      <button onclick="submitAuth()" class="btn rounded-xl py-3 font-semibold text-white">Kirish</button>
-      <button onclick="switchAuthMode()" id="authSwitchText" class="text-sm text-violet-300 underline">Akkauntingiz yo'qmi? Ro'yxatdan o'tish</button>
+  <div class="p-4 glass">
+    <div class="max-w-2xl mx-auto flex gap-2">
+      <textarea id="prompt" rows="1" placeholder="Xabar yozing..." class="flex-1 resize-none"></textarea>
+      <button onclick="sendMsg()" class="btn px-5 rounded-xl font-bold cursor-pointer"><i class="fa-solid fa-arrow-up"></i></button>
     </div>
   </div>
 </div>
 
-<div id="m-pricing" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Tarifni tanlash</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="grid gap-4">
-      <div class="rounded-2xl p-5" style="border:1px solid #d946ef;background:rgba(124,58,237,.2)">
-        <h4 class="font-bold text-lg text-fuchsia-300">Dima AI Pro - 49,000 so'm / oy</h4>
-        <p class="text-xs text-violet-200 mt-1">Cheksiz xabarlar va barcha modellar.</p>
-        <button onclick="processPayment()" class="btn w-full rounded-xl py-3 mt-4 font-semibold text-white">Click / Payme orqali to'lash</button>
-      </div>
-    </div>
+<!-- MODALS -->
+<div id="modal-auth" class="modal">
+  <div class="glass p-6 rounded-2xl w-full max-w-sm space-y-4">
+    <div class="flex justify-between items-center"><h3 class="font-bold text-lg">Tizimga kirish</h3><button onclick="closeModal()" class="cursor-pointer">✕</button></div>
+    <input id="emailInput" type="email" placeholder="Email kiriting">
+    <button onclick="loginUser()" class="btn w-full py-3 rounded-xl font-bold cursor-pointer">Kirish</button>
   </div>
 </div>
 
-<div id="m-settings" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Sozlamalar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="flex flex-col gap-4">
-      <label class="flex flex-col gap-1.5 text-sm">Gemini / Optus5.5 API Key
-        <input id="apiKeySet" type="password" placeholder="AIzaSy..." class="px-3 py-2 text-sm"></label>
-      <button onclick="saveSettings()" class="btn rounded-xl py-2.5 font-semibold text-white">Saqlash</button>
+<div id="modal-pricing" class="modal">
+  <div class="glass p-6 rounded-2xl w-full max-w-sm space-y-4 text-center">
+    <div class="flex justify-between items-center"><h3 class="font-bold text-lg">Tariflar</h3><button onclick="closeModal()" class="cursor-pointer">✕</button></div>
+    <div class="p-4 glass rounded-xl border border-fuchsia-500">
+      <p class="font-bold text-fuchsia-300">Pro Plan - 49,000 so'm</p>
+      <button onclick="alert('To\'lov tizimi ulanmoqda!')" class="btn w-full py-2.5 mt-3 rounded-xl font-bold cursor-pointer">Sotib olish</button>
     </div>
   </div>
 </div>
-
-<!-- Admin Authenticate Modal -->
-<div id="m-admin-auth" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-amber-400">Dilmurat Admin Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="flex flex-col gap-3">
-      <input id="adminLoginInput" type="text" placeholder="Admin Login (dilmurat)" class="px-4 py-3">
-      <input id="adminPassInput" type="password" placeholder="Admin Parol (dilmurat2026)" class="px-4 py-3">
-      <p id="adminErr" class="text-sm text-pink-300"></p>
-      <button onclick="loginAdmin()" class="btn rounded-xl py-3 font-semibold text-white">Tasdiqlash</button>
-    </div>
-  </div>
-</div>
-
-<!-- Admin Panel Modal -->
-<div id="m-admin" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-md" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved mr-2"></i>Admin Panel (Dilmurat)</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="flex flex-col gap-4 text-sm">
-      <div class="flex items-center justify-between p-3 glass rounded-xl">
-        <span>Texnik ishlar rejimi (Maintenance)</span>
-        <button id="maintenanceToggleBtn" onclick="toggleMaintenance()" class="px-3 py-1.5 rounded-lg bg-slate-700 text-xs font-bold text-white">Yoqish</button>
-      </div>
-      <p class="text-xs text-slate-400">Ushbu tugmani yoqsangiz, barcha foydalanuvchilar ekranida "Texnik ishlar olib borilmoqda" belligi chiqadi.</p>
-    </div>
-  </div>
-</div>
-
-<div id="toast" class="fixed left-1/2 -translate-x-1/2 z-[3000] glass rounded-full px-5 py-2.5 text-sm hidden-view" style="bottom:90px;background:rgba(16,7,30,.98)"></div>
 
 <script>
-var state = { 
-  user: null, 
-  mode: "login", 
-  model: "Gemini 1.5 Flash", 
-  isAdmin: false,
-  limit: parseInt(localStorage.getItem("dima_limit") || "20"),
-  isPro: localStorage.getItem("dima_pro") === "true",
-  maintenance: localStorage.getItem("dima_maint") === "true",
-  history: JSON.parse(localStorage.getItem("dima_history") || "[]"),
-  apiKey: localStorage.getItem("dima_gemini_key") || "" 
-};
-
-window.onload = function() {
-  if(document.getElementById("apiKeySet")) document.getElementById("apiKeySet").value = state.apiKey;
-  updateLimitUI();
-  checkMaintenanceUI();
-  renderArchive();
-};
-
-function toast(t){
-  var el = document.getElementById("toast");
-  if(!el) return;
-  el.textContent = t;
-  el.classList.remove("hidden-view");
-  clearTimeout(toast.t);
-  toast.t = setTimeout(function(){ el.classList.add("hidden-view"); }, 2400);
+function openModal(name) {
+  closeModal();
+  if(name === 'auth') document.getElementById('modal-auth').classList.add('active');
+  if(name === 'pricing') document.getElementById('modal-pricing').classList.add('active');
 }
 
-function openModal(name){
-  closeModals();
-  var m = document.getElementById("m-" + name);
-  if(m) m.classList.add("open");
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
 }
 
-function openModalWithMode(name, mode){
-  setAuthMode(mode);
-  openModal(name);
+function goToDashboard() {
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
 }
 
-function closeModals(){
-  document.querySelectorAll(".modal").forEach(function(m){ m.classList.remove("open"); });
+function goHome() {
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('landing').classList.remove('hidden');
 }
 
-function openDrawer(){
-  document.getElementById("drawer").classList.add("open");
-  document.getElementById("overlay").classList.add("open");
+function loginUser() {
+  var email = document.getElementById('emailInput').value.trim();
+  if(!email) { alert('Emailni kiriting!'); return; }
+  document.getElementById('userEmail').textContent = email;
+  closeModal();
+  goToDashboard();
 }
 
-function closeDrawer(){
-  document.getElementById("drawer").classList.remove("open");
-  document.getElementById("overlay").classList.remove("open");
-}
+function sendMsg() {
+  var prompt = document.getElementById('prompt');
+  var text = prompt.value.trim();
+  if(!text) return;
+  prompt.value = '';
 
-function goToDashboard(){
-  if(state.user) showDashboard();
-  else openModalWithMode('auth', 'login');
-}
-
-function goHome(){
-  document.getElementById("dashboard").classList.add("hidden-view");
-  document.getElementById("landing").classList.remove("hidden-view");
-  closeDrawer();
-}
-
-function showDashboard(){
-  document.getElementById("landing").classList.add("hidden-view");
-  document.getElementById("dashboard").classList.remove("hidden-view");
-  document.getElementById("userEmail").textContent = (state.user && state.user.email) ? state.user.email : "Foydalanuvchi";
-  closeDrawer();
-}
-
-function checkAdminAuth(){
-  if(state.isAdmin){
-    openModal('admin');
-  } else {
-    openModal('admin-auth');
-  }
-}
-
-function loginAdmin(){
-  var l = document.getElementById("adminLoginInput").value.trim();
-  var p = document.getElementById("adminPassInput").value.trim();
-  var err = document.getElementById("adminErr");
+  document.getElementById('emptyText').style.display = 'none';
+  var msgBox = document.getElementById('messages');
   
-  if(l === "dilmurat" && p === "dilmurat2026"){
-    state.isAdmin = true;
-    closeModals();
-    openModal('admin');
-    toast("Hush kelibsiz, Dilmurat!");
-  } else {
-    err.textContent = "Login yoki parol xato!";
-  }
-}
-
-function setAuthMode(m){
-  state.mode = m;
-  var reg = m === "register";
-  document.getElementById("authTitle").textContent = reg ? "Ro'yxatdan o'tish" : "Kirish";
-  document.getElementById("authPass2").classList.toggle("hidden-view", !reg);
-  document.getElementById("authSwitchText").textContent = reg ? "Akkauntingiz bormi? Kirish" : "Akkauntingiz yo'qmi? Ro'yxatdan o'tish";
-}
-
-function switchAuthMode(){
-  setAuthMode(state.mode === "login" ? "register" : "login");
-}
-
-function submitAuth(){
-  var email = document.getElementById("authEmail").value.trim();
-  var pass = document.getElementById("authPass").value;
-  var err = document.getElementById("authErr");
-  if(!email || !pass){ err.textContent = "Maydonlarni to'ldiring."; return; }
+  // User message
+  msgBox.innerHTML += '<div class="flex justify-end"><div class="bg-purple-600 p-3 rounded-2xl max-w-[80%] text-sm">' + text + '</div></div>';
   
-  state.user = { email: email };
-  closeModals();
-  showDashboard();
-  toast("Muvaffaqiyatli kirdingiz!");
+  // AI reply simulation
+  setTimeout(function() {
+    msgBox.innerHTML += '<div class="flex justify-start"><div class="glass p-3 rounded-2xl max-w-[80%] text-sm">Javob: ' + text + ' (Simulyatsiya)</div></div>';
+    var area = document.getElementById('chatArea');
+    area.scrollTop = area.scrollHeight;
+  }, 500);
 }
-
-function handleLogout(){
-  state.user = null;
-  state.isAdmin = false;
-  goHome();
-  toast("Tizimdan chiqdingiz");
-}
-
-function changeModel(m){
-  state.model = m;
-  toast("Model o'zgardi: " + m);
-}
-
-function triggerAttach(){ document.getElementById("fileInput").click(); }
-function handleFile(input){
-  if(input.files && input.files[0]){
-    document.getElementById("prompt").value += " [Fayl: " + input.files[0].name + "]";
-  }
-}
-function setSuggestion(txt){
-  var p = document.getElementById("prompt");
-  p.value = txt;
-  p.focus();
-}
-
-function saveSettings(){
-  state.apiKey = document
+</script>
+</body>
+</html>
