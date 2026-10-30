@@ -2,602 +2,790 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dima AI - Pro SaaS Platform</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10091b">
+<title>Dima AI — Creative Workspace</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{--bg:#07030f;--glass:rgba(124,58,237,.12);--line:rgba(167,139,250,.25)}
-*{-webkit-tap-highlight-color:transparent;box-sizing:border-box}
-html,body{height:100%;margin:0;padding:0}
-body{background:var(--bg);color:#f3e8ff;font-family:system-ui,-apple-system,sans-serif;overflow-x:hidden}
-
-.glass{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line)}
-.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 20px rgba(192,132,252,.35);cursor:pointer!important;position:relative;z-index:99!important}
-.ghost{border:1px solid var(--line);cursor:pointer!important;position:relative;z-index:99!important}
-.ghost:hover{background:rgba(167,139,250,.15)}
-
-.hidden-view{display:none!important}
-.modal{position:fixed;inset:0;z-index:1000!important;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.88);backdrop-filter:blur(8px)}
-.modal.open{display:flex!important}
-
-input,textarea,select{background:rgba(255,255,255,.08);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px;position:relative;z-index:100!important}
-select option{background:#14091f}
-
-#drawer{transition:transform .25s;z-index:700!important}
-@media(max-width:1023px){#drawer{position:fixed;top:0;left:0;bottom:0;transform:translateX(-105%);width:80%;max-width:300px}#drawer.open{transform:none!important}}
-#overlay{display:none;position:fixed;inset:0;z-index:600!important;background:rgba(0,0,0,.6)}#overlay.open{display:block!important}
-
-.msg-u{background:linear-gradient(135deg,#7c3aed,#c026d3);border-radius:18px 18px 4px 18px}
-.msg-a{background:rgba(124,58,237,.14);border:1px solid var(--line);border-radius:18px 18px 18px 4px}
+:root{--bg:#100b18;--panel:#171020;--line:#ffffff18;--purple:#a855f7;--pink:#d946ef}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#100b18;color:#f8f3ff;font-family:Inter,system-ui,-apple-system,sans-serif;min-height:100vh}
+.glass{background:#ffffff09;border:1px solid var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.btn{background:linear-gradient(120deg,#8b5cf6,#c026d3);box-shadow:0 5px 22px #9333ea38}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.muted{color:#a99bb9}.hide{display:none!important}
+input,textarea,select{background:#ffffff0c;border:1px solid #ffffff20;color:#fff;border-radius:12px;outline:none}
+input:focus,textarea:focus,select:focus{border-color:#b66aff}
+select option{background:#20162b;color:#fff}
+.modal{position:fixed;inset:0;background:#05030be8;z-index:80;display:none;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.modal.open{display:flex}
+.navbtn{width:100%;display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;color:#cfc4dc;text-align:left;font-size:13px}
+.navbtn:hover,.navbtn.active{background:#ffffff12;color:#fff}
+.feature{background:linear-gradient(145deg,#20152d,#120d1b);border:1px solid #ffffff17;border-radius:16px;padding:14px;text-align:left;min-height:118px}
+.msg{max-width:92%;padding:12px 15px;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55}
+.msg.user{align-self:flex-end;background:linear-gradient(130deg,#7c3aed,#a21caf)}
+.msg.ai{align-self:flex-start;background:#ffffff0b;border:1px solid #ffffff18}
+#sidebar{width:245px;flex-shrink:0;background:#100c17;border-right:1px solid #ffffff14}
+#mobileShade{display:none}
+@media(max-width:760px){
+#sidebar{position:fixed;z-index:60;inset:0 auto 0 0;width:min(82vw,290px);transform:translateX(-105%);transition:transform .25s}
+#sidebar.open{transform:translateX(0)}
+#mobileShade.open{display:block;position:fixed;inset:0;background:#0009;z-index:55}
+#mainArea{width:100%}
+.feature{min-height:100px}
+}
 </style>
 </head>
-<body class="min-h-screen flex flex-col">
-
-<!-- Maintenance Banner -->
-<div id="maintenanceBanner" class="hidden-view fixed top-0 left-0 right-0 z-[2500] bg-amber-500 text-slate-950 font-bold text-center py-2 px-4 text-xs">
-  ⚠️ Diqqat: Saytda hozirda texnik ishlar olib borilmoqda.
+<body>
+<div id="mobileShade" onclick="closeSidebar()"></div>
+<div class="min-h-screen flex" id="appShell">
+<aside id="sidebar" class="flex flex-col p-4 min-h-screen">
+<div class="flex items-center justify-between mb-6 px-1">
+<div class="font-extrabold text-xl tracking-tight"><span class="text-fuchsia-400">✦</span> Dima AI</div>
+<button class="md:hidden muted" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
 </div>
-
-<!-- ============ LANDING ============ -->
-<div id="landing" class="relative z-10 min-h-screen flex flex-col">
-  <header class="glass sticky top-0 z-40 flex items-center justify-between px-4 sm:px-8 py-3">
-    <div class="flex items-center gap-2 font-bold text-lg"><span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span>Dima AI</div>
-    <div class="flex gap-2">
-      <button onclick="openModalWithMode('auth', 'login')" class="ghost rounded-full px-4 py-2 text-sm">Kirish</button>
-      <button onclick="openModalWithMode('auth', 'register')" class="btn rounded-full px-4 py-2 text-sm font-semibold text-white">Boshlash</button>
-    </div>
-  </header>
-
-  <main class="flex-1 flex flex-col items-center justify-center">
-    <section class="text-center px-5 py-12 max-w-3xl mx-auto relative">
-      <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight">Kelajak Sun'iy Intellekti Dima AI Bilan</h1>
-      <p class="mt-5 text-violet-200/80 text-base sm:text-lg">Savol bering, rasm yarating, taqdimot va kod yozdiring. Hammasi bitta joyda, o'zbek tilida.</p>
-      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-        <button onclick="goToDashboard()" class="btn rounded-full px-7 py-3.5 font-semibold text-white">Dashboardga O'tish</button>
-        <button onclick="openModal('pricing')" class="ghost glass rounded-full px-7 py-3.5 font-semibold">Tariflarni Ko'rish</button>
-      </div>
-    </section>
-
-    <section class="px-5 pb-12 max-w-5xl mx-auto w-full">
-      <h2 class="text-2xl font-bold text-center mb-6">Foydalanuvchilar fikri</h2>
-      <div class="grid gap-4 md:grid-cols-3">
-        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-sm text-violet-100/90">Dars tayyorlashda juda yordam berdi. Javoblar tez va tushunarli.</p><p class="mt-3 font-semibold text-xs">Jasurbek T.</p></div>
-        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-sm text-violet-100/90">Dizayni chiroyli, telefonda ham qulay ishlaydi. Rasm yaratish menga yoqdi.</p><p class="mt-3 font-semibold text-xs">Madina K.</p></div>
-        <div class="glass rounded-2xl p-5"><div class="text-yellow-300 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div><p class="text-sm text-violet-100/90">Kod yozishda yordamchi sifatida ishlataman. Vaqtimni tejaydi.</p><p class="mt-3 font-semibold text-xs">Bobur M.</p></div>
-      </div>
-    </section>
-  </main>
-  <footer class="text-center text-sm text-violet-300/60 py-6 px-4">&copy; 2026 Dima AI. Barcha huquqlar himoyalangan.</footer>
+<button class="btn rounded-xl py-3 font-semibold text-sm mb-5" onclick="newChat()"><i class="fa-solid fa-plus mr-2"></i>New Chat</button>
+<div class="text-[10px] uppercase tracking-widest muted px-3 mb-2">Features</div>
+<nav class="space-y-1">
+<button class="navbtn active" data-view="chat" onclick="showView('chat',this)"><i class="fa-regular fa-message w-4"></i>Chat</button>
+<button class="navbtn" data-view="archive" onclick="showView('archive',this)"><i class="fa-solid fa-box-archive w-4"></i>Archived <span id="archiveCount" class="ml-auto text-xs">0</span></button>
+<button class="navbtn" data-view="library" onclick="showView('library',this)"><i class="fa-regular fa-folder-open w-4"></i>Library</button>
+</nav>
+<div class="text-[10px] uppercase tracking-widest muted px-3 mt-6 mb-2">Workspaces</div>
+<nav class="space-y-1">
+<button class="navbtn" onclick="newWorkspace()"><i class="fa-solid fa-folder-plus w-4"></i>New Project</button>
+<button class="navbtn" onclick="setPrompt('Menga rasm yaratish uchun batafsil prompt yozib ber.')"><i class="fa-regular fa-image w-4"></i>Image</button>
+<button class="navbtn" onclick="setPrompt('Menga professional taqdimot rejasini tuzib ber.')"><i class="fa-regular fa-file-powerpoint w-4"></i>Presentation</button>
+<button class="navbtn" onclick="setPrompt('Menga dasturlash loyihasi uchun reja va kod yozib ber.')"><i class="fa-solid fa-code w-4"></i>Dev Project</button>
+</nav>
+<div id="projectList" class="mt-2 space-y-1"></div>
+<div class="mt-auto glass rounded-2xl p-4 text-center">
+<div class="text-2xl text-amber-300 mb-1"><i class="fa-solid fa-crown"></i></div>
+<p class="font-bold text-sm">Upgrade to Premium</p>
+<p class="text-[11px] muted mt-1">Ko‘proq imkoniyatlar va qulay ish jarayoni.</p>
+<button class="btn w-full rounded-lg py-2 mt-3 text-xs font-bold" onclick="openModal('premiumModal')">Premium tariflar</button>
 </div>
+<div class="flex items-center gap-2 mt-4 px-1">
+<div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-xs font-bold">D</div>
+<div class="min-w-0 flex-1"><p id="sideEmail" class="text-xs truncate">Mehmon</p><p id="sidePlan" class="text-[10px] muted">Free Plan</p></div>
+<button onclick="openModal('settingsModal')" class="muted"><i class="fa-solid fa-gear"></i></button>
+</div>
+</aside>
+<main id="mainArea" class="flex-1 min-w-0 min-h-screen flex flex-col">
+<header class="h-16 border-b border-white/10 flex items-center gap-3 px-4 sm:px-6">
+<button class="md:hidden glass rounded-lg w-9 h-9" onclick="openSidebar()"><i class="fa-solid fa-bars"></i></button>
+<select id="model" class="text-xs px-3 py-2 max-w-44">
+<option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+<option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+</select>
+<div class="ml-auto flex items-center gap-2">
+<button class="glass rounded-lg px-3 py-2 text-xs" onclick="openModal('settingsModal')"><i class="fa-solid fa-sliders mr-1"></i><span class="hidden sm:inline">Configuration</span></button>
+<button class="glass rounded-lg px-3 py-2 text-xs" onclick="exportChat()"><i class="fa-solid fa-download mr-1"></i><span class="hidden sm:inline">Export</span></button>
+<button id="adminBtn" class="hide text-amber-300 glass rounded-lg px-3 py-2 text-xs" onclick="openModal('adminModal')">Admin</button>
+<button id="authHeaderBtn" class="btn rounded-lg px-3 py-2 text-xs" onclick="openAuth('login')">Kirish</button>
+<button id="logoutBtn" class="hide glass rounded-lg px-3 py-2 text-xs" onclick="logout()">Chiqish</button>
+</div>
+</header>
+<section id="chatView" class="flex-1 flex flex-col min-h-0">
+<div id="chatMessages" class="flex-1 overflow-y-auto p-4 sm:p-7 flex flex-col gap-3">
+<div id="welcome" class="m-auto text-center py-10 max-w-xl">
+<div class="w-14 h-14 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-600 shadow-xl shadow-purple-500/30 mx-auto mb-5"></div>
+<h1 class="text-2xl sm:text-3xl font-light">Ready to Create Something New?</h1>
+<p class="muted text-sm mt-3">Dima AI bilan fikrlaringizni amalga oshiring.</p>
+<div class="flex flex-wrap justify-center gap-2 mt-7">
+<button class="glass rounded-full px-3 py-2 text-xs" onclick="setPrompt('Rasm yaratish uchun kreativ prompt tuzib ber')">✦ Create Image</button>
+<button class="glass rounded-full px-3 py-2 text-xs" onclick="setPrompt('Yangi g‘oyalar topib ber')">Brainstorm</button>
+<button class="glass rounded-full px-3 py-2 text-xs" onclick="setPrompt('Bugungi ishlarim uchun reja tuz')">Make a plan</button>
+</div>
+</div>
+</div>
+<div class="px-3 sm:px-6 pb-4">
+<div class="max-w-3xl mx-auto glass rounded-2xl p-3">
+<textarea id="prompt" rows="2" class="w-full bg-transparent border-0 p-2 resize-y" placeholder="✦ Ask Anything..."></textarea>
+<input id="fileInput" type="file" class="hide" onchange="attachFile(this)">
+<div class="flex items-center gap-2 mt-2">
+<button class="muted text-xs px-2 py-2" onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-paperclip mr-1"></i>Attach</button>
+<button class="muted text-xs px-2 py-2" onclick="openModal('settingsModal')"><i class="fa-solid fa-sliders mr-1"></i>Settings</button>
+<span id="attachedName" class="text-[10px] muted truncate"></span>
+<button id="sendBtn" class="btn ml-auto w-9 h-9 rounded-full" onclick="sendMessage()"><i class="fa-solid fa-arrow-up"></i></button>
+</div>
+</div>
+<div class="max-w-3xl mx-auto grid grid-cols-3 gap-2 mt-3">
+<button class="feature" onclick="setPrompt('Rasm yaratish uchun batafsil prompt yozib ber.')"><i class="fa-regular fa-image text-fuchsia-300"></i><p class="text-xs font-semibold mt-2">Image Generator</p><p class="text-[10px] muted mt-1">Rasm g‘oyalarini yarating</p></button>
+<button class="feature" onclick="setPrompt('5 slaydlik professional taqdimot rejasini tuzib ber.')"><i class="fa-regular fa-file-powerpoint text-violet-300"></i><p class="text-xs font-semibold mt-2">AI Presentation</p><p class="text-[10px] muted mt-1">Taqdimot rejalari</p></button>
+<button class="feature" onclick="setPrompt('JavaScriptda zamonaviy web loyiha kodi yozib ber.')"><i class="fa-solid fa-code text-purple-300"></i><p class="text-xs font-semibold mt-2">Dev Assistant</p><p class="text-[10px] muted mt-1">Kod va dasturlash</p></button>
+</div>
+</div>
+</section>
+<section id="archiveView" class="hide flex-1 p-5 sm:p-8"><h2 class="text-2xl font-semibold">Archived Chats</h2><p class="muted text-sm mt-1">Arxivlangan suhbatlaringiz shu yerda ko‘rinadi.</p><div id="archiveList" class="mt-5 space-y-2"></div></section>
+<section id="libraryView" class="hide flex-1 p-5 sm:p-8"><h2 class="text-2xl font-semibold">Library</h2><p class="muted text-sm mt-1">Saqlangan fayl va materiallar uchun joy.</p><div id="libraryList" class="glass rounded-xl p-5 mt-5 text-sm muted">Hozircha saqlangan material yo‘q.</div></section>
+</main>
+  </div>
+  <!-- LOGIN / REGISTER -->
+<div id="authModal" class="modal">
+  <div class="glass rounded-3xl p-6 sm:p-8 w-full max-w-md" style="background:#171020">
 
-<!-- ============ DASHBOARD ============ -->
-<div id="dashboard" class="hidden-view relative z-10 h-screen flex" style="height:100dvh">
-  <div id="overlay" onclick="closeDrawer()"></div>
-  <aside id="drawer" class="glass flex flex-col p-4 lg:w-64 lg:flex-none lg:relative" style="background:rgba(14,6,28,.98)">
-    <div class="flex items-center justify-between mb-5">
-      <div class="flex items-center gap-2 font-bold text-lg"><span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span>Dima AI</div>
-      <button onclick="closeDrawer()" class="lg:hidden ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <button onclick="startNewChat()" class="btn rounded-xl py-2.5 font-semibold text-white mb-5"><i class="fa-solid fa-plus mr-2"></i>New Chat</button>
-    
-    <nav class="flex flex-col gap-1 text-sm">
-      <button onclick="closeDrawer()" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
-      <button onclick="renderArchive()" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived <span id="archiveCount" class="text-xs bg-purple-900 px-1.5 py-0.5 rounded-full ml-auto">0</span></button>
-      <button onclick="goHome()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
-      <button id="adminNavBtn" onclick="openModal('admin')" class="hidden ghost rounded-lg px-3 py-2.5 text-left border-transparent text-amber-400 font-bold"><i class="fa-solid fa-shield-halved w-6"></i>Admin Panel</button>
-    </nav>
-
-    <div id="archiveContainer" class="mt-2 text-xs text-violet-300/80 overflow-y-auto max-h-40 space-y-1"></div>
-
-    <div class="mt-auto glass rounded-2xl p-4 text-center">
-      <i class="fa-solid fa-crown text-yellow-300"></i>
-      <p id="planBadge" class="font-semibold mt-1">Free Plan (<span id="limitCount">20</span> qoldi)</p>
-      <button onclick="openModal('pricing')" class="btn w-full rounded-lg py-2 mt-3 text-sm font-semibold text-white">Upgrade (49,000 so'm)</button>
-    </div>
-  </aside>
-
-  <section class="flex-1 min-w-0 flex flex-col">
-    <div class="glass flex items-center gap-2 px-3 sm:px-5 py-2.5">
-      <button onclick="openDrawer()" class="lg:hidden ghost rounded-lg w-10 h-10"><i class="fa-solid fa-bars"></i></button>
-      <select id="modelTop" class="px-3 py-2 text-sm" onchange="changeModel(this.value)">
-        <option value="Gemini 1.5 Flash">Gemini 1.5 Flash</option>
-        <option value="ChatGPT v4.0">ChatGPT v4.0</option>
-        <option value="Claude">Claude</option>
-      </select>
-      <span id="userEmail" class="ml-auto text-xs sm:text-sm text-violet-200/80 truncate max-w-[40%]"></span>
-      <button onclick="handleLogout()" class="ghost rounded-lg px-3 py-2 text-sm"><i class="fa-solid fa-right-from-bracket sm:mr-1"></i><span class="hidden sm:inline">Logout</span></button>
-    </div>
-
-    <div id="chatArea" class="flex-1 overflow-y-auto px-4 py-5">
-      <div id="empty" class="h-full flex flex-col items-center justify-center text-center">
-        <h2 class="text-2xl sm:text-3xl font-semibold">Ready to Create Something New?</h2>
-      </div>
-      <div id="messages" class="hidden-view max-w-3xl mx-auto flex flex-col gap-3"></div>
-    </div>
-
-    <div class="px-3 sm:px-6 pb-3">
-      <div class="max-w-3xl mx-auto">
-        <div class="glass rounded-2xl p-3">
-          <textarea id="prompt" rows="2" placeholder="Ask Anything..." class="w-full resize-none p-2 bg-transparent border-0"></textarea>
-          <input type="file" id="fileInput" class="hidden" onchange="handleFile(this)">
-          <div class="flex items-center gap-2 mt-1">
-            <button onclick="triggerAttach()" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm"><i class="fa-solid fa-paperclip mr-1"></i>Attach</button>
-            <button onclick="openModal('settings')" class="ghost rounded-lg px-3 py-2 text-xs sm:text-sm"><i class="fa-solid fa-sliders mr-1"></i>Settings</button>
-            <button onclick="sendMsg()" class="btn ml-auto w-10 h-10 rounded-full text-white"><i class="fa-solid fa-arrow-up"></i></button>
-          </div>
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <div class="text-lg font-bold">
+          <span class="text-fuchsia-300">✦</span> Dima AI
         </div>
-        <div class="grid grid-cols-3 gap-2 mt-3 text-left">
-          <button onclick="setSuggestion('Menga bir rasm yarat: kechki Samarqand, neon uslubida')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-regular fa-image text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Image Generator</p></button>
-          <button onclick="setSuggestion('Suniy intellekt haqida 5 slaydlik taqdimot rejasini tuz')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-regular fa-file-powerpoint text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">AI Presentation</p></button>
-          <button onclick="setSuggestion('JavaScript da oddiy kalkulyator kodini yozib ber')" class="sug glass rounded-xl p-2.5 sm:p-3"><i class="fa-solid fa-code text-fuchsia-300"></i><p class="text-xs sm:text-sm font-semibold mt-1">Dev Assistant</p></button>
-        </div>
+        <p id="authTitle" class="text-xl font-semibold mt-4">Welcome back</p>
+        <p id="authSub" class="muted text-xs mt-1">Akkauntingizga kiring</p>
       </div>
+      <button onclick="closeModal('authModal')" class="muted text-xl">×</button>
     </div>
-  </section>
-</div>
 
-<!-- ============ MODALS ============ -->
-<div id="m-auth" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="flex flex-col gap-3">
-      <input id="authEmail" type="email" placeholder="Email" class="px-4 py-3">
-      <input id="authPass" type="password" placeholder="Parol" class="px-4 py-3">
-      <input id="authPass2" type="password" placeholder="Parolni tasdiqlang" class="px-4 py-3 hidden-view">
-      <p id="authErr" class="text-sm text-pink-300 min-h-[1.25rem]"></p>
-      <button onclick="submitAuth()" class="btn rounded-xl py-3 font-semibold text-white">Kirish</button>
-      <button onclick="switchAuthMode()" id="authSwitchText" class="text-sm text-violet-300 underline">Akkauntingiz yo'qmi? Ro'yxatdan o'tish</button>
-    </div>
-  </div>
-</div>
+    <div class="space-y-3">
 
-<div id="m-pricing" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Tarifni tanlash</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="grid gap-4">
-      <div class="rounded-2xl p-5" style="border:1px solid #d946ef;background:rgba(124,58,237,.2)">
-        <h4 class="font-bold text-lg text-fuchsia-300">Dima AI Pro - 49,000 so'm / oy</h4>
-        <p class="text-xs text-violet-200 mt-1">Cheksiz xabarlar va barcha modellar.</p>
-        <button onclick="processPayment()" class="btn w-full rounded-xl py-3 mt-4 font-semibold text-white">Click / Payme orqali to'lash</button>
+      <label class="block text-xs">
+        Email
+        <input id="authEmail" type="email" autocomplete="email"
+          placeholder="Email manzilingiz"
+          class="w-full px-4 py-3 mt-1">
+      </label>
+
+      <label class="block text-xs">
+        Password
+        <input id="authPassword" type="password"
+          autocomplete="current-password"
+          placeholder="Parolingiz"
+          class="w-full px-4 py-3 mt-1">
+      </label>
+
+      <label id="confirmWrap" class="hide block text-xs">
+        Confirm password
+        <input id="authPassword2" type="password"
+          placeholder="Parolni takrorlang"
+          class="w-full px-4 py-3 mt-1">
+      </label>
+
+      <p id="authError" class="text-xs text-rose-300 min-h-4"></p>
+
+      <button id="authSubmit"
+        class="btn w-full rounded-full py-3 text-sm font-bold"
+        onclick="submitAuth()">
+        Login
+      </button>
+
+      <div class="text-center text-[10px] muted">
+        Or continue with
       </div>
-    </div>
-  </div>
-</div>
 
-<div id="m-settings" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Sozlamalar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="flex flex-col gap-4">
-      <label class="flex flex-col gap-1.5 text-sm">Gemini API Key
-        <input id="apiKeySet" type="password" placeholder="AIzaSy..." class="px-3 py-2 text-sm"></label>
-      <button onclick="saveSettings()" class="btn rounded-xl py-2.5 font-semibold text-white">Saqlash</button>
-    </div>
-  </div>
-</div>
+      <div class="grid grid-cols-2 gap-2">
+        <button class="glass rounded-full py-2 text-xs"
+          onclick="toast('Google OAuth hali sozlanmagan.')">
+          <i class="fa-brands fa-google mr-1"></i> Google
+        </button>
 
-<div id="m-admin" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-md" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved mr-2"></i>Admin Panel (Dilmurat)</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="flex flex-col gap-4 text-sm">
-      <div class="flex items-center justify-between p-3 glass rounded-xl">
-        <span>Texnik ishlar rejimi (Maintenance)</span>
-        <button id="maintenanceToggleBtn" onclick="toggleMaintenance()" class="px-3 py-1.5 rounded-lg bg-slate-700 text-xs font-bold text-white">Yoqish</button>
+        <button class="glass rounded-full py-2 text-xs"
+          onclick="toast('Apple OAuth hali sozlanmagan.')">
+          <i class="fa-brands fa-apple mr-1"></i> Apple
+        </button>
       </div>
-      <p class="text-xs text-slate-400">Texnik ishlar yoqilganda barcha foydalanuvchilar ekranida banner chiqadi.</p>
+
+      <button id="authSwitch"
+        class="w-full text-xs text-violet-300 pt-2"
+        onclick="switchAuth()">
+        Akkauntingiz yo‘qmi? Create an account
+      </button>
+
     </div>
   </div>
 </div>
 
-<div id="toast" class="fixed left-1/2 -translate-x-1/2 z-[3000] glass rounded-full px-5 py-2.5 text-sm hidden-view" style="bottom:90px;background:rgba(16,7,30,.98)"></div>
+<!-- SETTINGS -->
+<div id="settingsModal" class="modal">
+  <div class="glass rounded-2xl p-6 w-full max-w-md"
+    style="background:#171020">
 
-<script>
-var state = { 
-  user: null, 
-  mode: "login", 
-  model: "Gemini 1.5 Flash", 
-  isAdmin: false,
-  limit: parseInt(localStorage.getItem("dima_limit") || "20"),
-  isPro: localStorage.getItem("dima_pro") === "true",
-  maintenance: localStorage.getItem("dima_maint") === "true",
-  history: JSON.parse(localStorage.getItem("dima_history") || "[]"),
-  apiKey: localStorage.getItem("dima_gemini_key") || "" 
-};
+    <div class="flex justify-between mb-5">
+      <h2 class="text-xl font-bold">Configuration</h2>
+      <button onclick="closeModal('settingsModal')">×</button>
+    </div>
 
-window.onload = function() {
-  if(document.getElementById("apiKeySet")) document.getElementById("apiKeySet").value = state.apiKey;
-  updateLimitUI();
-  checkMaintenanceUI();
-  renderArchive();
-  
-  if(window.location.hash === "#admin" || localStorage.getItem("dima_owner") === "true") {
-    state.isAdmin = true;
-    if(document.getElementById("adminNavBtn")) document.getElementById("adminNavBtn").classList.remove("hidden");
-  }
-};
+    <label class="text-xs">
+      Gemini API Key
+      <input id="apiKey" type="password"
+        class="w-full px-3 py-3 mt-2"
+        placeholder="API kalitini kiriting">
+    </label>
 
-function toast(t){
-  var el = document.getElementById("toast");
-  if(!el) return;
-  el.textContent = t;
-  el.classList.remove("hidden-view");
+    <p class="text-[11px] text-amber-200/80 mt-3">
+      API kalitini hech kimga yubormang.
+      Ishlab chiqarish saytida uni server orqali himoyalash kerak.
+    </p>
+
+    <button
+      class="btn w-full rounded-xl py-3 mt-4 text-sm font-bold"
+      onclick="saveApiKey()">
+      Save Configuration
+    </button>
+
+  </div>
+</div>
+
+<!-- PREMIUM -->
+<div id="premiumModal" class="modal">
+  <div class="glass rounded-2xl p-6 w-full max-w-md"
+    style="background:#171020">
+
+    <div class="flex justify-between">
+      <h2 class="text-xl font-bold text-amber-300">
+        <i class="fa-solid fa-crown mr-2"></i>
+        Dima AI Premium
+      </h2>
+      <button onclick="closeModal('premiumModal')">×</button>
+    </div>
+
+    <p class="muted text-sm mt-2">
+      Premium imkoniyatlari uchun tarif.
+    </p>
+
+    <div class="glass rounded-xl p-4 mt-5">
+      <p class="text-2xl font-bold">
+        49 000 so‘m
+        <span class="text-xs muted font-normal">/ oy</span>
+      </p>
+
+      <ul class="text-sm space-y-2 mt-4">
+        <li>✓ Kengaytirilgan AI imkoniyatlari</li>
+        <li>✓ Ko‘proq foydalanish limiti</li>
+        <li>✓ Premium foydalanuvchi maqomi</li>
+      </ul>
+    </div>
+
+    <button
+      class="btn w-full rounded-xl py-3 mt-4 font-bold"
+      onclick="toast('To‘lov provayderi hali ulanmagan. Premium faollashtirilmaydi.')">
+      To‘lov tizimi tez orada
+    </button>
+
+    <p class="text-[10px] muted mt-3">
+      Bu demo tarif oynasi. Hozircha to‘lov amalga oshirilmaydi.
+    </p>
+
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminModal" class="modal">
+  <div class="glass rounded-2xl p-6 w-full max-w-md"
+    style="background:#171020">
+
+    <div class="flex justify-between">
+      <h2 class="font-bold text-amber-300">Admin Panel</h2>
+      <button onclick="closeModal('adminModal')">×</button>
+    </div>
+
+    <p class="text-sm mt-4">
+      Admin huquqi Supabase profilidagi role maydoni bilan tekshiriladi.
+    </p>
+
+    <p class="text-xs muted mt-2">
+      Global boshqaruv amallari uchun server tomondagi
+      himoyalangan API kerak.
+    </p>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"
+  class="fixed z-[100] bottom-5 left-1/2 -translate-x-1/2 glass rounded-full px-5 py-3 text-xs hide">
+  </div>
+  <script>
+const SUPABASE_URL='https://qjgnwremgeyajzpwybvb.supabase.co';
+const SUPABASE_KEY='sb_publishable_0NCWu1KZvXNN536AdoUpWw_o0c8Gb5V';
+
+const sb=window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let authMode='login';
+let user=null;
+let isAdmin=false;
+let apiKey='';
+let turns=[];
+let archive=[];
+let attached=null;
+let busy=false;
+
+/* TOAST */
+function toast(s){
+  let e=document.getElementById('toast');
+  e.textContent=s;
+  e.classList.remove('hide');
   clearTimeout(toast.t);
-  toast.t = setTimeout(function(){ el.classList.add("hidden-view"); }, 2400);
+  toast.t=setTimeout(()=>e.classList.add('hide'),2800);
 }
 
-function openModal(name){
-  closeModals();
-  var m = document.getElementById("m-" + name);
-  if(m) m.classList.add("open");
+/* MODALS */
+function openModal(id){
+  document.getElementById(id).classList.add('open');
 }
 
-function openModalWithMode(name, mode){
-  setAuthMode(mode);
-  openModal(name);
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
 }
 
-function closeModals(){
-  document.querySelectorAll(".modal").forEach(function(m){ m.classList.remove("open"); });
+/* SIDEBAR */
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('mobileShade').classList.add('open');
 }
 
-function openDrawer(){
-  document.getElementById("drawer").classList.add("open");
-  document.getElementById("overlay").classList.add("open");
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mobileShade').classList.remove('open');
 }
 
-function closeDrawer(){
-  document.getElementById("drawer").classList.remove("open");
-  document.getElementById("overlay").classList.remove("open");
+/* AUTH */
+function openAuth(mode){
+  authMode=mode;
+  updateAuthMode();
+  document.getElementById('authError').textContent='';
+  openModal('authModal');
 }
 
-function goToDashboard(){
-  if(state.user) showDashboard();
-  else openModalWithMode('auth', 'login');
+function updateAuthMode(){
+  let r=authMode==='register';
+
+  document.getElementById('authTitle').textContent=
+    r?'Create Dima AI Account':'Welcome back';
+
+  document.getElementById('authSub').textContent=
+    r?'Yangi akkaunt yarating':'Akkauntingizga kiring';
+
+  document.getElementById('confirmWrap').classList.toggle('hide',!r);
+
+  document.getElementById('authSubmit').textContent=
+    r?'Sign Up':'Login';
+
+  document.getElementById('authSwitch').textContent=
+    r?'Already have an account? Login':
+    'Don’t have an account? Create an account';
 }
 
-function goHome(){
-  document.getElementById("dashboard").classList.add("hidden-view");
-  document.getElementById("landing").classList.remove("hidden-view");
-  closeDrawer();
+function switchAuth(){
+  authMode=authMode==='login'?'register':'login';
+  updateAuthMode();
 }
 
-function showDashboard(){
-  document.getElementById("landing").classList.add("hidden-view");
-  document.getElementById("dashboard").classList.remove("hidden-view");
-  document.getElementById("userEmail").textContent = (state.user && state.user.email) ? state.user.email : "Foydalanuvchi";
-  closeDrawer();
-}
+/* REGISTER / LOGIN */
+async function submitAuth(){
 
-function setAuthMode(m){
-  state.mode = m;
-  var reg = m === "register";
-  document.getElementById("authTitle").textContent = reg ? "Ro'yxatdan o'tish" : "Kirish";
-  document.getElementById("authPass2").classList.toggle("hidden-view", !reg);
-  document.getElementById("authSwitchText").textContent = reg ? "Akkauntingiz bormi? Kirish" : "Akkauntingiz yo'qmi? Ro'yxatdan o'tish";
-}
+  let email=document.getElementById('authEmail').value.trim();
+  let password=document.getElementById('authPassword').value;
+  let err=document.getElementById('authError');
+  let btn=document.getElementById('authSubmit');
 
-function switchAuthMode(){
-  setAuthMode(state.mode === "login" ? "register" : "login");
-}
+  err.textContent='';
 
-function submitAuth(){
-  var email = document.getElementById("authEmail").value.trim();
-  var pass = document.getElementById("authPass").value;
-  var err = document.getElementById("authErr");
-  if(!email || !pass){ err.textContent = "Maydonlarni to'ldiring."; return; }
-  
-  if(email === "dilmurat" && pass === "dilmurat2026"){
-    state.isAdmin = true;
-    localStorage.setItem("dima_owner", "true");
-    if(document.getElementById("adminNavBtn")) document.getElementById("adminNavBtn").classList.remove("hidden");
-    toast("Xush kelibsiz, Admin Dilmurat!");
-  }
-
-  state.user = { email: email };
-  closeModals();
-  showDashboard();
-}
-
-function handleLogout(){
-  state.user = null;
-  goHome();
-  toast("Tizimdan chiqdingiz");
-}
-
-function changeModel(m){
-  state.model = m;
-  toast("Model o'zgardi: " + m);
-}
-
-function triggerAttach(){ document.getElementById("fileInput").click(); }
-function handleFile(input){
-  if(input.files && input.files[0]){
-    document.getElementById("prompt").value += " [Fayl: " + input.files[0].name + "]";
-  }
-}
-function setSuggestion(txt){
-  var p = document.getElementById("prompt");
-  p.value = txt;
-  p.focus();
-}
-
-function saveSettings(){
-  state.apiKey = document.getElementById("apiKeySet").value.trim();
-  localStorage.setItem("dima_gemini_key", state.apiKey);
-  closeModals();
-  toast("Sozlamalar saqlandi!");
-}
-
-function processPayment(){
-  state.isPro = true;
-  localStorage.setItem("dima_pro", "true");
-  closeModals();
-  updateLimitUI();
-  toast("Tabriklaymiz! Siz Pro tarifga o'tdingiz 🚀");
-}
-
-function updateLimitUI(){
-  var badge = document.getElementById("planBadge");
-  var countEl = document.getElementById("limitCount");
-  if(state.isPro){
-    badge.innerHTML = "Pro Plan (<span class='text-amber-300'>Cheksiz</span>)";
-  } else {
-    countEl.textContent = state.limit;
-  }
-}
-
-function toggleMaintenance(){
-  state.maintenance = !state.maintenance;
-  localStorage.setItem("dima_maint", state.maintenance);
-  checkMaintenanceUI();
-  toast(state.maintenance ? "Texnik ishlar rejimi yoqildi" : "Texnik ishlar o'chirildi");
-}
-
-function checkMaintenanceUI(){
-  var banner = document.getElementById("maintenanceBanner");
-  var btn = document.getElementById("maintenanceToggleBtn");
-  if(state.maintenance){
-    banner.classList.remove("hidden-view");
-    if(btn) {
-      btn.textContent = "O'chirish";
-      btn.className = "px-3 py-1.5 rounded-lg bg-green-600 text-xs font-bold text-white";
-    }
-  } else {
-    banner.classList.add("hidden-view");
-    if(btn) {
-      btn.textContent = "Yoqish";
-      btn.className = "px-3 py-1.5 rounded-lg bg-slate-700 text-xs font-bold text-white";
-    }
-  }
-}
-
-function startNewChat(){
-  document.getElementById("messages").innerHTML = "";
-  document.getElementById("messages").classList.add("hidden-view");
-  document.getElementById("empty").classList.remove("hidden-view");
-  closeDrawer()
-  
-}
-
-// Chatni yangilash
-function startNewChat(){
-  document.getElementById("messages").innerHTML = "";
-  document.getElementById("messages").classList.add("hidden-view");
-  document.getElementById("empty").classList.remove("hidden-view");
-  document.getElementById("prompt").value = "";
-  closeDrawer();
-  toast("Yangi chat ochildi!");
-}
-
-// Arxivni ko'rsatish
-function renderArchive(){
-  var box = document.getElementById("archiveContainer");
-  var count = document.getElementById("archiveCount");
-
-  if(!box) return;
-
-  var history = state.history || [];
-  count.textContent = history.length;
-
-  box.innerHTML = "";
-
-  if(history.length === 0){
-    box.textContent = "Arxiv hozircha bo'sh.";
+  if(!email||!password){
+    err.textContent='Email va parolni kiriting.';
     return;
   }
 
-  history.forEach(function(item){
-    var p = document.createElement("p");
-    p.className = "glass rounded-lg p-2";
-    p.textContent = item.title || "Saqlangan chat";
-    box.appendChild(p);
+  if(password.length<6){
+    err.textContent='Parol kamida 6 belgidan iborat bo‘lsin.';
+    return;
+  }
+
+  if(
+    authMode==='register' &&
+    password!==document.getElementById('authPassword2').value
+  ){
+    err.textContent='Parollar mos emas.';
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='Kuting...';
+
+  try{
+
+    let r=authMode==='register'
+      ?await sb.auth.signUp({email,password})
+      :await sb.auth.signInWithPassword({email,password});
+
+    if(r.error) throw r.error;
+
+    if(authMode==='register'&&!r.data.session){
+      err.textContent=
+        'Emailingizga tasdiqlash xati yuborildi. Tasdiqlab, keyin kiring.';
+      return;
+    }
+
+    await enterApp(r.data.user);
+
+  }catch(e){
+
+    err.textContent=e.message||'Xatolik yuz berdi.';
+
+  }finally{
+
+    btn.disabled=false;
+    updateAuthMode();
+
+  }
+}
+
+/* USER PROFILE AND ADMIN CHECK */
+async function enterApp(u){
+
+  user=u;
+  isAdmin=false;
+
+  let {data,error}=await sb
+    .from('profiles')
+    .select('role')
+    .eq('id',u.id)
+    .maybeSingle();
+
+  if(error) console.warn(error.message);
+
+  isAdmin=!!(data&&data.role==='admin');
+
+  closeModal('authModal');
+
+  document.getElementById('authHeaderBtn').classList.add('hide');
+  document.getElementById('logoutBtn').classList.remove('hide');
+
+  document.getElementById('sideEmail').textContent=
+    u.email||'Foydalanuvchi';
+
+  document.getElementById('adminBtn').classList.toggle('hide',!isAdmin);
+
+  toast(isAdmin?'Admin sifatida kirdingiz.':'Xush kelibsiz!');
+
+  closeSidebar();
+}
+
+/* LOGOUT */
+async function logout(){
+
+  await sb.auth.signOut();
+
+  user=null;
+  isAdmin=false;
+
+  document.getElementById('authHeaderBtn').classList.remove('hide');
+  document.getElementById('logoutBtn').classList.add('hide');
+  document.getElementById('adminBtn').classList.add('hide');
+  document.getElementById('sideEmail').textContent='Mehmon';
+  document.getElementById('sidePlan').textContent='Free Plan';
+
+  toast('Tizimdan chiqdingiz.');
+}
+
+/* NAVIGATION */
+function showView(view,button){
+
+  ['chat','archive','library'].forEach(v=>{
+    document.getElementById(v+'View').classList.toggle('hide',v!==view);
+  });
+
+  document.querySelectorAll('.navbtn[data-view]').forEach(b=>{
+    b.classList.remove('active');
+  });
+
+  if(button) button.classList.add('active');
+
+  closeSidebar();
+
+  if(view==='archive') renderArchive();
+}
+
+/* NEW CHAT */
+function newChat(){
+
+  if(turns.length){
+
+    archive.unshift({
+      title:
+        turns.find(x=>x.role==='user')?.parts?.[0]?.text?.slice(0,48)
+        ||'Yangi suhbat',
+      turns:[...turns]
+    });
+
+    document.getElementById('archiveCount').textContent=archive.length;
+  }
+
+  turns=[];
+
+  document.getElementById('chatMessages').innerHTML=`
+    <div id="welcome" class="m-auto text-center py-10">
+      <div class="w-14 h-14 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-600 mx-auto mb-5"></div>
+      <h1 class="text-2xl font-light">Ready to Create Something New?</h1>
+      <p class="muted text-sm mt-3">Dima AI bilan fikrlaringizni amalga oshiring.</p>
+    </div>
+  `;
+
+  showView('chat',document.querySelector('[data-view="chat"]'));
+}
+
+/* ARCHIVE */
+function renderArchive(){
+
+  let el=document.getElementById('archiveList');
+  el.innerHTML='';
+
+  if(!archive.length){
+    el.textContent='Hozircha arxiv bo‘sh.';
+    el.className='mt-5 muted text-sm';
+    return;
+  }
+
+  archive.forEach(a=>{
+
+    let b=document.createElement('button');
+    b.className='glass w-full text-left rounded-xl p-3 text-sm';
+    b.textContent=a.title;
+
+    b.onclick=()=>{
+
+      turns=[...a.turns];
+      document.getElementById('chatMessages').innerHTML='';
+
+      turns.forEach(t=>{
+        addMessage(
+          t.parts?.[0]?.text||'',
+          t.role==='user'?'user':'ai'
+        );
+      });
+
+      showView('chat',document.querySelector('[data-view="chat"]'));
+    };
+
+    el.appendChild(b);
+
   });
 }
 
-// AI xabar yuborish
-async function sendMsg(){
-  var input = document.getElementById("prompt");
-  var message = input.value.trim();
+/* WORKSPACES */
+function newWorkspace(){
 
-  if(!message){
-    toast("Xabar yozing!");
+  let name=prompt('Loyiha nomi:');
+
+  if(!name) return;
+
+  let b=document.createElement('button');
+  b.className='navbtn';
+  b.innerHTML='<i class="fa-regular fa-folder w-4"></i>';
+  b.append(document.createTextNode(name));
+
+  b.onclick=()=>{
+    setPrompt(name+' loyihasini rejalashtirib ber.');
+    showView('chat',document.querySelector('[data-view="chat"]'));
+  };
+
+  document.getElementById('projectList').appendChild(b);
+
+  closeSidebar();
+}
+
+/* PROMPT */
+function setPrompt(t){
+
+  document.getElementById('prompt').value=t;
+  document.getElementById('prompt').focus();
+
+  showView('chat',document.querySelector('[data-view="chat"]'));
+}
+
+/* FILE ATTACH */
+function attachFile(input){
+
+  attached=input.files?.[0]||null;
+
+  document.getElementById('attachedName').textContent=
+    attached?attached.name:'';
+
+  if(attached){
+    toast('Fayl tanlandi. Hozircha uning mazmuni AI ga yuborilmaydi.');
+  }
+}
+
+/* CHAT MESSAGE */
+function addMessage(text,who){
+
+  let w=document.getElementById('welcome');
+  if(w) w.remove();
+
+  let d=document.createElement('div');
+
+  d.className='msg '+(who==='user'?'user':'ai');
+  d.textContent=text;
+
+  document.getElementById('chatMessages').appendChild(d);
+
+  d.scrollIntoView({
+    behavior:'smooth',
+    block:'end'
+  });
+
+  return d;
+}
+
+/* SEND MESSAGE TO GEMINI */
+async function sendMessage(){
+
+  if(busy) return;
+
+  if(!user){
+    openAuth('login');
     return;
   }
 
-  if(state.model !== "Gemini 1.5 Flash"){
-    toast("Hozircha faqat Gemini API ulangan.");
+  if(!apiKey){
+    toast('Gemini API kalitini Settings bo‘limida kiriting.');
+    openModal('settingsModal');
     return;
   }
 
-  if(!state.apiKey){
-    openModal("settings");
-    toast("Gemini API Key kiriting!");
-    return;
-  }
+  let input=document.getElementById('prompt');
+  let q=input.value.trim();
 
-  var area = document.getElementById("messages");
-  document.getElementById("empty").classList.add("hidden-view");
-  area.classList.remove("hidden-view");
+  if(!q) return;
 
-  var userMessage = document.createElement("div");
-  userMessage.className = "msg-u p-3 self-end max-w-[90%]";
-  userMessage.textContent = message;
-  area.appendChild(userMessage);
+  input.value='';
+  busy=true;
 
-  input.value = "";
+  document.getElementById('sendBtn').disabled=true;
 
-  var aiMessage = document.createElement("div");
-  aiMessage.className = "msg-a p-3 self-start max-w-[90%]";
-  aiMessage.textContent = "Dima AI javob tayyorlamoqda...";
-  area.appendChild(aiMessage);
+  addMessage(q,'user');
+
+  let pending=addMessage(
+    'Dima AI javob tayyorlamoqda…',
+    'ai'
+  );
 
   try{
-    var response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+
+    let model=document.getElementById('model').value;
+
+    let res=await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/'
+      +encodeURIComponent(model)
+      +':generateContent?key='
+      +encodeURIComponent(apiKey),
       {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "x-goog-api-key":state.apiKey
-        },
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
-          contents:[{
-            parts:[{text:message}]
-          }]
+
+          contents:[
+            ...turns,
+            {
+              role:'user',
+              parts:[{text:q}]
+            }
+          ],
+
+          generationConfig:{
+            temperature:0.7,
+            maxOutputTokens:2048
+          }
+
         })
       }
     );
 
-    var data = await response.json();
+    let data=await res.json();
 
-    if(!response.ok){
-      throw new Error(data.error?.message || "API xatosi");
+    if(!res.ok){
+      throw Error(data.error?.message||'Gemini API xatosi');
     }
 
-    var answer = data.candidates?.[0]?.content?.parts
-      ?.map(function(p){return p.text || "";})
-      .join("");
+    let answer=
+      data.candidates?.[0]?.content?.parts
+      ?.map(p=>p.text||'')
+      .join('')
+      ||'Javob olinmadi.';
 
-    aiMessage.textContent = answer || "Javob topilmadi.";
+    pending.textContent=answer;
 
-  }catch(error){
-    aiMessage.textContent = "Xatolik: " + error.message;
+    turns.push(
+      {role:'user',parts:[{text:q}]},
+      {role:'model',parts:[{text:answer}]}
+    );
+
+  }catch(e){
+
+    pending.textContent='Xatolik: '+e.message;
+    toast('API kaliti yoki modelni tekshiring.');
+
+  }finally{
+
+    busy=false;
+    document.getElementById('sendBtn').disabled=false;
+
   }
-
-  document.getElementById("chatArea").scrollTop =
-    document.getElementById("chatArea").scrollHeight;
 }
 
-// Enter orqali xabar yuborish
-document.getElementById("prompt").addEventListener(
-  "keydown",
-  function(e){
-    if(e.key === "Enter" && !e.shiftKey){
-      e.preventDefault();
-      sendMsg();
-    }
-  }
-);
+/* API SETTINGS */
+function saveApiKey(){
 
-// Saqlash
-window.addEventListener("beforeunload",function(){
-  localStorage.setItem("dima_history",JSON.stringify(state.history));
-});
+  apiKey=document.getElementById('apiKey').value.trim();
 
-// HTML yakuni
+  closeModal('settingsModal');
 
-function startNewChat() {
-  document.getElementById("messages").innerHTML = "";
-  document.getElementById("messages").classList.add("hidden-view");
-  document.getElementById("empty").classList.remove("hidden-view");
-  document.getElementById("prompt").value = "";
-  closeDrawer();
+  toast(
+    apiKey
+    ?'API kaliti shu sahifa sessiyasi uchun saqlandi.'
+    :'API kaliti kiritilmadi.'
+  );
 }
 
-function renderArchive() {
-  var container = document.getElementById("archiveContainer");
-  var count = document.getElementById("archiveCount");
+/* EXPORT CHAT */
+function exportChat(){
 
-  if (!container || !count) return;
-
-  count.textContent = state.history.length;
-  container.innerHTML = "";
-
-  if (state.history.length === 0) {
-    container.textContent = "Hozircha chat tarixi yo‘q.";
+  if(!turns.length){
+    toast('Eksport qilish uchun chat bo‘sh.');
     return;
   }
 
-  state.history.forEach(function(chat, index) {
-    var item = document.createElement("button");
-    item.className = "w-full text-left p-2 rounded-lg ghost truncate";
-    item.textContent = chat.title || "Yangi chat";
+  let text=turns.map(t=>
+    (t.role==='user'?'Siz: ':'Dima AI: ')
+    +(t.parts?.[0]?.text||'')
+  ).join('\n\n');
 
-    item.onclick = function() {
-      document.getElementById("messages").innerHTML = "";
-      document.getElementById("messages").classList.remove("hidden-view");
-      document.getElementById("empty").classList.add("hidden-view");
+  let blob=new Blob([text],{type:'text/plain'});
+  let url=URL.createObjectURL(blob);
 
-      (chat.messages || []).forEach(function(msg) {
-        addMessage(msg.text, msg.role);
-      });
+  let a=document.createElement('a');
+  a.href=url;
+  a.download='dima-ai-chat.txt';
+  a.click();
 
-      closeDrawer();
-    };
-
-    container.appendChild(item);
-  });
+  URL.revokeObjectURL(url);
 }
 
-function addMessage(text, role) {
-  var messages = document.getElementById("messages");
-  var item = document.createElement("div");
+/* ENTER TO SEND */
+document.getElementById('prompt').addEventListener('keydown',e=>{
 
-  item.className = role === "user"
-    ? "msg-u self-end max-w-[85%] p-3"
-    : "msg-a self-start max-w-[85%] p-3";
-
-  item.textContent = text;
-  messages.appendChild(item);
-  messages.scrollTop = messages.scrollHeight;
-}
-
-function sendMsg() {
-  var prompt = document.getElementById("prompt");
-  var message = prompt.value.trim();
-
-  if (!message) {
-    toast("Avval xabar yozing!");
-    return;
-  }
-
-  if (!document.getElementById("messages").classList.contains("hidden-view")) {
-    // Joriy chat davom etmoqda
-  } else {
-    document.getElementById("messages").innerHTML = "";
-  }
-
-  document.getElementById("messages").classList.remove("hidden-view");
-  document.getElementById("empty").classList.add("hidden-view");
-
-  addMessage(message, "user");
-  prompt.value = "";
-
-  toast("AI serveri hali ulanmagan. Keyingi bosqichda ulaymiz.");
-}
-
-document.getElementById("prompt").addEventListener("keydown", function(e) {
-  if (e.key === "Enter" && !e.shiftKey) {
+  if(e.key==='Enter'&&!e.shiftKey){
     e.preventDefault();
-    sendMsg();
+    sendMessage();
   }
+
 });
 
-window.addEventListener("beforeunload", function() {
-  localStorage.setItem("dima_history", JSON.stringify(state.history));
+/* RESTORE SUPABASE SESSION */
+sb.auth.getSession().then(async({data,error})=>{
+
+  if(error) console.warn(error.message);
+
+  if(data?.session?.user){
+    await enterApp(data.session.user);
+  }
+
 });
 
 </script>
 </body>
 </html>
-
