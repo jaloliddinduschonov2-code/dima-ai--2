@@ -7,26 +7,26 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{--bg:#07030f;--glass:rgba(124,58,237,.10);--line:rgba(167,139,250,.22);--neon:#c084fc;--pink:#f0abfc}
+:root{--bg:#07030f;--glass:rgba(124,58,237,.12);--line:rgba(167,139,250,.25);--neon:#c084fc}
 *{-webkit-tap-highlight-color:transparent;box-sizing:border-box}
 html,body{height:100%;margin:0;padding:0}
-body{background:var(--bg);color:#f3e8ff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+body{background:var(--bg);color:#f3e8ff;font-family:system-ui,-apple-system,sans-serif;overflow-x:hidden}
 
 .glass{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line)}
 .bg-glow{position:fixed;inset:0;pointer-events:none!important;z-index:0;background:radial-gradient(60% 50% at 20% 0%,rgba(124,58,237,.35),transparent),radial-gradient(50% 40% at 90% 100%,rgba(217,70,239,.22),transparent)}
 
-.orb{border-radius:9999px;background:radial-gradient(circle at 32% 28%,#f5d0fe,#a855f7 45%,#4c1d95 85%);box-shadow:0 0 60px 10px rgba(168,85,247,.55),0 0 140px 40px rgba(217,70,239,.25);animation:pulse 3.4s ease-in-out infinite;pointer-events:none!important}
-@keyframes pulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.07);filter:brightness(1.2)}}
+.orb{border-radius:9999px;background:radial-gradient(circle at 32% 28%,#f5d0fe,#a855f7 45%,#4c1d95 85%);box-shadow:0 0 60px 10px rgba(168,85,247,.55);animation:pulse 3.4s ease-in-out infinite;pointer-events:none!important}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 
-.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 22px rgba(192,132,252,.45);cursor:pointer!important;position:relative;z-index:50!important}
-.ghost{border:1px solid var(--line);cursor:pointer!important;position:relative;z-index:50!important}
+.btn{background:linear-gradient(135deg,#9333ea,#d946ef);box-shadow:0 0 22px rgba(192,132,252,.45);cursor:pointer!important;position:relative;z-index:99!important}
+.ghost{border:1px solid var(--line);cursor:pointer!important;position:relative;z-index:99!important}
 .ghost:hover{background:rgba(167,139,250,.15)}
 
 .hidden-view{display:none!important}
-.modal{position:fixed;inset:0;z-index:1000!important;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.85);backdrop-filter:blur(8px)}
+.modal{position:fixed;inset:0;z-index:1000!important;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,2,12,.88);backdrop-filter:blur(8px)}
 .modal.open{display:flex!important}
 
-input,textarea,select{background:rgba(255,255,255,.05);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px;position:relative;z-index:51!important}
+input,textarea,select{background:rgba(255,255,255,.08);border:1px solid var(--line);color:#fff;outline:none;border-radius:12px;position:relative;z-index:100!important}
 select option{background:#14091f}
 
 #drawer{transition:transform .25s;z-index:700!important}
@@ -41,8 +41,8 @@ select option{background:#14091f}
 <div class="bg-glow"></div>
 
 <!-- Maintenance Banner -->
-<div id="maintenanceBanner" class="hidden-view fixed top-0 left-0 right-0 z-[2500] bg-amber-600 text-slate-950 font-bold text-center py-2 px-4 text-xs">
-  ⚠️ Diqqat: Platformada hozirda texnik ishlar olib borilmoqda.
+<div id="maintenanceBanner" class="hidden-view fixed top-0 left-0 right-0 z-[2500] bg-amber-500 text-slate-950 font-bold text-center py-2 px-4 text-xs">
+  ⚠️ Diqqat: Saytda hozirda texnik ishlar olib borilmoqda.
 </div>
 
 <!-- ============ LANDING ============ -->
@@ -92,7 +92,7 @@ select option{background:#14091f}
       <button onclick="closeDrawer()" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
       <button onclick="renderArchive()" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived <span id="archiveCount" class="text-xs bg-purple-900 px-1.5 py-0.5 rounded-full ml-auto">0</span></button>
       <button onclick="goHome()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
-      <button id="adminNavBtn" onclick="openModal('admin')" class="hidden ghost rounded-lg px-3 py-2.5 text-left border-transparent text-amber-400"><i class="fa-solid fa-shield-halved w-6"></i>Admin Panel</button>
+      <button id="adminNavBtn" onclick="checkAdminAuth()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent text-amber-400 font-bold"><i class="fa-solid fa-shield-halved w-6"></i>Admin Panel</button>
     </nav>
 
     <div id="archiveContainer" class="mt-2 text-xs text-violet-300/80 overflow-y-auto max-h-40 space-y-1"></div>
@@ -150,7 +150,7 @@ select option{background:#14091f}
   <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
     <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-3">
-      <input id="authEmail" type="email" placeholder="Email (admin uchun admin@dima.ai)" class="px-4 py-3">
+      <input id="authEmail" type="email" placeholder="Email" class="px-4 py-3">
       <input id="authPass" type="password" placeholder="Parol" class="px-4 py-3">
       <input id="authPass2" type="password" placeholder="Parolni tasdiqlang" class="px-4 py-3 hidden-view">
       <p id="authErr" class="text-sm text-pink-300 min-h-[1.25rem]"></p>
@@ -184,14 +184,29 @@ select option{background:#14091f}
   </div>
 </div>
 
+<!-- Admin Authenticate Modal -->
+<div id="m-admin-auth" class="modal">
+  <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
+    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-amber-400">Dilmurat Admin Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="flex flex-col gap-3">
+      <input id="adminLoginInput" type="text" placeholder="Admin Login (dilmurat)" class="px-4 py-3">
+      <input id="adminPassInput" type="password" placeholder="Admin Parol (dilmurat2026)" class="px-4 py-3">
+      <p id="adminErr" class="text-sm text-pink-300"></p>
+      <button onclick="loginAdmin()" class="btn rounded-xl py-3 font-semibold text-white">Tasdiqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel Modal -->
 <div id="m-admin" class="modal">
   <div class="glass rounded-2xl p-6 w-full max-w-md" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved mr-2"></i>Admin Panel</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved mr-2"></i>Admin Panel (Dilmurat)</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-4 text-sm">
       <div class="flex items-center justify-between p-3 glass rounded-xl">
         <span>Texnik ishlar rejimi (Maintenance)</span>
         <button id="maintenanceToggleBtn" onclick="toggleMaintenance()" class="px-3 py-1.5 rounded-lg bg-slate-700 text-xs font-bold text-white">Yoqish</button>
       </div>
+      <p class="text-xs text-slate-400">Ushbu tugmani yoqsangiz, barcha foydalanuvchilar ekranida "Texnik ishlar olib borilmoqda" belligi chiqadi.</p>
     </div>
   </div>
 </div>
@@ -203,6 +218,7 @@ var state = {
   user: null, 
   mode: "login", 
   model: "Gemini 1.5 Flash", 
+  isAdmin: false,
   limit: parseInt(localStorage.getItem("dima_limit") || "20"),
   isPro: localStorage.getItem("dima_pro") === "true",
   maintenance: localStorage.getItem("dima_maint") === "true",
@@ -210,10 +226,12 @@ var state = {
   apiKey: localStorage.getItem("dima_gemini_key") || "" 
 };
 
-if(document.getElementById("apiKeySet")) document.getElementById("apiKeySet").value = state.apiKey;
-updateLimitUI();
-checkMaintenanceUI();
-renderArchive();
+window.onload = function() {
+  if(document.getElementById("apiKeySet")) document.getElementById("apiKeySet").value = state.apiKey;
+  updateLimitUI();
+  checkMaintenanceUI();
+  renderArchive();
+};
 
 function toast(t){
   var el = document.getElementById("toast");
@@ -263,15 +281,31 @@ function goHome(){
 function showDashboard(){
   document.getElementById("landing").classList.add("hidden-view");
   document.getElementById("dashboard").classList.remove("hidden-view");
-  var email = (state.user && state.user.email) ? state.user.email : "Mehmon";
-  document.getElementById("userEmail").textContent = email;
-  
-  if(email === "admin@dima.ai") {
-    document.getElementById("adminNavBtn").classList.remove("hidden");
-  } else {
-    document.getElementById("adminNavBtn").classList.add("hidden");
-  }
+  document.getElementById("userEmail").textContent = (state.user && state.user.email) ? state.user.email : "Foydalanuvchi";
   closeDrawer();
+}
+
+function checkAdminAuth(){
+  if(state.isAdmin){
+    openModal('admin');
+  } else {
+    openModal('admin-auth');
+  }
+}
+
+function loginAdmin(){
+  var l = document.getElementById("adminLoginInput").value.trim();
+  var p = document.getElementById("adminPassInput").value.trim();
+  var err = document.getElementById("adminErr");
+  
+  if(l === "dilmurat" && p === "dilmurat2026"){
+    state.isAdmin = true;
+    closeModals();
+    openModal('admin');
+    toast("Hush kelibsiz, Dilmurat!");
+  } else {
+    err.textContent = "Login yoki parol xato!";
+  }
 }
 
 function setAuthMode(m){
@@ -300,6 +334,7 @@ function submitAuth(){
 
 function handleLogout(){
   state.user = null;
+  state.isAdmin = false;
   goHome();
   toast("Tizimdan chiqdingiz");
 }
@@ -322,43 +357,4 @@ function setSuggestion(txt){
 }
 
 function saveSettings(){
-  state.apiKey = document.getElementById("apiKeySet").value.trim();
-  localStorage.setItem("dima_gemini_key", state.apiKey);
-  closeModals();
-  toast("Sozlamalar saqlandi!");
-}
-
-function processPayment(){
-  state.isPro = true;
-  localStorage.setItem("dima_pro", "true");
-  closeModals();
-  updateLimitUI();
-  toast("Tabriklaymiz! Siz Pro tarifga o'tdingiz 🚀");
-}
-
-function updateLimitUI(){
-  var badge = document.getElementById("planBadge");
-  var countEl = document.getElementById("limitCount");
-  if(state.isPro){
-    badge.innerHTML = "Pro Plan (<span class='text-amber-300'>Cheksiz</span>)";
-  } else {
-    countEl.textContent = state.limit;
-  }
-}
-
-function toggleMaintenance(){
-  state.maintenance = !state.maintenance;
-  localStorage.setItem("dima_maint", state.maintenance);
-  checkMaintenanceUI();
-  toast(state.maintenance ? "Texnik ishlar rejimi yoqildi" : "Texnik ishlar o'chirildi");
-}
-
-function checkMaintenanceUI(){
-  var banner = document.getElementById("maintenanceBanner");
-  if(state.maintenance){
-    banner.classList.remove("hidden-view");
-    document.getElementById("maintenanceToggleBtn").textContent = "O'chirish";
-    document.getElementById("maintenanceToggleBtn").className = "px-3 py-1.5 rounded-lg bg-green-600 text-xs font-bold text-white";
-  } else {
-    banner.classList.add("hidden-view");
-    document.getElemen
+  state.apiKey = document
