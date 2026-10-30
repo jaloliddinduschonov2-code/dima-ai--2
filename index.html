@@ -4,96 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dima AI - Next-Gen Smart Platform</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: #080312;
-            background-image: radial-gradient(circle at 50% 20%, rgba(147, 51, 234, 0.2) 0%, rgba(8, 3, 18, 1) 70%);
-        }
-        .glass-panel {
-            background: rgba(23, 12, 38, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(168, 85, 247, 0.18);
-        }
-        .glass-card {
-            background: rgba(35, 18, 58, 0.5);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(168, 85, 247, 0.15);
-        }
-        .glow-orb {
-            box-shadow: 0 0 60px 20px rgba(168, 85, 247, 0.4);
-            animation: orb-pulse 3s ease-in-out infinite alternate;
-        }
-        @keyframes orb-pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 40px 10px rgba(168, 85, 247, 0.3); }
-            100% { transform: scale(1.05); box-shadow: 0 0 70px 25px rgba(217, 70, 239, 0.5); }
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #07030f; color: #f8fafc; }
+        .glass { background: rgba(20, 10, 35, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.2); }
+        .glass-card { background: rgba(30, 15, 50, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(168, 85, 247, 0.15); }
+        .glow-orb { box-shadow: 0 0 60px 20px rgba(168, 85, 247, 0.4); animation: orb-pulse 3s ease-in-out infinite alternate; }
+        @keyframes orb-pulse { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 1; } }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 10px; }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col overflow-x-hidden">
 
-    <!-- ================= 1. LANDING PAGE (KIRISH SAHIFASI VA MAQTOVULAR) ================= -->
+    <!-- ================= 1. LANDING PAGE (KIRISH & MAQTOVULAR) ================= -->
     <div id="landingPage" class="flex-1 flex flex-col">
-        <!-- Header -->
-        <header class="sticky top-0 z-40 w-full glass-panel border-b border-purple-900/30">
+        <header class="sticky top-0 z-40 w-full glass border-b border-purple-900/30">
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-bold text-white shadow-lg">D</div>
-                    <span class="text-lg font-extrabold text-white">Dima AI</span>
+                    <span class="text-lg font-extrabold">Dima AI</span>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button type="button" onclick="openAuthModal('login')" class="px-4 py-2 text-xs font-bold text-slate-300 hover:text-white">Kirish</button>
-                    <button type="button" onclick="openAuthModal('register')" class="px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl shadow-lg">Boshlash</button>
+                    <button type="button" onclick="openAuthModal('login')" class="px-4 py-2 text-xs font-bold text-slate-300 hover:text-white cursor-pointer">Kirish</button>
+                    <button type="button" onclick="openAuthModal('register')" class="px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl shadow-lg cursor-pointer">Boshlash</button>
                 </div>
             </div>
         </header>
 
-        <!-- Hero Section -->
         <main class="flex-1 max-w-5xl mx-auto px-4 py-16 text-center space-y-12">
             <div class="space-y-6 max-w-2xl mx-auto">
                 <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center glow-orb">
                     <i class="fa-solid fa-wand-magic-sparkles text-2xl text-white"></i>
                 </div>
-                <h1 class="text-4xl sm:text-6xl font-black text-white leading-tight">Kelajak Sun'iy Intellekti <br><span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Dima AI Bilan</span></h1>
+                <h1 class="text-4xl sm:text-6xl font-black leading-tight">Kelajak Sun'iy Intellekti <br><span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Bilols & Dima AI Bilan</span></h1>
                 <p class="text-slate-400 text-sm sm:text-base">Savollaringizga soniyalar ichida professional javoblar oling, kod yozing va g'oyalaringizni hayotga tatbiq eting.</p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                    <button type="button" onclick="enterDashboard()" class="px-8 py-4 text-xs font-extrabold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl shadow-xl shadow-purple-500/25">Dashboardga O'tish ➔</button>
-                    <button type="button" onclick="togglePricingModal()" class="px-8 py-4 text-xs font-bold text-purple-200 glass-panel rounded-2xl">Tariflarni Ko'rish</button>
+                    <button type="button" onclick="enterDashboard()" class="px-8 py-4 text-xs font-extrabold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl shadow-xl cursor-pointer">Dashboardga O'tish ➔</button>
+                    <button type="button" onclick="togglePricingModal()" class="px-8 py-4 text-xs font-bold text-purple-200 glass rounded-2xl cursor-pointer">Tariflarni Ko'rish</button>
                 </div>
             </div>
 
-            <!-- Foydalanuvchilarning Maqtovlari (Testimonials) -->
+            <!-- Foydalanuvchilarning Maqtovlari -->
             <div class="space-y-6 pt-10 border-t border-purple-900/30">
-                <h2 class="text-xl sm:text-2xl font-bold text-white">Foydalanuvchilarimiz nima deydi?</h2>
+                <h2 class="text-xl sm:text-2xl font-bold">Foydalanuvchilarimiz nima deydi?</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
                     <div class="glass-card p-5 rounded-2xl space-y-3">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        <p class="text-xs text-slate-300">"Dima AI orqali dasturlashdagi xatolarimni bir zumda topib To'g'rilayapman. Ajoyib platforma!"</p>
+                        <div class="flex items-center gap-1 text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-xs text-slate-300">"Dima AI orqali dasturlashdagi xatolarimni bir zumda topib To'g'rilayapman. Ajoyib!"</p>
                         <p class="text-[11px] font-bold text-purple-300">— Jasurbek T.</p>
                     </div>
                     <div class="glass-card p-5 rounded-2xl space-y-3">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        <p class="text-xs text-slate-300">"Dizayni va ish tezligi huddi ChatGPTdek mukammal. Premium tarifi juda arzon va qulay."</p>
+                        <div class="flex items-center gap-1 text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-xs text-slate-300">"Dizayni va ish tezligi huddi Bilols.ai kabi mukammal. Premium juda qulay."</p>
                         <p class="text-[11px] font-bold text-purple-300">— Madina K.</p>
                     </div>
                     <div class="glass-card p-5 rounded-2xl space-y-3">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        <p class="text-xs text-slate-300">"Matnlar tarjima qilish va maqolalar yozishda eng yaqin yordamchimga aylandi. Tavsiya qilaman!"</p>
+                        <div class="flex items-center gap-1 text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-xs text-slate-300">"Matnlar tarjima qilish va maqolalar yozishda eng yaqin yordamchimga aylandi."</p>
                         <p class="text-[11px] font-bold text-purple-300">— Bobur M.</p>
                     </div>
                 </div>
@@ -108,24 +80,24 @@
     <!-- ================= 2. DASHBOARD VIEW (CHAT) ================= -->
     <div id="dashboardView" style="display: none;" class="flex-1 h-screen overflow-hidden flex flex-col md:flex-row">
         <!-- Sidebar -->
-        <aside id="sidebar" class="fixed md:relative top-0 left-0 h-full w-72 md:w-64 glass-panel border-r border-purple-900/30 flex flex-col justify-between p-4 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+        <aside id="sidebar" class="fixed md:relative top-0 left-0 h-full w-72 md:w-64 glass border-r border-purple-900/30 flex flex-col justify-between p-4 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
             <div class="space-y-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-bold text-white">D</div>
-                        <span class="text-lg font-extrabold text-white">Dima AI</span>
+                        <span class="text-lg font-extrabold">Dima AI</span>
                     </div>
-                    <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-slate-400 hover:text-white">✕</button>
+                    <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-slate-400 hover:text-white cursor-pointer">✕</button>
                 </div>
 
-                <button type="button" onclick="resetChat(); toggleMobileMenu();" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-purple-950/60 text-purple-200 text-xs font-semibold border border-purple-500/30">
+                <button type="button" onclick="resetChat(); toggleMobileMenu();" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-purple-950/60 text-purple-200 text-xs font-semibold border border-purple-500/30 cursor-pointer">
                     <i class="fa-solid fa-plus text-[10px]"></i> New Chat
                 </button>
 
                 <div class="space-y-1 text-xs">
                     <p class="text-[10px] font-bold text-slate-500 uppercase px-2 mb-2">Features</p>
                     <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-purple-600/20 text-purple-300 font-medium border border-purple-500/20"><i class="fa-regular fa-message"></i> Chat</a>
-                    <a href="#" onclick="backToLanding()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-400 hover:text-white"><i class="fa-solid fa-house"></i> Asosiy Sahifa</a>
+                    <a href="#" onclick="backToLanding()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-house"></i> Asosiy Sahifa</a>
                 </div>
             </div>
 
@@ -134,83 +106,75 @@
                     <span class="text-amber-400 font-bold text-xs">Premium Plan</span>
                     <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
                 </div>
-                <button type="button" onclick="togglePricingModal()" class="w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-extrabold rounded-xl text-xs shadow-md">Upgrade</button>
+                <button type="button" onclick="togglePricingModal()" class="w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-extrabold rounded-xl text-xs shadow-md cursor-pointer">Upgrade</button>
             </div>
         </aside>
 
         <!-- Main Workspace -->
         <main class="flex-1 flex flex-col h-full relative overflow-hidden">
-            <!-- Top Navbar -->
-            <header class="p-3 sm:p-4 flex items-center justify-between glass-panel border-b border-purple-900/20 z-10">
+            <header class="p-3 sm:p-4 flex items-center justify-between glass border-b border-purple-900/20 z-10 shrink-0">
                 <div class="flex items-center gap-3">
-                    <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-purple-300 text-lg p-1"><i class="fa-solid fa-bars"></i></button>
+                    <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-purple-300 text-lg p-1 cursor-pointer"><i class="fa-solid fa-bars"></i></button>
                     <span class="px-3 py-1.5 rounded-xl bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-semibold">ChatGPT v4.0</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span id="userEmailDisplay" class="text-xs text-slate-300 hidden sm:inline"></span>
-                    <button type="button" onclick="handleLogout()" class="px-3 py-1.5 bg-red-500/20 text-red-300 font-semibold rounded-lg text-xs">Chiqish</button>
+                    <button type="button" onclick="handleLogout()" class="px-3 py-1.5 bg-red-500/20 text-red-300 font-semibold rounded-lg text-xs cursor-pointer">Chiqish</button>
                 </div>
             </header>
 
-            <!-- Chat / Welcome Area -->
-            <div class="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col justify-between items-center">
-                
-                <!-- Welcome Section -->
-                <div id="welcomeSection" class="text-center space-y-4 max-w-xl mx-auto my-auto py-8">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-gradient-to-tr from-purple-500 via-fuchsia-500 to-pink-500 flex items-center justify-center glow-orb">
+            <!-- Scrollable Chat & Welcome Container -->
+            <div id="scrollArea" class="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center">
+                <div class="w-full max-w-2xl my-auto text-center" id="welcomeSection">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-gradient-to-tr from-purple-500 via-fuchsia-500 to-pink-500 flex items-center justify-center glow-orb mb-4">
                         <i class="fa-solid fa-atom text-2xl text-white"></i>
                     </div>
-                    <h2 class="text-xl sm:text-3xl font-extrabold text-white">Ready to Create Something New?</h2>
+                    <h2 class="text-xl sm:text-3xl font-extrabold">Ready to Create Something New?</h2>
                 </div>
 
-                <!-- Chat Messages Scroll Container -->
-                <div id="chatBox" class="w-full max-w-2xl space-y-3 my-auto hidden"></div>
+                <div id="chatBox" class="w-full max-w-2xl space-y-3 hidden pb-4"></div>
+            </div>
 
-                <!-- Input Box & Actions -->
-                <div class="w-full max-w-2xl space-y-3 mt-auto">
-                    <!-- Hidden File Input for Attach -->
+            <!-- Bottom Fixed Input Area -->
+            <div class="p-4 border-t border-purple-900/30 glass shrink-0">
+                <div class="w-full max-w-2xl mx-auto space-y-2">
                     <input type="file" id="fileInput" class="hidden" onchange="handleFileAttach(this)">
 
-                    <div class="glass-panel p-3 rounded-2xl border border-purple-500/30 shadow-2xl">
-                        <textarea id="userInput" rows="2" placeholder="+ Ask Anything..." onkeypress="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); sendPrompt(); }" class="w-full bg-transparent text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none resize-none pr-8"></textarea>
+                    <div class="glass-card p-3 rounded-2xl border border-purple-500/30 shadow-2xl">
+                        <textarea id="userInput" rows="1" placeholder="+ Ask Anything..." onkeypress="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); sendPrompt(); }" class="w-full bg-transparent text-xs sm:text-sm placeholder-slate-500 focus:outline-none resize-none pr-8"></textarea>
                         
                         <div class="flex items-center justify-between border-t border-purple-900/30 pt-2 text-slate-400 text-xs">
                             <div class="flex items-center gap-3">
-                                <button type="button" onclick="triggerAttach()" class="hover:text-purple-300 transition"><i class="fa-solid fa-paperclip"></i> Attach</button>
-                                <button type="button" onclick="toggleSettingsModal()" class="hover:text-purple-300 transition"><i class="fa-solid fa-sliders"></i> Settings</button>
+                                <button type="button" onclick="triggerAttach()" class="hover:text-purple-300 transition cursor-pointer"><i class="fa-solid fa-paperclip"></i> Attach</button>
+                                <button type="button" onclick="toggleSettingsModal()" class="hover:text-purple-300 transition cursor-pointer"><i class="fa-solid fa-sliders"></i> Settings</button>
                             </div>
-                            <button type="button" onclick="sendPrompt()" class="w-8 h-8 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white hover:opacity-90 transition">
+                            <button type="button" onclick="sendPrompt()" class="w-8 h-8 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white hover:opacity-90 transition cursor-pointer">
                                 <i class="fa-solid fa-arrow-up text-xs"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Feature Quick Cards -->
                     <div class="grid grid-cols-3 gap-2 text-left">
-                        <div onclick="setPrompt('Generate high-quality image concept')" class="p-2.5 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
-                            <p class="font-bold text-white text-[10px]">Image Generator</p>
-                            <p class="text-[8px] text-slate-400 mt-0.5 truncate">Create images</p>
+                        <div onclick="setPrompt('Generate high-quality image concept')" class="p-2 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
+                            <p class="font-bold text-[10px]">Image Generator</p>
                         </div>
-                        <div onclick="setPrompt('Create an engaging presentation outline')" class="p-2.5 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
-                            <p class="font-bold text-white text-[10px]">AI Presentation</p>
-                            <p class="text-[8px] text-slate-400 mt-0.5 truncate">Ideas to slides</p>
+                        <div onclick="setPrompt('Create an engaging presentation outline')" class="p-2 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
+                            <p class="font-bold text-[10px]">AI Presentation</p>
                         </div>
-                        <div onclick="setPrompt('Write production ready code')" class="p-2.5 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
-                            <p class="font-bold text-white text-[10px]">Dev Assistant</p>
-                            <p class="text-[8px] text-slate-400 mt-0.5 truncate">Clean code</p>
+                        <div onclick="setPrompt('Write production ready code')" class="p-2 rounded-xl glass-card border border-purple-500/20 hover:border-purple-500/50 cursor-pointer transition">
+                            <p class="font-bold text-[10px]">Dev Assistant</p>
                         </div>
                     </div>
                 </div>
-
             </div>
         </main>
     </div>
 
-    <!-- ================= 3. MODALS (AUTH, PRICING, SETTINGS) ================= -->
-    <div id="authModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel p-6 rounded-2xl w-full max-w-sm border border-purple-500/30 relative">
-            <button type="button" onclick="closeAuthModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">✕</button>
-            <h3 id="modalTitle" class="text-lg font-bold text-white mb-4">Tizimga kirish</h3>
+    <!-- ================= 3. MODALS ================= -->
+    <div id="authModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass p-6 rounded-2xl w-full max-w-sm border border-purple-500/30 relative">
+            <button type="button" onclick="closeAuthModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white cursor-pointer">✕</button>
+            <h3 id="modalTitle" class="text-lg font-bold mb-4">Tizimga kirish</h3>
             <form onsubmit="handleAuthSubmit(event)" class="space-y-3 text-xs">
                 <div>
                     <label class="block text-slate-300 font-semibold mb-1">Email</label>
@@ -220,18 +184,18 @@
                     <label class="block text-slate-300 font-semibold mb-1">Parol</label>
                     <input id="authPassword" type="password" required placeholder="••••••••" class="w-full bg-purple-950/40 border border-purple-500/30 rounded-lg p-2.5 text-white focus:outline-none">
                 </div>
-                <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg shadow-md">Tasdiqlash</button>
+                <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg shadow-md cursor-pointer">Tasdiqlash</button>
             </form>
         </div>
     </div>
 
-    <div id="pricingModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel p-6 rounded-2xl w-full max-w-md border border-purple-500/30 relative text-center">
-            <button type="button" onclick="togglePricingModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">✕</button>
-            <h3 class="text-lg font-bold text-white mb-4">Tarifni Tanlang</h3>
+    <div id="pricingModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass p-6 rounded-2xl w-full max-w-md border border-purple-500/30 relative text-center">
+            <button type="button" onclick="togglePricingModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white cursor-pointer">✕</button>
+            <h3 class="text-lg font-bold mb-4">Tarifni Tanlang</h3>
             <div class="space-y-3 text-left text-xs">
                 <div class="p-3 glass-card rounded-xl border border-purple-500/20">
-                    <p class="font-bold text-white">Free Plan - 0 so'm</p>
+                    <p class="font-bold">Free Plan - 0 so'm</p>
                     <p class="text-slate-400">Kuniga 10 ta bepul xabar.</p>
                 </div>
                 <div class="p-3 glass-card rounded-xl border border-amber-500/50 bg-amber-500/10">
@@ -242,19 +206,18 @@
         </div>
     </div>
 
-    <!-- Settings Modal -->
-    <div id="settingsModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel p-6 rounded-2xl w-full max-w-sm border border-purple-500/30 relative text-xs">
-            <button type="button" onclick="toggleSettingsModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">✕</button>
-            <h3 class="text-lg font-bold text-white mb-4">Sozlamalar (Settings)</h3>
+    <div id="settingsModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass p-6 rounded-2xl w-full max-w-sm border border-purple-500/30 relative text-xs">
+            <button type="button" onclick="toggleSettingsModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white cursor-pointer">✕</button>
+            <h3 class="text-lg font-bold mb-4">Sozlamalar (Settings)</h3>
             <div class="space-y-4 text-slate-300">
                 <div class="flex items-center justify-between">
                     <span>Ovozli xabarlar</span>
-                    <input type="checkbox" class="accent-purple-600 w-4 h-4">
+                    <input type="checkbox" class="accent-purple-600 w-4 h-4 cursor-pointer">
                 </div>
                 <div class="flex items-center justify-between">
                     <span>Qorong'i rejim (Dark Vibe)</span>
-                    <input type="checkbox" checked class="accent-purple-600 w-4 h-4">
+                    <input type="checkbox" checked class="accent-purple-600 w-4 h-4 cursor-pointer">
                 </div>
                 <div>
                     <label class="block font-semibold mb-1">AI Model Versiyasi</label>
@@ -263,7 +226,7 @@
                         <option>Dima AI Ultra v1</option>
                     </select>
                 </div>
-                <button type="button" onclick="toggleSettingsModal(); alert('Sozlamalar saqlandi!');" class="w-full py-2 bg-purple-600 text-white font-bold rounded-lg">Saqlash</button>
+                <button type="button" onclick="toggleSettingsModal(); alert('Sozlamalar saqlandi!');" class="w-full py-2 bg-purple-600 text-white font-bold rounded-lg cursor-pointer">Saqlash</button>
             </div>
         </div>
     </div>
@@ -289,4 +252,34 @@
             document.getElementById('landingPage').style.display = 'flex';
         }
 
-        function toggleMobile
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        function openAuthModal(mode) {
+            authMode = mode;
+            document.getElementById('modalTitle').innerText = mode === 'login' ? 'Tizimga kirish' : "Ro'yxatdan o'tish";
+            document.getElementById('authModal').style.display = 'flex';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        function togglePricingModal() {
+            const modal = document.getElementById('pricingModal');
+            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function toggleSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function triggerAttach() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleFileAttach(input) {
+            if (input.file
