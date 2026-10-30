@@ -92,7 +92,8 @@ select option{background:#14091f}
       <button onclick="closeDrawer()" class="nav ghost rounded-lg px-3 py-2.5 text-left bg-violet-500/20"><i class="fa-regular fa-comment w-6"></i>Chat</button>
       <button onclick="renderArchive()" class="nav ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-box-archive w-6"></i>Archived <span id="archiveCount" class="text-xs bg-purple-900 px-1.5 py-0.5 rounded-full ml-auto">0</span></button>
       <button onclick="goHome()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent"><i class="fa-solid fa-house w-6"></i>Asosiy Sahifa</button>
-      <button id="adminNavBtn" onclick="checkAdminAuth()" class="ghost rounded-lg px-3 py-2.5 text-left border-transparent text-amber-400 font-bold"><i class="fa-solid fa-shield-halved w-6"></i>Admin Panel</button>
+      <!-- Admin tugmasi boshqalar uchun yashirin -->
+      <button id="adminNavBtn" onclick="openModal('admin')" class="hidden ghost rounded-lg px-3 py-2.5 text-left border-transparent text-amber-400 font-bold"><i class="fa-solid fa-shield-halved w-6"></i>Admin Panel</button>
     </nav>
 
     <div id="archiveContainer" class="mt-2 text-xs text-violet-300/80 overflow-y-auto max-h-40 space-y-1"></div>
@@ -150,8 +151,8 @@ select option{background:#14091f}
   <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
     <div class="flex justify-between items-center mb-4"><h3 id="authTitle" class="text-xl font-bold">Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-3">
-      <input id="authEmail" type="email" placeholder="Email" class="px-4 py-3">
-      <input id="authPass" type="password" placeholder="Parol" class="px-4 py-3">
+      <input id="authEmail" type="email" placeholder="Email (Admin uchun: dilmurat)" class="px-4 py-3">
+      <input id="authPass" type="password" placeholder="Parol (Admin uchun: dilmurat2026)" class="px-4 py-3">
       <input id="authPass2" type="password" placeholder="Parolni tasdiqlang" class="px-4 py-3 hidden-view">
       <p id="authErr" class="text-sm text-pink-300 min-h-[1.25rem]"></p>
       <button onclick="submitAuth()" class="btn rounded-xl py-3 font-semibold text-white">Kirish</button>
@@ -177,22 +178,9 @@ select option{background:#14091f}
   <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
     <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Sozlamalar</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="flex flex-col gap-4">
-      <label class="flex flex-col gap-1.5 text-sm">Gemini / Optus5.5 API Key
+      <label class="flex flex-col gap-1.5 text-sm">Gemini API Key
         <input id="apiKeySet" type="password" placeholder="AIzaSy..." class="px-3 py-2 text-sm"></label>
       <button onclick="saveSettings()" class="btn rounded-xl py-2.5 font-semibold text-white">Saqlash</button>
-    </div>
-  </div>
-</div>
-
-<!-- Admin Authenticate Modal -->
-<div id="m-admin-auth" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-sm" style="background:rgba(16,7,30,.98)">
-    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-amber-400">Dilmurat Admin Kirish</h3><button onclick="closeModals()" class="ghost rounded-lg w-9 h-9"><i class="fa-solid fa-xmark"></i></button></div>
-    <div class="flex flex-col gap-3">
-      <input id="adminLoginInput" type="text" placeholder="Admin Login (dilmurat)" class="px-4 py-3">
-      <input id="adminPassInput" type="password" placeholder="Admin Parol (dilmurat2026)" class="px-4 py-3">
-      <p id="adminErr" class="text-sm text-pink-300"></p>
-      <button onclick="loginAdmin()" class="btn rounded-xl py-3 font-semibold text-white">Tasdiqlash</button>
     </div>
   </div>
 </div>
@@ -206,7 +194,7 @@ select option{background:#14091f}
         <span>Texnik ishlar rejimi (Maintenance)</span>
         <button id="maintenanceToggleBtn" onclick="toggleMaintenance()" class="px-3 py-1.5 rounded-lg bg-slate-700 text-xs font-bold text-white">Yoqish</button>
       </div>
-      <p class="text-xs text-slate-400">Ushbu tugmani yoqsangiz, barcha foydalanuvchilar ekranida "Texnik ishlar olib borilmoqda" belligi chiqadi.</p>
+      <p class="text-xs text-slate-400">Texnik ishlar yoqilganda barcha foydalanuvchilar ekranida banner chiqadi.</p>
     </div>
   </div>
 </div>
@@ -231,6 +219,12 @@ window.onload = function() {
   updateLimitUI();
   checkMaintenanceUI();
   renderArchive();
+  
+  // URL da #admin bo'lsa yoki localStorage'da saqlangan bo'lsa
+  if(window.location.hash === "#admin" || localStorage.getItem("dima_owner") === "true") {
+    state.isAdmin = true;
+    if(document.getElementById("adminNavBtn")) document.getElementById("adminNavBtn").classList.remove("hidden");
+  }
 };
 
 function toast(t){
@@ -285,29 +279,6 @@ function showDashboard(){
   closeDrawer();
 }
 
-function checkAdminAuth(){
-  if(state.isAdmin){
-    openModal('admin');
-  } else {
-    openModal('admin-auth');
-  }
-}
-
-function loginAdmin(){
-  var l = document.getElementById("adminLoginInput").value.trim();
-  var p = document.getElementById("adminPassInput").value.trim();
-  var err = document.getElementById("adminErr");
-  
-  if(l === "dilmurat" && p === "dilmurat2026"){
-    state.isAdmin = true;
-    closeModals();
-    openModal('admin');
-    toast("Hush kelibsiz, Dilmurat!");
-  } else {
-    err.textContent = "Login yoki parol xato!";
-  }
-}
-
 function setAuthMode(m){
   state.mode = m;
   var reg = m === "register";
@@ -326,15 +297,21 @@ function submitAuth(){
   var err = document.getElementById("authErr");
   if(!email || !pass){ err.textContent = "Maydonlarni to'ldiring."; return; }
   
+  // Dilmurat uchun maxsus admin tekshiruvi
+  if(email === "dilmurat" && pass === "dilmurat2026"){
+    state.isAdmin = true;
+    localStorage.setItem("dima_owner", "true");
+    if(document.getElementById("adminNavBtn")) document.getElementById("adminNavBtn").classList.remove("hidden");
+    toast("Xush kelibsiz, Admin Dilmurat!");
+  }
+
   state.user = { email: email };
   closeModals();
   showDashboard();
-  toast("Muvaffaqiyatli kirdingiz!");
 }
 
 function handleLogout(){
   state.user = null;
-  state.isAdmin = false;
   goHome();
   toast("Tizimdan chiqdingiz");
 }
@@ -357,94 +334,30 @@ function setSuggestion(txt){
 }
 
 function saveSettings(){
-  function saveSettings(){
   state.apiKey = document.getElementById("apiKeySet").value.trim();
   localStorage.setItem("dima_gemini_key", state.apiKey);
   closeModals();
-  toast("Saqlandi");
+  toast("Sozlamalar saqlandi!");
+}
+
+function processPayment(){
+  state.isPro = true;
+  localStorage.setItem("dima_pro", "true");
+  closeModals();
+  updateLimitUI();
+  toast("Tabriklaymiz! Siz Pro tarifga o'tdingiz 🚀");
 }
 
 function updateLimitUI(){
-  var b = document.getElementById("planBadge");
-  if(state.isPro) b.textContent = "Pro Plan (cheksiz)";
-  else b.innerHTML = 'Free Plan (<span id="limitCount">' + state.limit + '</span> qoldi)';
-}
-
-function checkMaintenanceUI(){
-  document.getElementById("maintenanceBanner").classList.toggle("hidden-view", !state.maintenance);
-  document.getElementById("maintenanceToggleBtn").textContent = state.maintenance ? "O'chirish" : "Yoqish";
+  var badge = document.getElementById("planBadge");
+  var countEl = document.getElementById("limitCount");
+  if(state.isPro){
+    badge.innerHTML = "Pro Plan (<span class='text-amber-300'>Cheksiz</span>)";
+  } else {
+    countEl.textContent = state.limit;
+  }
 }
 
 function toggleMaintenance(){
   state.maintenance = !state.maintenance;
-  localStorage.setItem("dima_maint", state.maintenance);
-  checkMaintenanceUI();
-}
-
-function renderArchive(){
-  document.getElementById("archiveCount").textContent = state.history.length;
-  var c = document.getElementById("archiveContainer");
-  c.innerHTML = "";
-  state.history.forEach(function(h){
-    var d = document.createElement("div");
-    d.textContent = "• " + h;
-    c.appendChild(d);
-  });
-}
-
-function startNewChat(){
-  var m = document.getElementById("messages");
-  m.innerHTML = "";
-  m.classList.add("hidden-view");
-  document.getElementById("empty").classList.remove("hidden-view");
-  closeDrawer();
-}
-
-function addMsg(role, text){
-  document.getElementById("empty").classList.add("hidden-view");
-  var m = document.getElementById("messages");
-  m.classList.remove("hidden-view");
-  var d = document.createElement("div");
-  d.className = (role === "u" ? "msg-u self-end" : "msg-a self-start") + " px-4 py-2.5 max-w-[85%] whitespace-pre-wrap";
-  d.textContent = text;
-  m.appendChild(d);
-  document.getElementById("chatArea").scrollTop = 99999;
-  return d;
-}
-
-async function sendMsg(){
-  var p = document.getElementById("prompt");
-  var text = p.value.trim();
-  if(!text) return;
-  if(!state.isPro && state.limit <= 0){ openModal("pricing"); return; }
-  if(!state.apiKey){ toast("Avval Sozlamalarda API kalitni kiriting"); openModal("settings"); return; }
-  p.value = "";
-  addMsg("u", text);
-  var wait = addMsg("a", "...");
-  try{
-    var r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + encodeURIComponent(state.apiKey), {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({contents: [{parts: [{text: text}]}]})
-    });
-    var j = await r.json();
-    wait.textContent = j.candidates ? j.candidates[0].content.parts[0].text : ("Xato: " + (j.error ? j.error.message : "noma'lum"));
-    if(!state.isPro){
-      state.limit--;
-      localStorage.setItem("dima_limit", state.limit);
-      updateLimitUI();
-    }
-    state.history.push(text.slice(0, 30));
-    localStorage.setItem("dima_history", JSON.stringify(state.history));
-    renderArchive();
-  }catch(e){
-    wait.textContent = "Tarmoq xatosi";
-  }
-}
-
-function processPayment(){
-  toast("To'lov tizimi hali ulanmagan");
-}
-</script>
-</body>
-</html>
+  localStorage.setItem("dima_maint", state.mainten
