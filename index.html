@@ -2,879 +2,486 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#101010">
-<title>Dima AI — O‘zbekcha sun’iy intellekt</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090914">
+<title>Dima AI — Intelligence, Reimagined</title>
 <style>
-:root{--bg:#0c0c0d;--panel:#171719;--panel2:#202023;--line:#ffffff18;--orange:#ff7417;--orange2:#ff9a3d;--muted:#aaa8a5;--white:#f7f5f2}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
-header{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;position:sticky;top:0;background:#0c0c0deF;backdrop-filter:blur(16px);z-index:20}
-.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:-.4px;font-size:19px}.logo{height:30px;width:30px;border-radius:9px;background:linear-gradient(145deg,#ffad50,#ff6412);display:grid;place-items:center;color:#151515;font-weight:1000;box-shadow:0 5px 24px #ff741744}
-.header-actions{display:flex;align-items:center;gap:10px}.btn{border:0;border-radius:11px;padding:12px 17px;font-weight:750;color:#16110d;background:linear-gradient(120deg,var(--orange2),var(--orange));box-shadow:0 6px 22px #ff74172c}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}.ghost{border:1px solid #ffffff24;background:#ffffff08;color:#fff;border-radius:11px;padding:11px 16px;font-weight:650}.ghost:hover{background:#ffffff12}.menuBtn{display:none}
-.hero{padding:78px 0 56px;display:grid;grid-template-columns:1.02fr .98fr;gap:46px;align-items:center;min-height:550px}.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #ff8a383d;background:#ff741711;color:#ffad70;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:750}.dot{width:7px;height:7px;border-radius:50%;background:#ff8a32;box-shadow:0 0 12px #ff8a32}
-h1{font-size:clamp(38px,6vw,66px);line-height:1.04;letter-spacing:-2.7px;margin:22px 0 17px}.accent{color:#ff8b35}.hero p{color:#b9b5b0;line-height:1.75;font-size:16px;max-width:560px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}.tiny{font-size:11px;color:#85817c;margin-top:16px}
-.demo{border:1px solid #ffffff1b;background:linear-gradient(145deg,#1d1b1a,#111112);border-radius:22px;padding:16px;box-shadow:0 25px 80px #0009;transform:rotate(1deg)}.demo-top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;padding:4px 2px 13px;font-size:12px}.model{color:#ffae73;font-weight:800}.demo-chat{padding:20px 4px 8px;min-height:245px}.bubble{padding:12px 14px;border-radius:14px;margin:10px 0;max-width:90%;font-size:12px;line-height:1.6}.bubble.user{margin-left:auto;background:#292522;border:1px solid #ffffff10}.bubble.ai{background:#211b17;border:1px solid #ff8a3528}.demo-input{display:flex;gap:10px;align-items:center;border:1px solid #ffffff1b;background:#111;border-radius:13px;padding:12px;color:#8d8984;font-size:12px}.send{margin-left:auto;background:var(--orange);color:#16110d;border:0;border-radius:9px;width:30px;height:30px;font-weight:900}
-.section{padding:64px 0}.section-head{text-align:center;max-width:650px;margin:0 auto 30px}.section-head h2{font-size:clamp(26px,4vw,39px);margin:0 0 10px;letter-spacing:-1px}.section-head p{color:var(--muted);line-height:1.7;margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{border:1px solid #ffffff17;background:linear-gradient(145deg,#1b1b1d,#131314);border-radius:17px;padding:21px}.cardIcon{width:40px;height:40px;border-radius:12px;background:#ff74171b;color:#ff9b51;display:grid;place-items:center;font-size:19px}.card h3{margin:15px 0 7px;font-size:16px}.card p{color:#a9a5a0;font-size:13px;line-height:1.7;margin:0}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.stepNum{font-size:12px;color:#ff9b51;font-weight:900}.price{max-width:430px;margin:auto;border:1px solid #ff8b355c;background:linear-gradient(145deg,#211a15,#141313);border-radius:20px;padding:25px}.price h3{margin:0}.price .amount{font-size:42px;font-weight:900;margin:16px 0 5px}.price ul{padding:0;list-style:none;color:#c6c1bb;font-size:13px;line-height:2.2}.price li:before{content:"✓";color:#ff923e;margin-right:9px}
-footer{border-top:1px solid #ffffff16;padding:30px 0;color:#898580;font-size:12px}.footerIn{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;padding:18px;z-index:50}.modal.open{display:flex}.modalBox{width:min(430px,100%);background:#19191b;border:1px solid #ffffff22;border-radius:22px;padding:24px;box-shadow:0 25px 80px #000b}.modalHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.modalHead h2{font-size:22px;margin:0}.x{background:#ffffff0d;color:#fff;border:1px solid #ffffff20;border-radius:9px;width:34px;height:34px}.field{display:block;margin:13px 0;color:#c9c5c0;font-size:12px}.field input{display:block;width:100%;margin-top:7px;padding:13px 14px;border:1px solid #ffffff24;background:#101011;color:white;border-radius:11px;outline:none}.field input:focus{border-color:#ff8a35}.wide{width:100%;margin-top:8px}.switch{display:block;margin:17px auto 0;background:none;border:0;color:#ffae73;font-size:12px}.error{color:#ff9b9b;font-size:12px;min-height:17px;line-height:1.5}.muted{color:var(--muted)}
-#workspace{display:none;min-height:calc(100vh - 72px);padding:22px 0 35px;background:radial-gradient(ellipse at 75% 8%,#8e5bc955 0,transparent 38%),radial-gradient(ellipse at 18% 92%,#513b9955 0,transparent 42%),linear-gradient(135deg,#191326,#171323 48%,#10101a);position:relative;overflow:hidden}#workspace:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,#a66de522,transparent 55%);pointer-events:none}.workgrid{position:relative;z-index:1;display:grid;grid-template-columns:218px minmax(0,1fr);gap:14px;min-height:690px}.side{border:1px solid #ffffff20;background:#17131fe8;backdrop-filter:blur(20px);border-radius:20px;padding:15px;display:flex;flex-direction:column;gap:5px;box-shadow:0 20px 70px #0005}.sideBrand{display:flex;align-items:center;gap:9px;padding:5px 4px 16px;font-weight:850;font-size:15px}.sideLabel{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;color:#91889f;padding:14px 8px 5px}.side button{width:100%;text-align:left;margin:2px 0;background:transparent;border:1px solid transparent;color:#d8d1e3;border-radius:10px;padding:10px 11px;font-size:12px}.side button:hover,.side button.active{background:#ffffff12;border-color:#ffffff12;color:white}.side .premiumMini{margin-top:auto;border:1px solid #a96be54a;background:linear-gradient(145deg,#322044,#211a31);border-radius:15px;padding:13px;color:#e8dcff;font-size:11px;line-height:1.6}.side .premiumMini button{background:linear-gradient(120deg,#b86bfa,#7939c7);color:white;text-align:center;font-weight:800;margin-top:8px}.chatbox{min-width:0;min-height:690px;display:flex;flex-direction:column;border:1px solid #ffffff27;background:linear-gradient(145deg,#211a2bdc,#171321eF);backdrop-filter:blur(24px);border-radius:22px;padding:17px 20px 16px;box-shadow:0 28px 90px #0008;position:relative;overflow:hidden}.chatbox:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 52% 25%,#a56bd51a,transparent 35%);pointer-events:none}.chatTitle{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff18;padding-bottom:14px;gap:10px}.chatTitleLeft{display:flex;align-items:center;gap:10px}.modelSelect{background:#30263d;color:#f3eaff;border:1px solid #ffffff24;border-radius:20px;padding:8px 12px;font-size:11px;outline:none}.topTool{border:1px solid #ffffff1b;background:#ffffff0a;color:#e8dff2;border-radius:10px;padding:8px 11px;font-size:11px}.topTools{display:flex;gap:8px}.chatWelcome{position:relative;z-index:1;text-align:center;margin:35px auto 15px}.orb{width:48px;height:48px;margin:0 auto 16px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#f3b7ff,#a25de9 45%,#5b2b9b 78%);box-shadow:0 0 35px #ad70ed66,inset -7px -8px 15px #34134d66}.chatWelcome h2{font-size:clamp(20px,3vw,27px);font-weight:500;letter-spacing:-.6px;margin:0 0 7px}.chatWelcome p{color:#a99db7;font-size:12px;margin:0}.quickPrompts{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:18px 0 5px}.quickPrompts button{border:1px solid #ffffff20;background:#ffffff0a;color:#e7ddec;border-radius:20px;padding:8px 11px;font-size:10px}.messages{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;gap:12px;padding:12px 4px;overflow:auto;max-height:44vh;min-height:130px}.msg{max-width:88%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;padding:12px 14px;border-radius:14px;font-size:13px}.msg.user{align-self:flex-end;background:linear-gradient(135deg,#693ca1,#4b2b77);border:1px solid #c89bff35}.msg.ai{align-self:flex-start;background:#ffffff0b;border:1px solid #ffffff19}.composer{position:relative;z-index:1;display:flex;gap:9px;align-items:end;border:1px solid #ffffff2b;background:#171321eF;border-radius:16px;padding:10px 12px;box-shadow:0 8px 30px #0003}.composer textarea{flex:1;resize:vertical;min-height:50px;max-height:140px;border:0;outline:0;background:transparent;color:white;padding:9px;font-size:13px}.composer textarea::placeholder{color:#9d92aa}.composerTools{display:flex;align-items:center;gap:7px;padding:0 3px 4px}.miniTool{background:transparent;border:0;color:#b9acc8;font-size:10px;padding:5px}.sendPurple{background:linear-gradient(135deg,#c17aff,#8439c6);color:white;border:0;border-radius:50%;width:34px;height:34px;font-size:17px;box-shadow:0 4px 16px #a55be755}.featureRow{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px}.featureTile{border:1px solid #ffffff1c;background:#100e17a8;border-radius:13px;padding:12px;min-height:85px}.featureTile b{font-size:11px;display:block;margin:5px 0}.featureTile span{font-size:10px;color:#a99fb2;line-height:1.5}.hide{display:none!important}
-@media(max-width:760px){.wrap{width:min(100% - 26px,600px)}header{height:62px}.hero{grid-template-columns:1fr;padding:54px 0 35px;gap:30px;min-height:auto}.hero h1{letter-spacing:-1.7px}.demo{transform:none}.grid,.steps{grid-template-columns:1fr}.section{padding:45px 0}.workgrid{grid-template-columns:1fr;min-height:calc(100vh - 100px)}.side{display:flex;flex-direction:row;gap:5px;overflow:auto;padding:9px;border-radius:14px}.sideBrand,.sideLabel,.premiumMini{display:none!important}.side button{min-width:max-content;width:auto;margin:0;padding:9px 11px}.chatbox{min-height:calc(100vh - 170px);padding:13px 12px;border-radius:17px}.chatTitle{align-items:flex-start}.topTools{gap:5px}.topTool{padding:7px 8px;font-size:10px}.chatWelcome{margin:30px auto 8px}.chatWelcome h2{font-size:20px}.messages{max-height:none;min-height:120px}.featureRow{grid-template-columns:1fr 1fr}.featureTile:last-child{display:none}.composer{padding:8px}.composer textarea{min-height:44px}.menuBtn{display:inline-flex}.desktopNav{display:none}}
-</style>
-</head>
-<body>
-<header>
- <div class="wrap" style="display:flex;align-items:center;justify-content:space-between">
-  <a class="brand" href="#" aria-label="Dima AI bosh sahifa"><span class="logo">D</span><span>Dima <span class="accent">AI</span></span></a>
-  <nav class="desktopNav muted" style="display:flex;gap:24px;font-size:13px"><a href="#imkoniyatlar">Imkoniyatlar</a><a href="#qanday">Qanday ishlaydi</a><a href="#narxlar">Tariflar</a></nav>
-  <div class="header-actions">
-  
-   <button class="ghost" id="loginOpen">Kirish</button>
-   <button class="btn" id="startOpen">Bepul boshlash</button>
-   <button class="ghost hide" id="logoutBtn">Chiqish</button>
-  </div>
- </div>
-</header>
+:root{
+--site-primary:#8B5CF6;
+--site-secondary:#16C7D9;
+--site-background:#090914;
+--site-on-primary:#FFFFFF;
+--site-on-secondary:#061216;
+--site-on-background:#F5F3FF;
+--site-font-body:Inter,ui-sans-serif,system-ui,sans-serif;
+--site-font-heading:Inter,ui-sans-serif,system-ui,sans-serif;
+--bg:#090914;
+--surface:#111120;
+--surface2:#17172a;
+--muted:#a7a5bc;
+--line:#ffffff19;
+--purple:#a78bfa;
+--cyan:#5ee7ef
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+margin:0;
+background:var(--site-background);
+color:var(--site-on-background);
+font-family:var(--site-font-body);
+overflow-x:hidden
+}
+button,a{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.app{
+min-height:100vh;
+background-color:var(--site-background);
+position:relative;
+isolation:isolate
+}
+ .wrap{
+  width:min(1180px,calc(100% - 44px));
+  margin:auto
+}
+.ambient{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:-1;
+  opacity:var(--site-decoration-opacity)
+}
+.ambient:before,.ambient:after{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  border-radius:50%;
+  filter:blur(100px);
+  opacity:.19
+}
+.ambient:before{
+  background:#7948ff;
+  top:-280px;
+  left:-180px
+}
+.ambient:after{
+  background:#06b6d4;
+  right:-300px;
+  top:360px
+}
+.nav{
+  height:82px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  position:relative;
+  z-index:5;
+  backdrop-filter:blur(20px)
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-weight:850;
+  letter-spacing:-.7px;
+  font-size:20px
+}
+.brandmark{
+  width:37px;
+  height:37px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#c4b5fd,#7c3aed 60%,#3b82f6);
+  box-shadow:0 8px 30px #8b5cf655;
+  color:white;
+  font-size:20px;
+  transform:rotate(-8deg)
+}
+.brand em{
+  font-style:normal;
+  color:#b9a2ff
+}
+.navlinks{
+  display:flex;
+  gap:32px;
+  color:#b7b4cb;
+  font-size:13px
+}
+.navlinks a:hover{color:white}
+.navright{
+  display:flex;
+  gap:10px;
+  align-items:center
+}
+.btn{
+  border:1px solid #ffffff20;
+  background:#ffffff08;
+  color:#fff;
+  padding:11px 17px;
+  border-radius:12px;
+  font-weight:700;
+  font-size:13px;
+  transition:.25s
+}
+.btn:hover{
+  transform:translateY(-2px);
+  border-color:#b49aff88;
+  background:#ffffff12
+}
+.btn.primary{
+  border:0;
+  background:linear-gradient(110deg,#a78bfa,#7651e9 55%,#397eea);
+  box-shadow:0 9px 28px #8056ef45
+}
+.btn.primary:hover{
+  box-shadow:0 12px 35px #8056ef75;
+  filter:brightness(1.1)
+}
+.mobile-menu{display:none}
+.hero{
+  min-height:690px;
+  display:grid;
+  grid-template-columns:1.03fr .97fr;
+  align-items:center;
+  gap:20px;
+  padding:65px 0 78px
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  border:1px solid #a78bfa44;
+  background:#a78bfa12;
+  color:#d6c9ff;
+  padding:8px 13px;
+  border-radius:50px;
+  font-size:11px;
+  font-weight:750;
+  letter-spacing:.5px
+}
+.pulse{
+  width:7px;
+  height:7px;
+  background:#6ee7b7;
+  border-radius:50%;
+  box-shadow:0 0 12px #6ee7b7
+}
+ googleBtn.className='google-auth-btn';
+googleBtn.innerHTML='<span class="google-g">G</span> Google bilan davom etish';
+googleBtn.addEventListener('click',async()=>{
+  $('authStatus').textContent='Google oynasi ochilmoqda...';
+  const {error}=await db.auth.signInWithOAuth({
+    provider:'google',
+    options:{redirectTo:window.location.origin+window.location.pathname}
+  });
+  if(error)$('authStatus').textContent=error.message
+});
+$('switchAuth').before(googleBtn);
 
-<main id="landing">
- <div class="wrap hero">
-  <div>
-   <span class="eyebrow"><span class="dot"></span> O‘zbek tilida AI yordamchi</span>
-   <h1>O‘zbekcha sun’iy intellekt. <span class="accent">Siz uchun.</span></h1>
-   <p>Savol bering, matn yozing, g‘oya toping va loyihalaringiz ustida ishlang. Dima AI — kundalik vazifalaringiz uchun qulay sun’iy intellekt yordamchisi.</p>
-   <div class="hero-actions">
-    <button class="btn" id="heroStart">Bepul boshlash →</button>
-    <a class="ghost" href="#imkoniyatlar">Imkoniyatlarni ko‘rish</a>
-   </div>
-   <div class="tiny">Ro‘yxatdan o‘tish oson · Telefon va kompyuterda ishlaydi</div>
-  </div>
+$('authForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const email=$('email').value.trim();
+  const password=$('password').value;
+  const name=$('fullName').value.trim();
+  $('authSubmit').disabled=true;
+  $('authSubmit').textContent='Kuting...';
+  $('authStatus').textContent='';
+  try{
+    let result;
+    if(signupMode){
+      result=await db.auth.signUp({email,password,options:{data:{full_name:name}}});
+      if(!result.error&&!result.data.session){
+        $('authStatus').textContent='Tasdiqlash havolasi emailingizga yuborildi. Emailni tasdiqlab, keyin kiring.';
+        return
+      }
+    }else{
+      result=await db.auth.signInWithPassword({email,password})
+    }
+    if(result.error)throw result.error;
+    if(result.data.session){
+      closeAuth();
+      toast(signupMode?'Hisob yaratildi!':'Muvaffaqiyatli kirdingiz!');
+      window.dispatchEvent(new CustomEvent('dima:authenticated',{detail:result.data.user}))
+    }
+  }catch(error){
+    $('authStatus').textContent=error.message||'Kirishda xatolik yuz berdi.'
+  }finally{
+    $('authSubmit').disabled=false;
+    $('authSubmit').textContent=signupMode?'Hisob yaratish':'Kirish'
+  }
+});
+ $('proPlan').addEventListener('click',()=>toast('Pro tarif hozircha ishlab chiqilmoqda.'));
 
-  <div class="demo">
-   <div class="demo-top"><b>✦ Dima AI</b><span class="model">AI yordamchi</span></div>
-   <div class="demo-chat">
-    <div class="bubble user">Salom! Kundalik vazifalarimni qanday rejalashtirsam bo‘ladi?</div>
-    <div class="bubble ai">Salom! Keling, vazifalaringizni muhimlik bo‘yicha tartiblaymiz. ✨</div>
-    <div class="bubble user">Menga bugungi kun uchun reja tuz.</div>
-    <div class="bubble ai">Albatta! Dima AI sizga reja, matn, tarjima va yangi g‘oyalar bilan yordam beradi.</div>
-   </div>
-   <div class="demo-input">
-    <span>Savolingizni yozing...</span>
-    <button class="send" id="demoSend">➜</button>
-   </div>
-  </div>
- </div>
+$('mobileMenu').addEventListener('click',()=>{
+ document.querySelector('.navlinks').style.display=
+ document.querySelector('.navlinks').style.display==='flex'?'none':'flex';
+ document.querySelector('.navlinks').style.position='absolute';
+ document.querySelector('.navlinks').style.top='70px';
+ document.querySelector('.navlinks').style.right='0';
+ document.querySelector('.navlinks').style.padding='18px';
+ document.querySelector('.navlinks').style.background='#17172a';
+ document.querySelector('.navlinks').style.borderRadius='14px';
+ document.querySelector('.navlinks').style.flexDirection='column'
+});
 
- <section class="section" id="imkoniyatlar">
-  <div class="wrap">
-   <div class="section-head">
-    <h2>Hammasi bitta joyda</h2>
-    <p>O‘qish, ijod va kundalik ishlaringiz uchun kerakli AI imkoniyatlari.</p>
-   </div>
-   <div class="grid">
-    <article class="card">
-     <div class="cardIcon">✦</div>
-     <h3>AI suhbat</h3>
-     <p>Savollaringizga javob oling va murakkab mavzularni sodda tushuning.</p>
-    </article>
-    <article class="card">
-     <div class="cardIcon">▧</div>
-     <h3>Matn va tarjima</h3>
-     <p>Matn yozish, tahrirlash, tarjima qilish va yangi g‘oyalar tayyorlash.</p>
-    </article>
-    <article class="card">
-     <div class="cardIcon">⌘</div>
-     <h3>Dasturlash yordami</h3>
-     <p>Kod yozish, xatolarni tushunish va loyihani rejalashga yordam.</p>
-    </article>
-   </div>
-  </div>
- </section>
+// Gentle pointer parallax for the 3D hero object.
+const visual=document.querySelector('.visual');
+if(visual&&matchMedia('(pointer:fine)').matches){
+ visual.addEventListener('pointermove',e=>{
+  const r=visual.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width-.5;
+  const y=(e.clientY-r.top)/r.height-.5;
+  const core=visual.querySelector('.core');
+  core.style.transform=`rotateY(${-22+x*18}deg) rotateX(${16-y*15}deg)`
+ });
+ visual.addEventListener('pointerleave',()=>{
+  visual.querySelector('.core').style.transform='rotateY(-22deg) rotateX(16deg)'
+ })
+}
+</script>
+</div>
+<div id="chatWorkspace" aria-label="Dima AI chat workspace">
+  <aside class="chat-sidebar">
+    <div class="chat-brand">✦ Dima <span>AI</span></div>
+    <button class="chat-action" id="newChatBtn">＋ &nbsp; Yangi suhbat</button>
+    <div class="chat-history">Yaqindagi suhbatlar</div>
+    <div id="chatHistoryList"></div>
 
- <section class="section" id="qanday" style="background:#111112">
-  <div class="wrap">
-   <div class="section-head">
-    <h2>Foydalanish juda oson</h2>
-    <p>Bir necha oddiy qadamda Dima AI bilan ishlashni boshlang.</p>
-   </div>
-   <div class="steps">
-    <article class="card"><div class="stepNum">01 / RO‘YXAT</div><h3>Akkaunt yarating</h3><p>Email va parolingiz orqali ro‘yxatdan o‘ting.</p></article>
-    <article class="card"><div class="stepNum">02 / SAVOL</div><h3>Savolingizni yozing</h3><p>O‘zbek yoki boshqa tilda savolingizni yuboring.</p></article>
-    <article class="card"><div class="stepNum">03 / NATIJA</div><h3>Javobni oling</h3><p>AI javob beradi va suhbatni davom ettirishingiz mumkin.</p></article>
-   </div>
-  </div>
- </section>
-
- <section class="section" id="narxlar">
-  <div class="wrap">
-   <div class="section-head">
-    <h2>Oddiy va tushunarli tarif</h2>
-    <p>Boshlash uchun bepul tarifdan foydalaning.</p>
-   </div>
-   <div class="price">
-    <h3>Free — Bepul</h3>
-    <div class="amount">0 <span style="font-size:15px;color:#aaa">so‘m</span></div>
-    <div class="muted" style="font-size:12px">Boshlash uchun</div>
-    <ul>
-     <li>AI chatdan foydalanish</li>
-     <li>O‘zbek tilida savol-javob</li>
-     <li>Matn va g‘oyalar bo‘yicha yordam</li>
-    </ul>
-    <button class="btn wide" id="priceStart">Bepul boshlash</button>
-    <p class="tiny">AI xizmatining limiti API provayderiga bog‘liq.</p>
-   </div>
-  </div>
- </section>
-</main>
-
-<section id="workspace">
- <div class="wrap workgrid">
-  <aside class="side">
-   <div class="sideBrand"><span class="logo">D</span>Dima AI</div>
-   <button class="active" id="newChat">＋ Yangi chat</button>
-   <div class="sideLabel">Ish joyi</div>
-   <button id="historyBtn">◷ Chat tarixi</button>
-   <button id="libraryBtn">▤ Kutubxona</button>
-   <div class="sideLabel">Vositalar</div>
-   <button id="imageBtn">▧ Rasm yaratish</button>
-   <button id="presentationBtn">▦ Taqdimot</button>
-   <button id="devBtn">⌘ Dev Assistant</button>
-   <div class="premiumMini">
-    <b>✦ Dima Premium</b>
-    <div>Qo‘shimcha imkoniyatlar bilan tanishing.</div>
-    <button id="premiumBtn">Batafsil</button>
-   </div>
-   <div class="muted" id="userLabel" style="font-size:10px;padding:8px;overflow-wrap:anywhere"></div>
+    <div style="margin-top:auto">
+      <button class="chat-action" id="backSiteBtn">↩ &nbsp; Saytga qaytish</button>
+      <div class="chat-history" id="chatUserLabel">Foydalanuvchi</div>
+    </div>
   </aside>
 
-  <div class="chatbox">
-   <div class="chatTitle">
-    <div class="chatTitleLeft">
-     <div>
-      <b>Dima AI</b>
-      <div class="muted" style="font-size:10px;margin-top:4px">Sizning AI yordamchingiz</div>
-     </div>
-     <select class="modelSelect" id="modelSelect">
-      <option value="gemini-2.5-flash">Gemini 4.0 Argon</option>
-     </select>
-    </div>
-    <div class="topTools">
-     <button class="topTool" id="exportChat">↓ Eksport</button>
-     <button class="topTool" id="settingsBtn">⚙</button>
-    </div>
-   </div>
+  <section class="chat-main">
+    <header class="chat-topbar">
+      <div>
+        <button class="chat-mobile-menu" id="sidebarToggle">☰</button>
+        &nbsp; <strong>Dima AI</strong>
+        <span style="color:#aaa;font-size:12px"> · Assistant</span>
+      </div>
+      <button id="chatLogoutBtn">Chiqish</button>
+    </header>
 
-   <div class="chatWelcome" id="chatWelcome">
-    <div class="orb"></div>
-    <h2>Bugun nimani birgalikda yaratamiz?</h2>
-    <p>Savolingizni yozing yoki quyidagi takliflardan birini tanlang.</p>
-    <div class="quickPrompts">
-     <button data-prompt="Menga yangi loyiha uchun g‘oyalar ber">✦ G‘oyalar</button>
-     <button data-prompt="Ushbu mavzuni sodda tushuntirib ber">▤ O‘rganish</button>
-     <button data-prompt="Menga matn yozishda yordam ber">✎ Matn yozish</button>
+    <div class="chat-scroll" id="chatScroll">
+      <div class="chat-welcome" id="chatWelcome">
+        <div class="mini-orb"></div>
+        <h1>Bugun nimada yordam beray?</h1>
+        <p>Savolingizni yozing — birgalikda yechim topamiz.</p>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
     </div>
-   </div>
 
-   <div class="messages" id="messages"></div>
-
-   <div class="composer">
-    <textarea id="prompt" placeholder="Dima AI’dan nimani so‘ramoqchisiz?" rows="2"></textarea>
-    <div class="composerTools">
-     <button class="miniTool" id="attachBtn" title="Fayl biriktirish">＋</button>
-     <button class="sendPurple" id="sendBtn" aria-label="Yuborish">↑</button>
+    <div class="chat-compose-wrap">
+      <form class="chat-compose" id="chatForm">
+        <textarea id="chatInput" rows="1"
+          placeholder="Dima AI’dan biror narsa so‘rang..." required></textarea>
+        <button type="submit" aria-label="Yuborish">↑</button>
+      </form>
+      <div class="chat-disclaimer">
+        Dima AI xato qilishi mumkin. Muhim ma’lumotlarni tekshiring.
+      </div>
     </div>
-    <input type="file" id="fileInput" class="hide">
-   </div>
-   <div class="tiny" id="chatNotice" style="text-align:center">Dima AI javoblari sun’iy intellekt tomonidan yaratiladi.</div>
-
-   <div class="featureRow">
-    <div class="featureTile"><span>▧</span><b>Image Generator</b><span>Rasm yaratish imkoniyati</span></div>
-    <div class="featureTile"><span>▦</span><b>AI Presentation</b><span>Taqdimot rejasini tuzish</span></div>
-    <div class="featureTile"><span>⌘</span><b>Dev Assistant</b><span>Dasturlash bo‘yicha yordam</span></div>
-   </div>
-  </div>
- </div>
   </section>
-  
-   <button class="ghost" id="loginOpen">Kirish</button>
-   <button class="btn" id="startOpen">Bepul boshlash</button>
-   <button class="ghost hide" id="logoutBtn">Chiqish</button>
-  </div>
- </div>
-</header>
-
-<main id="landing">
- <div class="wrap hero">
-  <div>
-   <span class="eyebrow"><span class="dot"></span> O‘zbek tilida AI yordamchi</span>
-   <h1>O‘zbekcha sun’iy intellekt. <span class="accent">Siz uchun.</span></h1>
-   <p>Savol bering, matn yozing, g‘oya toping va loyihalaringiz ustida ishlang. Dima AI — kundalik vazifalaringiz uchun qulay sun’iy intellekt yordamchisi.</p>
-   <div class="hero-actions">
-    <button class="btn" id="heroStart">Bepul boshlash →</button>
-    <a class="ghost" href="#imkoniyatlar">Imkoniyatlarni ko‘rish</a>
-   </div>
-   <div class="tiny">Ro‘yxatdan o‘tish oson · Telefon va kompyuterda ishlaydi</div>
-  </div>
-
-  <div class="demo">
-   <div class="demo-top"><b>✦ Dima AI</b><span class="model">AI yordamchi</span></div>
-   <div class="demo-chat">
-    <div class="bubble user">Salom! Kundalik vazifalarimni qanday rejalashtirsam bo‘ladi?</div>
-    <div class="bubble ai">Salom! Keling, vazifalaringizni muhimlik bo‘yicha tartiblaymiz. ✨</div>
-    <div class="bubble user">Menga bugungi kun uchun reja tuz.</div>
-    <div class="bubble ai">Albatta! Dima AI sizga reja, matn, tarjima va yangi g‘oyalar bilan yordam beradi.</div>
-   </div>
-   <div class="demo-input">
-    <span>Savolingizni yozing...</span>
-    <button class="send" id="demoSend">➜</button>
-   </div>
-  </div>
- </div>
-
- <section class="section" id="imkoniyatlar">
-  <div class="wrap">
-   <div class="section-head">
-    <h2>Hammasi bitta joyda</h2>
-    <p>O‘qish, ijod va kundalik ishlaringiz uchun kerakli AI imkoniyatlari.</p>
-   </div>
-   <div class="grid">
-    <article class="card">
-     <div class="cardIcon">✦</div>
-     <h3>AI suhbat</h3>
-     <p>Savollaringizga javob oling va murakkab mavzularni sodda tushuning.</p>
-    </article>
-    <article class="card">
-     <div class="cardIcon">▧</div>
-     <h3>Matn va tarjima</h3>
-     <p>Matn yozish, tahrirlash, tarjima qilish va yangi g‘oyalar tayyorlash.</p>
-    </article>
-    <article class="card">
-     <div class="cardIcon">⌘</div>
-     <h3>Dasturlash yordami</h3>
-     <p>Kod yozish, xatolarni tushunish va loyihani rejalashga yordam.</p>
-    </article>
-   </div>
-  </div>
- </section>
-
- <section class="section" id="qanday" style="background:#111112">
-  <div class="wrap">
-   <div class="section-head">
-    <h2>Foydalanish juda oson</h2>
-    <p>Bir necha oddiy qadamda Dima AI bilan ishlashni boshlang.</p>
-   </div>
-   <div class="steps">
-    <article class="card"><div class="stepNum">01 / RO‘YXAT</div><h3>Akkaunt yarating</h3><p>Email va parolingiz orqali ro‘yxatdan o‘ting.</p></article>
-    <article class="card"><div class="stepNum">02 / SAVOL</div><h3>Savolingizni yozing</h3><p>O‘zbek yoki boshqa tilda savolingizni yuboring.</p></article>
-    <article class="card"><div class="stepNum">03 / NATIJA</div><h3>Javobni oling</h3><p>AI javob beradi va suhbatni davom ettirishingiz mumkin.</p></article>
-   </div>
-  </div>
- </section>
-
- <section class="section" id="narxlar">
-  <div class="wrap">
-   <div class="section-head">
-    <h2>Oddiy va tushunarli tarif</h2>
-    <p>Boshlash uchun bepul tarifdan foydalaning.</p>
-   </div>
-   <div class="price">
-    <h3>Free — Bepul</h3>
-    <div class="amount">0 <span style="font-size:15px;color:#aaa">so‘m</span></div>
-    <div class="muted" style="font-size:12px">Boshlash uchun</div>
-    <ul>
-     <li>AI chatdan foydalanish</li>
-     <li>O‘zbek tilida savol-javob</li>
-     <li>Matn va g‘oyalar bo‘yicha yordam</li>
-    </ul>
-    <button class="btn wide" id="priceStart">Bepul boshlash</button>
-    <p class="tiny">AI xizmatining limiti API provayderiga bog‘liq.</p>
-   </div>
-  </div>
- </section>
-</main>
-
-<section id="workspace">
- <div class="wrap workgrid">
-  <aside class="side">
-   <div class="sideBrand"><span class="logo">D</span>Dima AI</div>
-   <button class="active" id="newChat">＋ Yangi chat</button>
-   <div class="sideLabel">Ish joyi</div>
-   <button id="historyBtn">◷ Chat tarixi</button>
-   <button id="libraryBtn">▤ Kutubxona</button>
-   <div class="sideLabel">Vositalar</div>
-   <button id="imageBtn">▧ Rasm yaratish</button>
-   <button id="presentationBtn">▦ Taqdimot</button>
-   <button id="devBtn">⌘ Dev Assistant</button>
-   <div class="premiumMini">
-    <b>✦ Dima Premium</b>
-    <div>Qo‘shimcha imkoniyatlar bilan tanishing.</div>
-    <button id="premiumBtn">Batafsil</button>
-   </div>
-   <div class="muted" id="userLabel" style="font-size:10px;padding:8px;overflow-wrap:anywhere"></div>
-  </aside>
-
-  <div class="chatbox">
-   <div class="chatTitle">
-    <div class="chatTitleLeft">
-     <div>
-      <b>Dima AI</b>
-      <div class="muted" style="font-size:10px;margin-top:4px">Sizning AI yordamchingiz</div>
-     </div>
-     <select class="modelSelect" id="modelSelect">
-      <option value="gemini-2.5-flash">Gemini 4.0 Argon</option>
-     </select>
-    </div>
-    <div class="topTools">
-     <button class="topTool" id="exportChat">↓ Eksport</button>
-     <button class="topTool" id="settingsBtn">⚙</button>
-    </div>
-   </div>
-
-   <div class="chatWelcome" id="chatWelcome">
-    <div class="orb"></div>
-    <h2>Bugun nimani birgalikda yaratamiz?</h2>
-    <p>Savolingizni yozing yoki quyidagi takliflardan birini tanlang.</p>
-    <div class="quickPrompts">
-     <button data-prompt="Menga yangi loyiha uchun g‘oyalar ber">✦ G‘oyalar</button>
-     <button data-prompt="Ushbu mavzuni sodda tushuntirib ber">▤ O‘rganish</button>
-     <button data-prompt="Menga matn yozishda yordam ber">✎ Matn yozish</button>
-    </div>
-   </div>
-
-   <div class="messages" id="messages"></div>
-
-   <div class="composer">
-    <textarea id="prompt" placeholder="Dima AI’dan nimani so‘ramoqchisiz?" rows="2"></textarea>
-    <div class="composerTools">
-     <button class="miniTool" id="attachBtn" title="Fayl biriktirish">＋</button>
-     <button class="sendPurple" id="sendBtn" aria-label="Yuborish">↑</button>
-    </div>
-    <input type="file" id="fileInput" class="hide">
-   </div>
-   <div class="tiny" id="chatNotice" style="text-align:center">Dima AI javoblari sun’iy intellekt tomonidan yaratiladi.</div>
-
-   <div class="featureRow">
-    <div class="featureTile"><span>▧</span><b>Image Generator</b><span>Rasm yaratish imkoniyati</span></div>
-    <div class="featureTile"><span>▦</span><b>AI Presentation</b><span>Taqdimot rejasini tuzish</span></div>
-    <div class="featureTile"><span>⌘</span><b>Dev Assistant</b><span>Dasturlash bo‘yicha yordam</span></div>
-   </div>
-  </div>
- </div>
-  </section>
-  
-<!-- AUTH MODAL -->
-<div class="modal" id="authModal">
-  <div class="modal-card">
-    <button class="modal-close" id="closeAuth" aria-label="Yopish">×</button>
-    <div class="logo modal-logo">D</div>
-    <h2 id="authTitle">Dima AI ga xush kelibsiz</h2>
-    <p class="muted" id="authSubtitle">Hisobingizga kiring yoki yangi hisob yarating.</p>
-
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="loginTab">Kirish</button>
-      <button class="auth-tab" id="signupTab">Ro‘yxatdan o‘tish</button>
-    </div>
-
-    <form id="authForm">
-      <label for="authName" id="nameLabel" class="hide">Ismingiz</label>
-      <input id="authName" class="field hide" type="text" placeholder="Ismingiz">
-
-      <label for="authEmail">Email</label>
-      <input id="authEmail" class="field" type="email" placeholder="email@example.com" required>
-
-      <label for="authPassword">Parol</label>
-      <input id="authPassword" class="field" type="password" placeholder="Parolingiz" minlength="6" required>
-
-      <button class="primary-btn full-btn" id="authSubmit" type="submit">Kirish</button>
-      <p class="muted small-text" id="authMessage" aria-live="polite"></p>
-    </form>
-
-    <p class="muted small-text center">
-      Davom etish orqali foydalanish shartlariga rozilik bildirasiz.
-    </p>
-  </div>
 </div>
-
-<!-- SETTINGS MODAL -->
-<div class="modal" id="settingsModal">
-  <div class="modal-card">
-    <button class="modal-close" id="closeSettings">×</button>
-    <h2>⚙️ Sozlamalar</h2>
-    <p class="muted">Dima AI sozlamalarini boshqaring.</p>
-
-    <label for="languageSelect">Til</label>
-    <select class="field" id="languageSelect">
-      <option value="uz">O‘zbekcha</option>
-      <option value="en">English</option>
-      <option value="ru">Русский</option>
-    </select>
-
-    <label for="themeSelect">Ko‘rinish</label>
-    <select class="field" id="themeSelect">
-      <option value="dark">Qorong‘i</option>
-      <option value="light">Yorug‘</option>
-    </select>
-
-    <button class="primary-btn full-btn" id="saveSettings">Saqlash</button>
-  </div>
-</div>
-
-<!-- PREMIUM MODAL -->
-<div class="modal" id="premiumModal">
-  <div class="modal-card premium-card">
-    <button class="modal-close" id="closePremium">×</button>
-    <div class="premium-icon">✦</div>
-    <h2>Dima AI Premium</h2>
-    <p class="muted">Premium imkoniyatlar haqida ma’lumot.</p>
-
-    <div class="premium-feature">✦ Kengaytirilgan AI imkoniyatlari</div>
-    <div class="premium-feature">✦ Katta hajmdagi suhbatlar</div>
-    <div class="premium-feature">✦ Qo‘shimcha ijodiy vositalar</div>
-
-    <button class="primary-btn full-btn" id="premiumInfoBtn">
-      Premium haqida
-    </button>
-    <p class="muted small-text center">
-      Premium xarid va to‘lov tizimi hozircha ulanmagan.
-    </p>
-  </div>
-</div>
-
-<!-- TOAST NOTIFICATION -->
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-  
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* =================================
-   DIMA AI — ASOSIY JAVASCRIPT
-================================= */
+(()=>{
+  const el=id=>document.getElementById(id);
+  const workspace=el('chatWorkspace');
+  let messages=[];
+  let currentUser=null;
 
-// 1. SUPABASE ULANISHI
-const SUPABASE_URL = "https://qjgnwremgeyajzpwybvb.supabase.co";
-const SUPABASE_KEY = "sb_publishable_0NCWu1KZvXNN536AdoUpWw_o0c8Gb5V";
-
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-// 2. ELEMENTLAR
-const $ = (id) => document.getElementById(id);
-
-const authModal = $("authModal");
-const settingsModal = $("settingsModal");
-const premiumModal = $("premiumModal");
-const toastBox = $("toast");
-
-let currentUser = null;
-let currentSession = null;
-let isSignup = false;
-let chatHistory = [];
-let isSending = false;
-
-// 3. XABAR CHIQARISH
-function toast(message) {
-  if (!toastBox) {
-    alert(message);
-    return;
+  function showChat(user){
+    currentUser=user;
+    workspace.classList.add('active');
+    el('chatUserLabel').textContent=
+      user?.user_metadata?.full_name||user?.email||'Foydalanuvchi';
+    el('chatWelcome').style.display=messages.length?'none':'block';
   }
 
-  toastBox.textContent = message;
-  toastBox.classList.add("show");
-
-  clearTimeout(window.dimaToastTimer);
-  window.dimaToastTimer = setTimeout(() => {
-    toastBox.classList.remove("show");
-  }, 3000);
-}
-
-// 4. MODAL OCHISH VA YOPISH
-function openModal(modal) {
-  if (modal) modal.classList.add("show");
-}
-
-function closeModal(modal) {
-  if (modal) modal.classList.remove("show");
-}
-
-function openAuth() {
-  openModal(authModal);
-}
-
-$("closeAuth")?.addEventListener("click", () => closeModal(authModal));
-$("closeSettings")?.addEventListener("click", () => closeModal(settingsModal));
-$("closePremium")?.addEventListener("click", () => closeModal(premiumModal));
-
-$("settingsBtn")?.addEventListener("click", () => {
-  openModal(settingsModal);
-});
-
-$("premiumBtn")?.addEventListener("click", () => {
-  openModal(premiumModal);
-});
-
-// 5. KIRISH VA RO‘YXATDAN O‘TISH OYNASI
-$("loginBtn")?.addEventListener("click", openAuth);
-$("startBtn")?.addEventListener("click", openAuth);
-$("getStartedBtn")?.addEventListener("click", openAuth);
-
-function setAuthMode(signup) {
-  isSignup = signup;
-
-  $("loginTab")?.classList.toggle("active", !signup);
-  $("signupTab")?.classList.toggle("active", signup);
-
-  $("authTitle").textContent = signup
-    ? "Yangi hisob yarating"
-    : "Dima AI ga xush kelibsiz";
-
-  $("authSubtitle").textContent = signup
-    ? "Ma’lumotlaringizni kiriting."
-    : "Hisobingizga kiring.";
-
-  $("authSubmit").textContent = signup
-    ? "Hisob yaratish"
-    : "Kirish";
-
-  $("authName")?.classList.toggle("hide", !signup);
-  $("nameLabel")?.classList.toggle("hide", !signup);
-
-  $("authName").required = signup;
-  $("authMessage").textContent = "";
-}
-
-$("loginTab")?.addEventListener("click", () => setAuthMode(false));
-$("signupTab")?.addEventListener("click", () => setAuthMode(true));
-
-// 6. AUTH FORM
-$("authForm")?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const email = $("authEmail").value.trim();
-  const password = $("authPassword").value;
-  const name = $("authName").value.trim();
-  const message = $("authMessage");
-  const submit = $("authSubmit");
-
-  submit.disabled = true;
-  submit.textContent = "Kuting...";
-  message.textContent = "";
-
-  try {
-    let result;
-
-    if (isSignup) {
-      result = await db.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: name }
-        }
-      });
-    } else {
-      result = await db.auth.signInWithPassword({
-        email,
-        password
-      });
-    }
-
-    if (result.error) throw result.error;
-
-    if (isSignup && !result.data.session) {
-      message.textContent =
-        "Emailingizga tasdiqlash xabari yuborildi. Emailni tekshiring.";
-      toast("Emailni tasdiqlang.");
-      return;
-    }
-
-    currentSession = result.data.session;
-    currentUser = result.data.user;
-
-    closeModal(authModal);
-    updateAccountUI();
-    toast(isSignup ? "Hisob yaratildi!" : "Muvaffaqiyatli kirdingiz!");
-
-  } catch (error) {
-    message.textContent = error.message || "Xatolik yuz berdi.";
-  } finally {
-    submit.disabled = false;
-    submit.textContent = isSignup ? "Hisob yaratish" : "Kirish";
-  }
-});
-
-// 7. FOYDALANUVCHI HOLATINI TEKSHIRISH
-function updateAccountUI() {
-  const loginButton = $("loginBtn");
-  const startButton = $("startBtn");
-  const logoutButton = $("logoutBtn");
-
-  if (currentUser) {
-    if (loginButton) loginButton.classList.add("hide");
-    if (startButton) startButton.classList.add("hide");
-    if (logoutButton) logoutButton.classList.remove("hide");
-  } else {
-    if (loginButton) loginButton.classList.remove("hide");
-    if (startButton) startButton.classList.remove("hide");
-    if (logoutButton) logoutButton.classList.add("hide");
-  }
-}
-
-async function checkSession() {
-  const { data, error } = await db.auth.getSession();
-
-  if (error) {
-    toast("Hisobni tekshirishda xatolik.");
-    return;
+  function hideChat(){
+    workspace.classList.remove('active');
   }
 
-  currentSession = data.session;
-  currentUser = data.session?.user || null;
+  function addMessage(role,text){
+    el('chatWelcome').style.display='none';
+    const row=document.createElement('div');
+    row.className='chat-message '+role;
 
-  updateAccountUI();
-}
+    const avatar=document.createElement('div');
+    avatar.className='chat-avatar';
+    avatar.textContent=role==='user'?'S':'✦';
 
-db.auth.onAuthStateChange((_event, session) => {
-  currentSession = session;
-  currentUser = session?.user || null;
-  updateAccountUI();
-});
+    const body=document.createElement('div');
+    body.textContent=text;
 
-checkSession();
-
-// 8. CHIQISH
-$("logoutBtn")?.addEventListener("click", async () => {
-  const { error } = await db.auth.signOut();
-
-  if (error) {
-    toast("Chiqishda xatolik: " + error.message);
-    return;
+    row.append(avatar,body);
+    el('chatMessages').append(row);
+    el('chatScroll').scrollTop=el('chatScroll').scrollHeight;
   }
 
-  currentUser = null;
-  currentSession = null;
-  updateAccountUI();
-  toast("Hisobdan chiqdingiz.");
-});
-
-// 9. CHAT XABARLARINI CHIQARISH
-function addMessage(text, sender) {
-  const messages = $("messages");
-  if (!messages) return;
-
-  const welcome = $("chatWelcome");
-  if (welcome) welcome.classList.add("hide");
-
-  const message = document.createElement("div");
-  message.className = "msg " + sender;
-
-  const content = document.createElement("div");
-  content.className = "msg-content";
-  content.textContent = text;
-
-  message.appendChild(content);
-  messages.appendChild(message);
-
-  messages.scrollTop = messages.scrollHeight;
-  return message;
-}
-
-// 10. YANGI CHAT
-function newChat() {
-  chatHistory = [];
-
-  if ($("messages")) $("messages").innerHTML = "";
-  $("chatWelcome")?.classList.remove("hide");
-
-  toast("Yangi suhbat boshlandi.");
-}
-
-$("newChat")?.addEventListener("click", newChat);
-
-// 11. AI CHAT — API BILAN ULANISH
-async function sendMessage() {
-  if (isSending) return;
-
-  const prompt = $("prompt");
-  const text = prompt?.value.trim();
-
-  if (!text) return;
-
-  if (!currentSession) {
-    toast("Avval hisobingizga kiring.");
-    openAuth();
-    return;
+  function reply(text){
+    const answer=
+      'Savolingiz qabul qilindi. AI javoblarini olish uchun Dima AI server endpointi chatga ulanishi kerak.\n\nSavol: '+text;
+    addMessage('assistant',answer);
   }
 
-  isSending = true;
+  el('chatForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const value=el('chatInput').value.trim();
+    if(!value)return;
 
-  const sendButton = $("sendBtn");
-  if (sendButton) sendButton.disabled = true;
-
-  addMessage(text, "user");
-  prompt.value = "";
-
-  const loading = addMessage("Dima AI javob tayyorlamoqda...", "assistant");
-
-  try {
-    const response = await fetch("/api/argon", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: text,
-        history: chatHistory,
-        accessToken: currentSession.access_token
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "AI serverda xatolik yuz berdi.");
-    }
-
-    const answer =
-      data.reply ||
-      data.response ||
-      data.text ||
-      data.message ||
-      "AI javob qaytarmadi.";
-
-    if (loading) {
-      loading.querySelector(".msg-content").textContent = answer;
-    }
-
-    chatHistory.push(
-      { role: "user", parts: [{ text }] },
-      { role: "model", parts: [{ text: answer }] }
-    );
-
-  } catch (error) {
-    if (loading) {
-      loading.querySelector(".msg-content").textContent =
-        "Xatolik: " + error.message;
-    }
-  } finally {
-    isSending = false;
-    if (sendButton) sendButton.disabled = false;
-    prompt?.focus();
-  }
-}
-
-$("sendBtn")?.addEventListener("click", sendMessage);
-
-$("prompt")?.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    sendMessage();
-  }
-});
-
-// 12. TEZKOR SAVOLLAR
-document.querySelectorAll(".quickPrompts button, .quick-prompt").forEach((button) => {
-  button.addEventListener("click", () => {
-    const prompt = $("prompt");
-    if (!prompt) return;
-
-    prompt.value =
-      button.dataset.prompt ||
-      button.textContent.trim();
-
-    prompt.focus();
-  });
-});
-
-// 13. FAYL TANLASH
-$("attachBtn")?.addEventListener("click", () => {
-  $("fileInput")?.click();
-});
-
-$("fileInput")?.addEventListener("change", (event) => {
-  const file = event.target.files?.[0];
-  if (!file) return;
-
-  toast("Tanlangan fayl: " + file.name);
-  toast("Faylni AI tahliliga yuborish funksiyasi hali ulanmagan.");
-  event.target.value = "";
-});
-
-// 14. CHATNI YUKLAB OLISH
-$("exportChat")?.addEventListener("click", () => {
-  const messages = $("messages");
-
-  if (!messages || !messages.innerText.trim()) {
-    toast("Yuklab olish uchun suhbat yo‘q.");
-    return;
-  }
-
-  const blob = new Blob([messages.innerText], {
-    type: "text/plain;charset=utf-8"
+    addMessage('user',value);
+    el('chatInput').value='';
+    reply(value);
   });
 
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  el('newChatBtn').addEventListener('click',()=>{
+    messages=[];
+    el('chatMessages').innerHTML='';
+    el('chatWelcome').style.display='block';
+  });
 
-  link.href = url;
-  link.download = "dima-ai-chat.txt";
-  link.click();
+  el('backSiteBtn').addEventListener('click',hideChat);
 
-  URL.revokeObjectURL(url);
-  toast("Suhbat yuklab olindi.");
-});
+  el('chatLogoutBtn').addEventListener('click',async()=>{
+    await window.dimaSupabase.auth.signOut();
+    hideChat();
+    location.reload();
+  });
 
-// 15. TARIX, KUTUBXONA VA BOSHQA BO‘LIMLAR
-$("historyBtn")?.addEventListener("click", () => {
-  toast("Suhbatlar tarixi funksiyasi keyingi yangilanishda ulanadi.");
-});
+  el('sidebarToggle').addEventListener('click',()=>{
+    const side=document.querySelector('.chat-sidebar');
+    side.style.display=side.style.display==='none'?'flex':'none';
+  });
 
-$("libraryBtn")?.addEventListener("click", () => {
-  toast("Kutubxona bo‘limi hozircha tayyorlanmoqda.");
-});
-
-$("imageBtn")?.addEventListener("click", () => {
-  toast("Rasm yaratish uchun alohida AI API ulash kerak.");
-});
-
-$("presentationBtn")?.addEventListener("click", () => {
-  toast("Prezentatsiya yaratish funksiyasi hali ulanmagan.");
-});
-
-$("devBtn")?.addEventListener("click", () => {
-  toast("Dasturlash rejimi tanlandi.");
-});
-
-// 16. PREMIUM
-$("premiumInfoBtn")?.addEventListener("click", () => {
-  toast("Premium to‘lov tizimi hali ulanmagan.");
-});
-
-// 17. SOZLAMALARNI SAQLASH
-$("saveSettings")?.addEventListener("click", () => {
-  const theme = $("themeSelect")?.value;
-
-  if (theme === "light") {
-    document.body.classList.add("light-theme");
-  } else {
-    document.body.classList.remove("light-theme");
-  }
-
-  toast("Sozlamalar qo‘llandi.");
-  closeModal(settingsModal);
-});
-
-// 18. MODEL TANLASH
-$("modelSelect")?.addEventListener("change", () => {
-  toast("Tanlangan model: " + $("modelSelect").selectedOptions[0].text);
-});
-
-// 19. SAHIFA YUKLANGANDA
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Dima AI ishga tushdi.");
-});
-
-console.log("Dima AI JavaScript yuklandi.");
+  window.addEventListener('dima:authenticated',e=>showChat(e.detail));
+})();
 </script>
+ ;box-shadow:0 14px 36px #20d6c233}
+.toast{background:#153b38;border-color:#20d6c255}
+#chatWorkspace{background:#071416;color:#f1fbf8}.chat-sidebar{background:#0b1d20;border-color:#d7fff21c}.chat-action{border-color:#d7fff229;background:#ffffff09}.chat-action:hover{background:#20d6c222;border-color:#20d6c266}.chat-topbar{border-color:#d7fff21c}.chat-topbar button{background:#153638;border-color:#20d6c244}.chat-avatar{background:#24413e}.chat-message.assistant .chat-avatar{background:linear-gradient(135deg,#b8f36b,#20bda9);color:#071416}.chat-compose{background:#102629;border-color:#d7fff233}.chat-compose button{background:linear-gradient(120deg,#b8f36b,#20d6c2);color:#061817;transition:transform .2s}.chat-compose button:active{transform:scale(.92)}
+.google-auth-btn{transition:transform .2s,box-shadow .2s}.google-auth-btn:active{transform:scale(.98)}
+.navlinks a,.show-pill,.chat-action,.feature,.plan{transition-duration:.25s}
+::selection{background:#20d6c277;color:#fff}
+@keyframes riseIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.hero>div:first-child,.section-head,.feature,.plan,.cta{animation:riseIn .7s both}.feature:nth-child(2){animation-delay:.06s}.feature:nth-child(3){animation-delay:.12s}.feature:nth-child(4){animation-delay:.18s}.feature:nth-child(5){animation-delay:.24s}.feature:nth-child(6){animation-delay:.3s}
+.btn:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #b8f36b;outline-offset:3px}
+.chat-compose textarea{font-family:inherit;line-height:1.5}
+@media(max-width:850px){.navlinks{background:#102629;border:1px solid #20d6c244;box-shadow:0 18px 45px #0008}.hero{min-height:auto}.visual{max-width:100%;overflow:visible}.section{padding-top:78px;padding-bottom:78px}}
+@media(max-width:560px){.hero h1{font-size:clamp(42px,12vw,54px);line-height:1.04}.visual{height:320px;transform:scale(.68);margin:-24px -70px}.hero-actions .btn{flex:1;justify-content:center;text-align:center}.cards{gap:12px}.feature{padding:23px;min-height:190px}.section-head{margin-bottom:32px}.showcase{min-height:360px}.chat-sidebar{width:64px}.chat-compose-wrap{left:64px}.chat-topbar{height:58px}}
+@media(hover:none){.feature:hover,.btn:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){.hero>div:first-child,.section-head,.feature,.plan,.cta{animation:none}}
+</style>
+<script>
+// Small interaction polish: ripple feedback, safe mobile navigation and chat input sizing.
+document.addEventListener('click',function(event){const button=event.target.closest('button');if(!button||button.disabled)return;button.classList.remove('tap-feedback');void button.offsetWidth;button.classList.add('tap-feedback');setTimeout(()=>button.classList.remove('tap-feedback'),260)});
+const mobileNav=document.querySelector('.navlinks');document.querySelectorAll('.navlinks a').forEach(link=>link.addEventListener('click',()=>{if(window.innerWidth<=850)mobileNav.style.display='none'}));
+window.addEventListener('resize',()=>{if(window.innerWidth>850&&mobileNav)mobileNav.style.display=''});
+document.querySelectorAll('.chat-compose textarea').forEach(area=>{area.addEventListener('input',()=>{area.style.height='auto';area.style.height=Math.min(area.scrollHeight,140)+'px'})});
+</script>
+ r('click',()=>menu.classList.toggle('open'));document.addEventListener('click',e=>{if(!menu.contains(e.target)&&e.target!==plus)menu.classList.remove('open')});
+menu.addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;const action=b.dataset.action;menu.classList.remove('open');if(action==='image')imageInput.click();if(action==='file')fileInput.click();if(action==='search'){searchMode=!searchMode;updateModes()}if(action==='thinking'){thinkingMode=!thinkingMode;updateModes()}if(action==='new')newSession()});
+tools.addEventListener('click',e=>{const b=e.target.closest('button[data-mode]');if(!b)return;if(b.dataset.mode==='search')searchMode=!searchMode;else thinkingMode=!thinkingMode;updateModes()});
+function fileChosen(file){selectedFile=file;if(!file){chip.classList.remove('show');chip.textContent='';return}chip.textContent='Biriktirildi: '+file.name+' · '+Math.max(1,Math.round(file.size/1024))+' KB';chip.classList.add('show')}
+imageInput.addEventListener('change',()=>fileChosen(imageInput.files[0]));fileInput.addEventListener('change',()=>fileChosen(fileInput.files[0]));
+compose.addEventListener('submit',()=>{if(selectedFile){setTimeout(()=>{const note=document.createElement('div');note.className='chat-disclaimer';note.textContent='Biriktirma tanlandi: '+selectedFile.name+'. Faylni AI tahlil qilishi uchun serverga fayl uzatish funksiyasini ulash kerak.';messagesEl.append(note);selectedFile=null;fileChosen(null);imageInput.value='';fileInput.value='';saveActive()},80)}if(searchMode||thinkingMode){const modes=[];if(searchMode)modes.push('Qidiruv');if(thinkingMode)modes.push('Kengroq fikrlash');setTimeout(()=>{const note=document.createElement('div');note.className='chat-disclaimer';note.textContent='Tanlangan rejimlar: '+modes.join(', ')+'. Bu rejimlar hozircha interfeys demo holatida.';messagesEl.append(note);saveActive()},90)}});
+byId('backSiteBtn').addEventListener('click',saveActive);byId('chatLogoutBtn').addEventListener('click',saveActive);
+byId('sidebarToggle').addEventListener('click',()=>{document.querySelector('.chat-sidebar').classList.toggle('expanded')});
+const originalShow=window.addEventListener;renderHistory();
+})();
+</script>
+<style>
+/* Workspace refresh only — homepage remains unchanged */
+#chatWorkspace{background:#080d12;color:#e8f1f3;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+#chatWorkspace .chat-sidebar{width:278px;flex:0 0 278px;padding:18px 14px;background:#0d151b;border-right:1px solid #b9e8e51c;gap:10px}
+#chatWorkspace .chat-brand{font-size:20px;letter-spacing:-.7px;padding:7px 9px;margin:2px 0 15px;color:#f4fffd}
+#chatWorkspace .chat-brand span{color:#65e6d2}
+#chatWorkspace .chat-action{display:flex;align-items:center;gap:10px;width:100%;min-height:43px;padding:11px 13px;border:1px solid #b9e8e51c;border-radius:12px;background:#ffffff08;color:#dcebea;font-size:13px;font-weight:600}
+#chatWorkspace .chat-action:hover{background:#14312f;border-color:#48cbbb66;box-shadow:0 7px 22px #0004;transform:translateY(-1px)}
+#chatWorkspace .chat-history{padding:17px 10px 5px;color:#718b8b;font-size:11px;font-weight:750;letter-spacing:1px;text-transform:uppercase}
+#chatWorkspace .chat-history-item{padding:11px 12px;margin:3px 0;border-radius:10px;color:#a9bfbd;font-size:12px}
+#chatWorkspace .chat-history-item:hover,#chatWorkspace .chat-history-item.active{background:#163331;border-color:#47c8b944;color:#eafff9}
+#chatWorkspace .chat-main{background:radial-gradient(ellipse at 50% 0%,#102422 0%,#080d12 48%)}
+#chatWorkspace .chat-topbar{height:64px;padding:0 26px;border-bottom:1px solid #b9e8e51a;background:#0b1318cc;backdrop-filter:blur(18px)}
+#chatWorkspace .chat-topbar strong{font-size:14px;letter-spacing:.1px}
+#chatWorkspace .chat-topbar button{padding:9px 14px;border:1px solid #b9e8e528;border-radius:10px;background:#ffffff08;color:#d8e8e6;font-size:12px}
+#chatWorkspace .chat-topbar button:hover{background:#17312e;border-color:#4ccfbd88}
+#chatWorkspace .chat-scroll{padding:30px 22px 175px}
+#chatWorkspace .chat-welcome{margin:13vh auto 42px;max-width:650px}
+#chatWorkspace .chat-welcome .mini-orb{width:54px;height:54px;margin-bottom:23px}
+#chatWorkspace .chat-welcome h1{font-size:clamp(27px,4vw,39px);font-weight:750;letter-spacing:-1.5px;color:#f0fbf8}
+#chatWorkspace .chat-welcome p{font-size:14px;color:#91aaa7}
+#chatWorkspace .chat-messages{max-width:820px}
+#chatWorkspace .chat-message{gap:14px;margin:25px 0;font-size:14px;line-height:1.8;color:#dce9e7}
+#chatWorkspace .chat-avatar{width:32px;height:32px;flex-basis:32px;border-radius:11px;background:#1b3434;color:#b9e9df}
+#chatWorkspace .chat-message.assistant .chat-avatar{background:linear-gradient(135deg,#b8f36b,#20c9b6);color:#071514;box-shadow:0 5px 18px #20c9b633}
+#chatWorkspace .chat-message.user{padding:14px 16px;border:1px solid #b9e8e51b;border-radius:17px;background:#10201f;width:fit-content;max-width:100%;margin-left:auto}
+#chatWorkspace .chat-message.user .chat-avatar{background:#b8f36b;color:#071514}
+#chatWorkspace .chat-compose-wrap{left:278px;padding:20px max(22px,calc((100% - 820px)/2));background:linear-gradient(transparent,#080d12 23%)}
+#chatWorkspace .composer-tools{gap:8px;margin-bottom:10px}
+#chatWorkspace .composer-tool{padding:8px 13px;border-radius:22px;background:#0e1b20;border-color:#b9e8e526;color:#a9c4c0;font-size:11px}
+#chatWorkspace .composer-tool:hover,#chatWorkspace .composer-tool.selected{background:#153633;border-color:#35bfae88;color:#cffff4}
+#chatWorkspace .chat-compose{gap:9px;padding:10px;border:1px solid #b9e8e538;border-radius:20px;background:#111e23;box-shadow:0 15px 50px #0008,0 0 0 1px #ffffff05;transition:border-color .2s,box-shadow .2s}
+#chatWorkspace .chat-compose:focus-within{border-color:#36bfaeaa;box-shadow:0 15px 50px #0008,0 0 0 3px #20c9b61a}
+#chatWorkspace .chat-compose textarea{min-height:45px;padding:12px 10px;color:#f0fbf8;font:14px/1.55 inherit}
+#chatWorkspace .chat-compose textarea::placeholder{color:#718986}
+#chatWorkspace .composer-plus{width:43px;height:43px;flex-basis:43px;border-radius:13px;background:#1a302f;border-color:#b9e8e533;color:#bff8e9;font-size:23px}
+#chatWorkspace .composer-plus:hover{background:#214541;border-color:#4dd2bf;box-shadow:0 5px 20px #20c9b633}
+#chatWorkspace .chat-compose button[type=submit]{width:44px;height:44px;flex-basis:44px;border-radius:13px;background:linear-gradient(135deg,#b8f36b,#28cbb7);color:#071514;font-weight:800;box-shadow:0 6px 20px #20c9b633}
+#chatWorkspace .chat-compose button[type=submit]:hover{filter:brightness(1.08);transform:translateY(-1px)}
+#chatWorkspace .composer-menu{bottom:68px;border-radius:16px;border-color:#b9e8e533;background:#122126;box-shadow:0 22px 65px #000c}
+#chatWorkspace .composer-menu button{padding:13px;border-radius:11px;color:#d9eae7}
+#chatWorkspace .composer-menu button:hover{background:#1a3a36;color:#d7fff4}
+#chatWorkspace .attachment-chip{background:#112d2a;color:#caffef}
+#chatWorkspace .chat-disclaimer{color:#6e8985;font-size:10px}
+#chatWorkspace .chat-sidebar,#chatWorkspace .chat-topbar button,#chatWorkspace .chat-action,#chatWorkspace .composer-plus,#chatWorkspace .composer-tool,#chatWorkspace .chat-compose button{transition:all .2s cubic-bezier(.2,.8,.2,1)}
+@media(max-width:700px){#chatWorkspace .chat-sidebar{width:64px;flex-basis:64px;padding:12px 6px}#chatWorkspace .chat-sidebar.expanded{width:min(270px,82vw);flex-basis:min(270px,82vw);padding:14px}#chatWorkspace .chat-compose-wrap{left:64px;padding:12px 10px}#chatWorkspace .chat-sidebar.expanded~.chat-main .chat-compose-wrap{left:min(270px,82vw)}#chatWorkspace .chat-topbar{padding:0 12px}#chatWorkspace .chat-scroll{padding:18px 12px 160px}#chatWorkspace .chat-welcome{margin:11vh auto 30px}#chatWorkspace .chat-welcome h1{font-size:27px;letter-spacing:-.8px}#chatWorkspace .chat-message{font-size:13px}#chatWorkspace .chat-compose{border-radius:17px;padding:8px}#chatWorkspace .composer-tool{padding:7px 10px}}
+@media(max-width:380px){#chatWorkspace .composer-tools{gap:5px}#chatWorkspace .composer-tool{font-size:10px;padding:7px 8px}#chatWorkspace .chat-disclaimer{font-size:9px}}
+</style>
 
-</body>
-</html>
+<style>
+/* Dima AI light chat theme — homepage styles intentionally untouched */
+#chatWorkspace{background:#fff!important;color:#202b36!important}
+#chatWorkspace .chat-sidebar{background:#f7f9fc!important;border-right:1px solid #e7ebf0!important}
+#chatWorkspace .chat-brand{color:#17212b!important}
+#chatWorkspace .chat-brand span{color:#5b75d6!important}
+#chatWorkspace .chat-action{background:#fff!important;color:#344154!important;border:1px solid #e3e8ef!important}
+#chatWorkspace .chat-action:hover,#chatWorkspace .chat-history-item:hover,#chatWorkspace .chat-history-item.active{background:#edf2ff!important;color:#334c9c!important;border-color:#dce5ff!important}
+#chatWorkspace .chat-history{color:#8993a2!important}
+#chatWorkspace .chat-history-item{color:#647084!important}
+#chatWorkspace .chat-main{background:#fff!important}
+#chatWorkspace .chat-topbar{background:#ffffffed!important;border-bottom:1px solid #edf0f4!important;color:#202b36!important}
+#chatWorkspace .chat-topbar span{color:#8290a0!important}
+#chatWorkspace .chat-topbar button{background:#fff!important;color:#465368!important;border:1px solid #e4e9f0!important}
+#chatWorkspace .chat-scroll{background:#fff!important}
+#chatWorkspace .chat-welcome h1{color:#202b36!important}
+#chatWorkspace .chat-welcome p{color:#7b8797!important}
+#chatWorkspace .chat-message{color:#293545!important}
+#chatWorkspace .chat-avatar{background:#edf1f7!important;color:#59677a!important}
+#chatWorkspace .chat-message.assistant .chat-avatar{background:linear-gradient(135deg,#dfe8ff,#e6f7f3)!important;color:#4b62ad!important;box-shadow:none!important}
+#chatWorkspace .chat-message.user{background:#f3f5f9!important;border:1px solid #e9edf3!important;color:#273244!important}
+#chatWorkspace .chat-message.user .chat-avatar{background:#dfe7ff!important;color:#4058a4!important}
+#chatWorkspace .chat-compose-wrap{background:linear-gradient(transparent,#fff 22%)!important}
+#chatWorkspace .chat-compose{background:#fff!important;border:1px solid #dfe5ed!important;box-shadow:0 8px 28px #25334a12!important}
+#chatWorkspace .chat-compose:focus-within{border-color:#aab9e8!important;box-shadow:0 8px 28px #25334a12,0 0 0 3px #7189d414!important}
+#chatWorkspace .chat-compose textarea{color:#253244!important}
+#chatWorkspace .chat-compose textarea::placeholder{color:#9aa4b2!important}
+#chatWorkspace .composer-plus{background:#f5f7fa!important;border-color:#e3e8ef!important;color:#53627a!important}
+#chatWorkspace .composer-tool{background:#f7f8fb!important;border-color:#e6eaf0!important;color:#5e6b7e!important}
+#chatWorkspace .composer-tool:hover,#chatWorkspace .composer-tool.selected{background:#edf2ff!important;border-color:#cbd7fa!important;color:#425da9!important}
+#chatWorkspace .chat-compose button[type=submit]{background:#536fd0!important;color:#fff!important;box-shadow:none!important}
+#chatWorkspace .composer-menu{background:#fff!important;border:1px solid #e3e8ef!important;box-shadow:0 14px 40px #26334a20!important}
+#chatWorkspace .composer-menu button{color:#344154!important}
+#chatWorkspace .composer-menu button:hover{background:#f1f4fb!important;color:#425da9!important}
+#chatWorkspace .attachment-chip{background:#f1f5ff!important;color:#425da9!important;border-color:#dce5ff!important}
+#chatWorkspace .chat-disclaimer{color:#9aa3af!important}
+@media(max-width:700px){#chatWorkspace .chat-compose-wrap{left:64px!important;right:0!important;padding:12px 12px!important}#chatWorkspace .chat-sidebar.expanded~.chat-main .chat-compose-wrap{left:min(270px,82vw)!important}}
+</style>
+</body></html>
