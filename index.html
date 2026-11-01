@@ -686,46 +686,75 @@ async function sendMessage(){
             }
           ],
 
-          generationConfig:{
-            temperature:0.7,
-            maxOutputTokens:2048
-          }
+async function sendMessage() {
+  if (busy) return;
 
-        })
-      }
-    );
+  if (!user) {
+    openAuth('login');
+    return;
+  }
 
-    let data=await res.json();
+  const input = document.getElementById('prompt');
+  const q = input.value.trim();
 
-    if(!res.ok){
-      throw Error(data.error?.message||'Gemini API xatosi');
+  if (!q) return;
+
+  input.value = '';
+  busy = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  addMessage(q, 'user');
+
+  const pending = addMessage(
+    'Dima AI javob tayyorlamoqda…',
+    'ai'
+  );
+
+  try {
+    const { data, error } = await sb.auth.getSession();
+
+    if (error || !data.session?.access_token) {
+      throw new Error('Qayta tizimga kiring.');
     }
 
-    let answer=
-      data.candidates?.[0]?.content?.parts
-      ?.map(p=>p.text||'')
-      .join('')
-      ||'Javob olinmadi.';
+    const res = await fetch('/api/argon', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization':
+          'Bearer ' + data.session.access_token
+      },
+      body: JSON.stringify({
+        prompt: q,
+        history: turns.slice(-12)
+      })
+    });
 
-    pending.textContent=answer;
+    const result = await res.json();
+
+    if (!res.ok) {
+      throw new Error(result.error || 'API xatosi.');
+    }
+
+    const answer = result.answer || 'Javob olinmadi.';
+
+    pending.textContent = answer;
 
     turns.push(
-      {role:'user',parts:[{text:q}]},
-      {role:'model',parts:[{text:answer}]}
+      { role: 'user', parts: [{ text: q }] },
+      { role: 'model', parts: [{ text: answer }] }
     );
 
-  }catch(e){
+  } catch (e) {
+    pending.textContent = 'Xatolik: ' + e.message;
+    toast(e.message);
 
-    pending.textContent='Xatolik: '+e.message;
-    toast('API kaliti yoki modelni tekshiring.');
-
-  }finally{
-
-    busy=false;
-    document.getElementById('sendBtn').disabled=false;
-
+  } finally {
+    busy = false;
+    document.getElementById('sendBtn').disabled = false;
   }
-}
+                            }
+          
 
 /* API SETTINGS */
 function saveApiKey(){
