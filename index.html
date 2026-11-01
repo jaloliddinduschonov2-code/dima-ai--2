@@ -2,819 +2,879 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#10091b">
-<title>Dima AI — Creative Workspace</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<title>Dima AI — O‘zbekcha sun’iy intellekt</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{--bg:#100b18;--panel:#171020;--line:#ffffff18;--purple:#a855f7;--pink:#d946ef}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#100b18;color:#f8f3ff;font-family:Inter,system-ui,-apple-system,sans-serif;min-height:100vh}
-.glass{background:#ffffff09;border:1px solid var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-.btn{background:linear-gradient(120deg,#8b5cf6,#c026d3);box-shadow:0 5px 22px #9333ea38}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.muted{color:#a99bb9}.hide{display:none!important}
-input,textarea,select{background:#ffffff0c;border:1px solid #ffffff20;color:#fff;border-radius:12px;outline:none}
-input:focus,textarea:focus,select:focus{border-color:#b66aff}
-select option{background:#20162b;color:#fff}
-.modal{position:fixed;inset:0;background:#05030be8;z-index:80;display:none;align-items:center;justify-content:center;padding:16px;overflow:auto}
-.modal.open{display:flex}
-.navbtn{width:100%;display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;color:#cfc4dc;text-align:left;font-size:13px}
-.navbtn:hover,.navbtn.active{background:#ffffff12;color:#fff}
-.feature{background:linear-gradient(145deg,#20152d,#120d1b);border:1px solid #ffffff17;border-radius:16px;padding:14px;text-align:left;min-height:118px}
-.msg{max-width:92%;padding:12px 15px;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55}
-.msg.user{align-self:flex-end;background:linear-gradient(130deg,#7c3aed,#a21caf)}
-.msg.ai{align-self:flex-start;background:#ffffff0b;border:1px solid #ffffff18}
-#sidebar{width:245px;flex-shrink:0;background:#100c17;border-right:1px solid #ffffff14}
-#mobileShade{display:none}
-@media(max-width:760px){
-#sidebar{position:fixed;z-index:60;inset:0 auto 0 0;width:min(82vw,290px);transform:translateX(-105%);transition:transform .25s}
-#sidebar.open{transform:translateX(0)}
-#mobileShade.open{display:block;position:fixed;inset:0;background:#0009;z-index:55}
-#mainArea{width:100%}
-.feature{min-height:100px}
-}
+:root{--bg:#0c0c0d;--panel:#171719;--panel2:#202023;--line:#ffffff18;--orange:#ff7417;--orange2:#ff9a3d;--muted:#aaa8a5;--white:#f7f5f2}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+header{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;position:sticky;top:0;background:#0c0c0deF;backdrop-filter:blur(16px);z-index:20}
+.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:-.4px;font-size:19px}.logo{height:30px;width:30px;border-radius:9px;background:linear-gradient(145deg,#ffad50,#ff6412);display:grid;place-items:center;color:#151515;font-weight:1000;box-shadow:0 5px 24px #ff741744}
+.header-actions{display:flex;align-items:center;gap:10px}.btn{border:0;border-radius:11px;padding:12px 17px;font-weight:750;color:#16110d;background:linear-gradient(120deg,var(--orange2),var(--orange));box-shadow:0 6px 22px #ff74172c}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}.ghost{border:1px solid #ffffff24;background:#ffffff08;color:#fff;border-radius:11px;padding:11px 16px;font-weight:650}.ghost:hover{background:#ffffff12}.menuBtn{display:none}
+.hero{padding:78px 0 56px;display:grid;grid-template-columns:1.02fr .98fr;gap:46px;align-items:center;min-height:550px}.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #ff8a383d;background:#ff741711;color:#ffad70;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:750}.dot{width:7px;height:7px;border-radius:50%;background:#ff8a32;box-shadow:0 0 12px #ff8a32}
+h1{font-size:clamp(38px,6vw,66px);line-height:1.04;letter-spacing:-2.7px;margin:22px 0 17px}.accent{color:#ff8b35}.hero p{color:#b9b5b0;line-height:1.75;font-size:16px;max-width:560px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}.tiny{font-size:11px;color:#85817c;margin-top:16px}
+.demo{border:1px solid #ffffff1b;background:linear-gradient(145deg,#1d1b1a,#111112);border-radius:22px;padding:16px;box-shadow:0 25px 80px #0009;transform:rotate(1deg)}.demo-top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;padding:4px 2px 13px;font-size:12px}.model{color:#ffae73;font-weight:800}.demo-chat{padding:20px 4px 8px;min-height:245px}.bubble{padding:12px 14px;border-radius:14px;margin:10px 0;max-width:90%;font-size:12px;line-height:1.6}.bubble.user{margin-left:auto;background:#292522;border:1px solid #ffffff10}.bubble.ai{background:#211b17;border:1px solid #ff8a3528}.demo-input{display:flex;gap:10px;align-items:center;border:1px solid #ffffff1b;background:#111;border-radius:13px;padding:12px;color:#8d8984;font-size:12px}.send{margin-left:auto;background:var(--orange);color:#16110d;border:0;border-radius:9px;width:30px;height:30px;font-weight:900}
+.section{padding:64px 0}.section-head{text-align:center;max-width:650px;margin:0 auto 30px}.section-head h2{font-size:clamp(26px,4vw,39px);margin:0 0 10px;letter-spacing:-1px}.section-head p{color:var(--muted);line-height:1.7;margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{border:1px solid #ffffff17;background:linear-gradient(145deg,#1b1b1d,#131314);border-radius:17px;padding:21px}.cardIcon{width:40px;height:40px;border-radius:12px;background:#ff74171b;color:#ff9b51;display:grid;place-items:center;font-size:19px}.card h3{margin:15px 0 7px;font-size:16px}.card p{color:#a9a5a0;font-size:13px;line-height:1.7;margin:0}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.stepNum{font-size:12px;color:#ff9b51;font-weight:900}.price{max-width:430px;margin:auto;border:1px solid #ff8b355c;background:linear-gradient(145deg,#211a15,#141313);border-radius:20px;padding:25px}.price h3{margin:0}.price .amount{font-size:42px;font-weight:900;margin:16px 0 5px}.price ul{padding:0;list-style:none;color:#c6c1bb;font-size:13px;line-height:2.2}.price li:before{content:"✓";color:#ff923e;margin-right:9px}
+footer{border-top:1px solid #ffffff16;padding:30px 0;color:#898580;font-size:12px}.footerIn{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;padding:18px;z-index:50}.modal.open{display:flex}.modalBox{width:min(430px,100%);background:#19191b;border:1px solid #ffffff22;border-radius:22px;padding:24px;box-shadow:0 25px 80px #000b}.modalHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.modalHead h2{font-size:22px;margin:0}.x{background:#ffffff0d;color:#fff;border:1px solid #ffffff20;border-radius:9px;width:34px;height:34px}.field{display:block;margin:13px 0;color:#c9c5c0;font-size:12px}.field input{display:block;width:100%;margin-top:7px;padding:13px 14px;border:1px solid #ffffff24;background:#101011;color:white;border-radius:11px;outline:none}.field input:focus{border-color:#ff8a35}.wide{width:100%;margin-top:8px}.switch{display:block;margin:17px auto 0;background:none;border:0;color:#ffae73;font-size:12px}.error{color:#ff9b9b;font-size:12px;min-height:17px;line-height:1.5}.muted{color:var(--muted)}
+#workspace{display:none;min-height:calc(100vh - 72px);padding:22px 0 35px;background:radial-gradient(ellipse at 75% 8%,#8e5bc955 0,transparent 38%),radial-gradient(ellipse at 18% 92%,#513b9955 0,transparent 42%),linear-gradient(135deg,#191326,#171323 48%,#10101a);position:relative;overflow:hidden}#workspace:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,#a66de522,transparent 55%);pointer-events:none}.workgrid{position:relative;z-index:1;display:grid;grid-template-columns:218px minmax(0,1fr);gap:14px;min-height:690px}.side{border:1px solid #ffffff20;background:#17131fe8;backdrop-filter:blur(20px);border-radius:20px;padding:15px;display:flex;flex-direction:column;gap:5px;box-shadow:0 20px 70px #0005}.sideBrand{display:flex;align-items:center;gap:9px;padding:5px 4px 16px;font-weight:850;font-size:15px}.sideLabel{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;color:#91889f;padding:14px 8px 5px}.side button{width:100%;text-align:left;margin:2px 0;background:transparent;border:1px solid transparent;color:#d8d1e3;border-radius:10px;padding:10px 11px;font-size:12px}.side button:hover,.side button.active{background:#ffffff12;border-color:#ffffff12;color:white}.side .premiumMini{margin-top:auto;border:1px solid #a96be54a;background:linear-gradient(145deg,#322044,#211a31);border-radius:15px;padding:13px;color:#e8dcff;font-size:11px;line-height:1.6}.side .premiumMini button{background:linear-gradient(120deg,#b86bfa,#7939c7);color:white;text-align:center;font-weight:800;margin-top:8px}.chatbox{min-width:0;min-height:690px;display:flex;flex-direction:column;border:1px solid #ffffff27;background:linear-gradient(145deg,#211a2bdc,#171321eF);backdrop-filter:blur(24px);border-radius:22px;padding:17px 20px 16px;box-shadow:0 28px 90px #0008;position:relative;overflow:hidden}.chatbox:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 52% 25%,#a56bd51a,transparent 35%);pointer-events:none}.chatTitle{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff18;padding-bottom:14px;gap:10px}.chatTitleLeft{display:flex;align-items:center;gap:10px}.modelSelect{background:#30263d;color:#f3eaff;border:1px solid #ffffff24;border-radius:20px;padding:8px 12px;font-size:11px;outline:none}.topTool{border:1px solid #ffffff1b;background:#ffffff0a;color:#e8dff2;border-radius:10px;padding:8px 11px;font-size:11px}.topTools{display:flex;gap:8px}.chatWelcome{position:relative;z-index:1;text-align:center;margin:35px auto 15px}.orb{width:48px;height:48px;margin:0 auto 16px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#f3b7ff,#a25de9 45%,#5b2b9b 78%);box-shadow:0 0 35px #ad70ed66,inset -7px -8px 15px #34134d66}.chatWelcome h2{font-size:clamp(20px,3vw,27px);font-weight:500;letter-spacing:-.6px;margin:0 0 7px}.chatWelcome p{color:#a99db7;font-size:12px;margin:0}.quickPrompts{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:18px 0 5px}.quickPrompts button{border:1px solid #ffffff20;background:#ffffff0a;color:#e7ddec;border-radius:20px;padding:8px 11px;font-size:10px}.messages{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;gap:12px;padding:12px 4px;overflow:auto;max-height:44vh;min-height:130px}.msg{max-width:88%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;padding:12px 14px;border-radius:14px;font-size:13px}.msg.user{align-self:flex-end;background:linear-gradient(135deg,#693ca1,#4b2b77);border:1px solid #c89bff35}.msg.ai{align-self:flex-start;background:#ffffff0b;border:1px solid #ffffff19}.composer{position:relative;z-index:1;display:flex;gap:9px;align-items:end;border:1px solid #ffffff2b;background:#171321eF;border-radius:16px;padding:10px 12px;box-shadow:0 8px 30px #0003}.composer textarea{flex:1;resize:vertical;min-height:50px;max-height:140px;border:0;outline:0;background:transparent;color:white;padding:9px;font-size:13px}.composer textarea::placeholder{color:#9d92aa}.composerTools{display:flex;align-items:center;gap:7px;padding:0 3px 4px}.miniTool{background:transparent;border:0;color:#b9acc8;font-size:10px;padding:5px}.sendPurple{background:linear-gradient(135deg,#c17aff,#8439c6);color:white;border:0;border-radius:50%;width:34px;height:34px;font-size:17px;box-shadow:0 4px 16px #a55be755}.featureRow{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px}.featureTile{border:1px solid #ffffff1c;background:#100e17a8;border-radius:13px;padding:12px;min-height:85px}.featureTile b{font-size:11px;display:block;margin:5px 0}.featureTile span{font-size:10px;color:#a99fb2;line-height:1.5}.hide{display:none!important}
+@media(max-width:760px){.wrap{width:min(100% - 26px,600px)}header{height:62px}.hero{grid-template-columns:1fr;padding:54px 0 35px;gap:30px;min-height:auto}.hero h1{letter-spacing:-1.7px}.demo{transform:none}.grid,.steps{grid-template-columns:1fr}.section{padding:45px 0}.workgrid{grid-template-columns:1fr;min-height:calc(100vh - 100px)}.side{display:flex;flex-direction:row;gap:5px;overflow:auto;padding:9px;border-radius:14px}.sideBrand,.sideLabel,.premiumMini{display:none!important}.side button{min-width:max-content;width:auto;margin:0;padding:9px 11px}.chatbox{min-height:calc(100vh - 170px);padding:13px 12px;border-radius:17px}.chatTitle{align-items:flex-start}.topTools{gap:5px}.topTool{padding:7px 8px;font-size:10px}.chatWelcome{margin:30px auto 8px}.chatWelcome h2{font-size:20px}.messages{max-height:none;min-height:120px}.featureRow{grid-template-columns:1fr 1fr}.featureTile:last-child{display:none}.composer{padding:8px}.composer textarea{min-height:44px}.menuBtn{display:inline-flex}.desktopNav{display:none}}
 </style>
 </head>
 <body>
-<div id="mobileShade" onclick="closeSidebar()"></div>
-<div class="min-h-screen flex" id="appShell">
-<aside id="sidebar" class="flex flex-col p-4 min-h-screen">
-<div class="flex items-center justify-between mb-6 px-1">
-<div class="font-extrabold text-xl tracking-tight"><span class="text-fuchsia-400">✦</span> Dima AI</div>
-<button class="md:hidden muted" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
-</div>
-<button class="btn rounded-xl py-3 font-semibold text-sm mb-5" onclick="newChat()"><i class="fa-solid fa-plus mr-2"></i>New Chat</button>
-<div class="text-[10px] uppercase tracking-widest muted px-3 mb-2">Features</div>
-<nav class="space-y-1">
-<button class="navbtn active" data-view="chat" onclick="showView('chat',this)"><i class="fa-regular fa-message w-4"></i>Chat</button>
-<button class="navbtn" data-view="archive" onclick="showView('archive',this)"><i class="fa-solid fa-box-archive w-4"></i>Archived <span id="archiveCount" class="ml-auto text-xs">0</span></button>
-<button class="navbtn" data-view="library" onclick="showView('library',this)"><i class="fa-regular fa-folder-open w-4"></i>Library</button>
-</nav>
-<div class="text-[10px] uppercase tracking-widest muted px-3 mt-6 mb-2">Workspaces</div>
-<nav class="space-y-1">
-<button class="navbtn" onclick="newWorkspace()"><i class="fa-solid fa-folder-plus w-4"></i>New Project</button>
-<button class="navbtn" onclick="setPrompt('Menga rasm yaratish uchun batafsil prompt yozib ber.')"><i class="fa-regular fa-image w-4"></i>Image</button>
-<button class="navbtn" onclick="setPrompt('Menga professional taqdimot rejasini tuzib ber.')"><i class="fa-regular fa-file-powerpoint w-4"></i>Presentation</button>
-<button class="navbtn" onclick="setPrompt('Menga dasturlash loyihasi uchun reja va kod yozib ber.')"><i class="fa-solid fa-code w-4"></i>Dev Project</button>
-</nav>
-<div id="projectList" class="mt-2 space-y-1"></div>
-<div class="mt-auto glass rounded-2xl p-4 text-center">
-<div class="text-2xl text-amber-300 mb-1"><i class="fa-solid fa-crown"></i></div>
-<p class="font-bold text-sm">Upgrade to Premium</p>
-<p class="text-[11px] muted mt-1">Ko‘proq imkoniyatlar va qulay ish jarayoni.</p>
-<button class="btn w-full rounded-lg py-2 mt-3 text-xs font-bold" onclick="openModal('premiumModal')">Premium tariflar</button>
-</div>
-<div class="flex items-center gap-2 mt-4 px-1">
-<div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-xs font-bold">D</div>
-<div class="min-w-0 flex-1"><p id="sideEmail" class="text-xs truncate">Mehmon</p><p id="sidePlan" class="text-[10px] muted">Free Plan</p></div>
-<button onclick="openModal('settingsModal')" class="muted"><i class="fa-solid fa-gear"></i></button>
-</div>
-</aside>
-<main id="mainArea" class="flex-1 min-w-0 min-h-screen flex flex-col">
-<header class="h-16 border-b border-white/10 flex items-center gap-3 px-4 sm:px-6">
-<button class="md:hidden glass rounded-lg w-9 h-9" onclick="openSidebar()"><i class="fa-solid fa-bars"></i></button>
-<select id="model" class="text-xs px-3 py-2 max-w-44">
-<option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
-<option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-</select>
-<div class="ml-auto flex items-center gap-2">
-<button class="glass rounded-lg px-3 py-2 text-xs" onclick="openModal('settingsModal')"><i class="fa-solid fa-sliders mr-1"></i><span class="hidden sm:inline">Configuration</span></button>
-<button class="glass rounded-lg px-3 py-2 text-xs" onclick="exportChat()"><i class="fa-solid fa-download mr-1"></i><span class="hidden sm:inline">Export</span></button>
-<button id="adminBtn" class="hide text-amber-300 glass rounded-lg px-3 py-2 text-xs" onclick="openModal('adminModal')">Admin</button>
-<button id="authHeaderBtn" class="btn rounded-lg px-3 py-2 text-xs" onclick="openAuth('login')">Kirish</button>
-<button id="logoutBtn" class="hide glass rounded-lg px-3 py-2 text-xs" onclick="logout()">Chiqish</button>
-</div>
+<header>
+ <div class="wrap" style="display:flex;align-items:center;justify-content:space-between">
+  <a class="brand" href="#" aria-label="Dima AI bosh sahifa"><span class="logo">D</span><span>Dima <span class="accent">AI</span></span></a>
+  <nav class="desktopNav muted" style="display:flex;gap:24px;font-size:13px"><a href="#imkoniyatlar">Imkoniyatlar</a><a href="#qanday">Qanday ishlaydi</a><a href="#narxlar">Tariflar</a></nav>
+  <div class="header-actions">
+  
+   <button class="ghost" id="loginOpen">Kirish</button>
+   <button class="btn" id="startOpen">Bepul boshlash</button>
+   <button class="ghost hide" id="logoutBtn">Chiqish</button>
+  </div>
+ </div>
 </header>
-<section id="chatView" class="flex-1 flex flex-col min-h-0">
-<div id="chatMessages" class="flex-1 overflow-y-auto p-4 sm:p-7 flex flex-col gap-3">
-<div id="welcome" class="m-auto text-center py-10 max-w-xl">
-<div class="w-14 h-14 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-600 shadow-xl shadow-purple-500/30 mx-auto mb-5"></div>
-<h1 class="text-2xl sm:text-3xl font-light">Ready to Create Something New?</h1>
-<p class="muted text-sm mt-3">Dima AI bilan fikrlaringizni amalga oshiring.</p>
-<div class="flex flex-wrap justify-center gap-2 mt-7">
-<button class="glass rounded-full px-3 py-2 text-xs" onclick="setPrompt('Rasm yaratish uchun kreativ prompt tuzib ber')">✦ Create Image</button>
-<button class="glass rounded-full px-3 py-2 text-xs" onclick="setPrompt('Yangi g‘oyalar topib ber')">Brainstorm</button>
-<button class="glass rounded-full px-3 py-2 text-xs" onclick="setPrompt('Bugungi ishlarim uchun reja tuz')">Make a plan</button>
-</div>
-</div>
-</div>
-<div class="px-3 sm:px-6 pb-4">
-<div class="max-w-3xl mx-auto glass rounded-2xl p-3">
-<textarea id="prompt" rows="2" class="w-full bg-transparent border-0 p-2 resize-y" placeholder="✦ Ask Anything..."></textarea>
-<input id="fileInput" type="file" class="hide" onchange="attachFile(this)">
-<div class="flex items-center gap-2 mt-2">
-<button class="muted text-xs px-2 py-2" onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-paperclip mr-1"></i>Attach</button>
-<button class="muted text-xs px-2 py-2" onclick="openModal('settingsModal')"><i class="fa-solid fa-sliders mr-1"></i>Settings</button>
-<span id="attachedName" class="text-[10px] muted truncate"></span>
-<button id="sendBtn" class="btn ml-auto w-9 h-9 rounded-full" onclick="sendMessage()"><i class="fa-solid fa-arrow-up"></i></button>
-</div>
-</div>
-<div class="max-w-3xl mx-auto grid grid-cols-3 gap-2 mt-3">
-<button class="feature" onclick="setPrompt('Rasm yaratish uchun batafsil prompt yozib ber.')"><i class="fa-regular fa-image text-fuchsia-300"></i><p class="text-xs font-semibold mt-2">Image Generator</p><p class="text-[10px] muted mt-1">Rasm g‘oyalarini yarating</p></button>
-<button class="feature" onclick="setPrompt('5 slaydlik professional taqdimot rejasini tuzib ber.')"><i class="fa-regular fa-file-powerpoint text-violet-300"></i><p class="text-xs font-semibold mt-2">AI Presentation</p><p class="text-[10px] muted mt-1">Taqdimot rejalari</p></button>
-<button class="feature" onclick="setPrompt('JavaScriptda zamonaviy web loyiha kodi yozib ber.')"><i class="fa-solid fa-code text-purple-300"></i><p class="text-xs font-semibold mt-2">Dev Assistant</p><p class="text-[10px] muted mt-1">Kod va dasturlash</p></button>
-</div>
-</div>
-</section>
-<section id="archiveView" class="hide flex-1 p-5 sm:p-8"><h2 class="text-2xl font-semibold">Archived Chats</h2><p class="muted text-sm mt-1">Arxivlangan suhbatlaringiz shu yerda ko‘rinadi.</p><div id="archiveList" class="mt-5 space-y-2"></div></section>
-<section id="libraryView" class="hide flex-1 p-5 sm:p-8"><h2 class="text-2xl font-semibold">Library</h2><p class="muted text-sm mt-1">Saqlangan fayl va materiallar uchun joy.</p><div id="libraryList" class="glass rounded-xl p-5 mt-5 text-sm muted">Hozircha saqlangan material yo‘q.</div></section>
+
+<main id="landing">
+ <div class="wrap hero">
+  <div>
+   <span class="eyebrow"><span class="dot"></span> O‘zbek tilida AI yordamchi</span>
+   <h1>O‘zbekcha sun’iy intellekt. <span class="accent">Siz uchun.</span></h1>
+   <p>Savol bering, matn yozing, g‘oya toping va loyihalaringiz ustida ishlang. Dima AI — kundalik vazifalaringiz uchun qulay sun’iy intellekt yordamchisi.</p>
+   <div class="hero-actions">
+    <button class="btn" id="heroStart">Bepul boshlash →</button>
+    <a class="ghost" href="#imkoniyatlar">Imkoniyatlarni ko‘rish</a>
+   </div>
+   <div class="tiny">Ro‘yxatdan o‘tish oson · Telefon va kompyuterda ishlaydi</div>
+  </div>
+
+  <div class="demo">
+   <div class="demo-top"><b>✦ Dima AI</b><span class="model">AI yordamchi</span></div>
+   <div class="demo-chat">
+    <div class="bubble user">Salom! Kundalik vazifalarimni qanday rejalashtirsam bo‘ladi?</div>
+    <div class="bubble ai">Salom! Keling, vazifalaringizni muhimlik bo‘yicha tartiblaymiz. ✨</div>
+    <div class="bubble user">Menga bugungi kun uchun reja tuz.</div>
+    <div class="bubble ai">Albatta! Dima AI sizga reja, matn, tarjima va yangi g‘oyalar bilan yordam beradi.</div>
+   </div>
+   <div class="demo-input">
+    <span>Savolingizni yozing...</span>
+    <button class="send" id="demoSend">➜</button>
+   </div>
+  </div>
+ </div>
+
+ <section class="section" id="imkoniyatlar">
+  <div class="wrap">
+   <div class="section-head">
+    <h2>Hammasi bitta joyda</h2>
+    <p>O‘qish, ijod va kundalik ishlaringiz uchun kerakli AI imkoniyatlari.</p>
+   </div>
+   <div class="grid">
+    <article class="card">
+     <div class="cardIcon">✦</div>
+     <h3>AI suhbat</h3>
+     <p>Savollaringizga javob oling va murakkab mavzularni sodda tushuning.</p>
+    </article>
+    <article class="card">
+     <div class="cardIcon">▧</div>
+     <h3>Matn va tarjima</h3>
+     <p>Matn yozish, tahrirlash, tarjima qilish va yangi g‘oyalar tayyorlash.</p>
+    </article>
+    <article class="card">
+     <div class="cardIcon">⌘</div>
+     <h3>Dasturlash yordami</h3>
+     <p>Kod yozish, xatolarni tushunish va loyihani rejalashga yordam.</p>
+    </article>
+   </div>
+  </div>
+ </section>
+
+ <section class="section" id="qanday" style="background:#111112">
+  <div class="wrap">
+   <div class="section-head">
+    <h2>Foydalanish juda oson</h2>
+    <p>Bir necha oddiy qadamda Dima AI bilan ishlashni boshlang.</p>
+   </div>
+   <div class="steps">
+    <article class="card"><div class="stepNum">01 / RO‘YXAT</div><h3>Akkaunt yarating</h3><p>Email va parolingiz orqali ro‘yxatdan o‘ting.</p></article>
+    <article class="card"><div class="stepNum">02 / SAVOL</div><h3>Savolingizni yozing</h3><p>O‘zbek yoki boshqa tilda savolingizni yuboring.</p></article>
+    <article class="card"><div class="stepNum">03 / NATIJA</div><h3>Javobni oling</h3><p>AI javob beradi va suhbatni davom ettirishingiz mumkin.</p></article>
+   </div>
+  </div>
+ </section>
+
+ <section class="section" id="narxlar">
+  <div class="wrap">
+   <div class="section-head">
+    <h2>Oddiy va tushunarli tarif</h2>
+    <p>Boshlash uchun bepul tarifdan foydalaning.</p>
+   </div>
+   <div class="price">
+    <h3>Free — Bepul</h3>
+    <div class="amount">0 <span style="font-size:15px;color:#aaa">so‘m</span></div>
+    <div class="muted" style="font-size:12px">Boshlash uchun</div>
+    <ul>
+     <li>AI chatdan foydalanish</li>
+     <li>O‘zbek tilida savol-javob</li>
+     <li>Matn va g‘oyalar bo‘yicha yordam</li>
+    </ul>
+    <button class="btn wide" id="priceStart">Bepul boshlash</button>
+    <p class="tiny">AI xizmatining limiti API provayderiga bog‘liq.</p>
+   </div>
+  </div>
+ </section>
 </main>
+
+<section id="workspace">
+ <div class="wrap workgrid">
+  <aside class="side">
+   <div class="sideBrand"><span class="logo">D</span>Dima AI</div>
+   <button class="active" id="newChat">＋ Yangi chat</button>
+   <div class="sideLabel">Ish joyi</div>
+   <button id="historyBtn">◷ Chat tarixi</button>
+   <button id="libraryBtn">▤ Kutubxona</button>
+   <div class="sideLabel">Vositalar</div>
+   <button id="imageBtn">▧ Rasm yaratish</button>
+   <button id="presentationBtn">▦ Taqdimot</button>
+   <button id="devBtn">⌘ Dev Assistant</button>
+   <div class="premiumMini">
+    <b>✦ Dima Premium</b>
+    <div>Qo‘shimcha imkoniyatlar bilan tanishing.</div>
+    <button id="premiumBtn">Batafsil</button>
+   </div>
+   <div class="muted" id="userLabel" style="font-size:10px;padding:8px;overflow-wrap:anywhere"></div>
+  </aside>
+
+  <div class="chatbox">
+   <div class="chatTitle">
+    <div class="chatTitleLeft">
+     <div>
+      <b>Dima AI</b>
+      <div class="muted" style="font-size:10px;margin-top:4px">Sizning AI yordamchingiz</div>
+     </div>
+     <select class="modelSelect" id="modelSelect">
+      <option value="gemini-2.5-flash">Gemini 4.0 Argon</option>
+     </select>
+    </div>
+    <div class="topTools">
+     <button class="topTool" id="exportChat">↓ Eksport</button>
+     <button class="topTool" id="settingsBtn">⚙</button>
+    </div>
+   </div>
+
+   <div class="chatWelcome" id="chatWelcome">
+    <div class="orb"></div>
+    <h2>Bugun nimani birgalikda yaratamiz?</h2>
+    <p>Savolingizni yozing yoki quyidagi takliflardan birini tanlang.</p>
+    <div class="quickPrompts">
+     <button data-prompt="Menga yangi loyiha uchun g‘oyalar ber">✦ G‘oyalar</button>
+     <button data-prompt="Ushbu mavzuni sodda tushuntirib ber">▤ O‘rganish</button>
+     <button data-prompt="Menga matn yozishda yordam ber">✎ Matn yozish</button>
+    </div>
+   </div>
+
+   <div class="messages" id="messages"></div>
+
+   <div class="composer">
+    <textarea id="prompt" placeholder="Dima AI’dan nimani so‘ramoqchisiz?" rows="2"></textarea>
+    <div class="composerTools">
+     <button class="miniTool" id="attachBtn" title="Fayl biriktirish">＋</button>
+     <button class="sendPurple" id="sendBtn" aria-label="Yuborish">↑</button>
+    </div>
+    <input type="file" id="fileInput" class="hide">
+   </div>
+   <div class="tiny" id="chatNotice" style="text-align:center">Dima AI javoblari sun’iy intellekt tomonidan yaratiladi.</div>
+
+   <div class="featureRow">
+    <div class="featureTile"><span>▧</span><b>Image Generator</b><span>Rasm yaratish imkoniyati</span></div>
+    <div class="featureTile"><span>▦</span><b>AI Presentation</b><span>Taqdimot rejasini tuzish</span></div>
+    <div class="featureTile"><span>⌘</span><b>Dev Assistant</b><span>Dasturlash bo‘yicha yordam</span></div>
+   </div>
   </div>
-  <!-- LOGIN / REGISTER -->
-<div id="authModal" class="modal">
-  <div class="glass rounded-3xl p-6 sm:p-8 w-full max-w-md" style="background:#171020">
+ </div>
+  </section>
+  
+   <button class="ghost" id="loginOpen">Kirish</button>
+   <button class="btn" id="startOpen">Bepul boshlash</button>
+   <button class="ghost hide" id="logoutBtn">Chiqish</button>
+  </div>
+ </div>
+</header>
 
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <div class="text-lg font-bold">
-          <span class="text-fuchsia-300">✦</span> Dima AI
-        </div>
-        <p id="authTitle" class="text-xl font-semibold mt-4">Welcome back</p>
-        <p id="authSub" class="muted text-xs mt-1">Akkauntingizga kiring</p>
-      </div>
-      <button onclick="closeModal('authModal')" class="muted text-xl">×</button>
+<main id="landing">
+ <div class="wrap hero">
+  <div>
+   <span class="eyebrow"><span class="dot"></span> O‘zbek tilida AI yordamchi</span>
+   <h1>O‘zbekcha sun’iy intellekt. <span class="accent">Siz uchun.</span></h1>
+   <p>Savol bering, matn yozing, g‘oya toping va loyihalaringiz ustida ishlang. Dima AI — kundalik vazifalaringiz uchun qulay sun’iy intellekt yordamchisi.</p>
+   <div class="hero-actions">
+    <button class="btn" id="heroStart">Bepul boshlash →</button>
+    <a class="ghost" href="#imkoniyatlar">Imkoniyatlarni ko‘rish</a>
+   </div>
+   <div class="tiny">Ro‘yxatdan o‘tish oson · Telefon va kompyuterda ishlaydi</div>
+  </div>
+
+  <div class="demo">
+   <div class="demo-top"><b>✦ Dima AI</b><span class="model">AI yordamchi</span></div>
+   <div class="demo-chat">
+    <div class="bubble user">Salom! Kundalik vazifalarimni qanday rejalashtirsam bo‘ladi?</div>
+    <div class="bubble ai">Salom! Keling, vazifalaringizni muhimlik bo‘yicha tartiblaymiz. ✨</div>
+    <div class="bubble user">Menga bugungi kun uchun reja tuz.</div>
+    <div class="bubble ai">Albatta! Dima AI sizga reja, matn, tarjima va yangi g‘oyalar bilan yordam beradi.</div>
+   </div>
+   <div class="demo-input">
+    <span>Savolingizni yozing...</span>
+    <button class="send" id="demoSend">➜</button>
+   </div>
+  </div>
+ </div>
+
+ <section class="section" id="imkoniyatlar">
+  <div class="wrap">
+   <div class="section-head">
+    <h2>Hammasi bitta joyda</h2>
+    <p>O‘qish, ijod va kundalik ishlaringiz uchun kerakli AI imkoniyatlari.</p>
+   </div>
+   <div class="grid">
+    <article class="card">
+     <div class="cardIcon">✦</div>
+     <h3>AI suhbat</h3>
+     <p>Savollaringizga javob oling va murakkab mavzularni sodda tushuning.</p>
+    </article>
+    <article class="card">
+     <div class="cardIcon">▧</div>
+     <h3>Matn va tarjima</h3>
+     <p>Matn yozish, tahrirlash, tarjima qilish va yangi g‘oyalar tayyorlash.</p>
+    </article>
+    <article class="card">
+     <div class="cardIcon">⌘</div>
+     <h3>Dasturlash yordami</h3>
+     <p>Kod yozish, xatolarni tushunish va loyihani rejalashga yordam.</p>
+    </article>
+   </div>
+  </div>
+ </section>
+
+ <section class="section" id="qanday" style="background:#111112">
+  <div class="wrap">
+   <div class="section-head">
+    <h2>Foydalanish juda oson</h2>
+    <p>Bir necha oddiy qadamda Dima AI bilan ishlashni boshlang.</p>
+   </div>
+   <div class="steps">
+    <article class="card"><div class="stepNum">01 / RO‘YXAT</div><h3>Akkaunt yarating</h3><p>Email va parolingiz orqali ro‘yxatdan o‘ting.</p></article>
+    <article class="card"><div class="stepNum">02 / SAVOL</div><h3>Savolingizni yozing</h3><p>O‘zbek yoki boshqa tilda savolingizni yuboring.</p></article>
+    <article class="card"><div class="stepNum">03 / NATIJA</div><h3>Javobni oling</h3><p>AI javob beradi va suhbatni davom ettirishingiz mumkin.</p></article>
+   </div>
+  </div>
+ </section>
+
+ <section class="section" id="narxlar">
+  <div class="wrap">
+   <div class="section-head">
+    <h2>Oddiy va tushunarli tarif</h2>
+    <p>Boshlash uchun bepul tarifdan foydalaning.</p>
+   </div>
+   <div class="price">
+    <h3>Free — Bepul</h3>
+    <div class="amount">0 <span style="font-size:15px;color:#aaa">so‘m</span></div>
+    <div class="muted" style="font-size:12px">Boshlash uchun</div>
+    <ul>
+     <li>AI chatdan foydalanish</li>
+     <li>O‘zbek tilida savol-javob</li>
+     <li>Matn va g‘oyalar bo‘yicha yordam</li>
+    </ul>
+    <button class="btn wide" id="priceStart">Bepul boshlash</button>
+    <p class="tiny">AI xizmatining limiti API provayderiga bog‘liq.</p>
+   </div>
+  </div>
+ </section>
+</main>
+
+<section id="workspace">
+ <div class="wrap workgrid">
+  <aside class="side">
+   <div class="sideBrand"><span class="logo">D</span>Dima AI</div>
+   <button class="active" id="newChat">＋ Yangi chat</button>
+   <div class="sideLabel">Ish joyi</div>
+   <button id="historyBtn">◷ Chat tarixi</button>
+   <button id="libraryBtn">▤ Kutubxona</button>
+   <div class="sideLabel">Vositalar</div>
+   <button id="imageBtn">▧ Rasm yaratish</button>
+   <button id="presentationBtn">▦ Taqdimot</button>
+   <button id="devBtn">⌘ Dev Assistant</button>
+   <div class="premiumMini">
+    <b>✦ Dima Premium</b>
+    <div>Qo‘shimcha imkoniyatlar bilan tanishing.</div>
+    <button id="premiumBtn">Batafsil</button>
+   </div>
+   <div class="muted" id="userLabel" style="font-size:10px;padding:8px;overflow-wrap:anywhere"></div>
+  </aside>
+
+  <div class="chatbox">
+   <div class="chatTitle">
+    <div class="chatTitleLeft">
+     <div>
+      <b>Dima AI</b>
+      <div class="muted" style="font-size:10px;margin-top:4px">Sizning AI yordamchingiz</div>
+     </div>
+     <select class="modelSelect" id="modelSelect">
+      <option value="gemini-2.5-flash">Gemini 4.0 Argon</option>
+     </select>
+    </div>
+    <div class="topTools">
+     <button class="topTool" id="exportChat">↓ Eksport</button>
+     <button class="topTool" id="settingsBtn">⚙</button>
+    </div>
+   </div>
+
+   <div class="chatWelcome" id="chatWelcome">
+    <div class="orb"></div>
+    <h2>Bugun nimani birgalikda yaratamiz?</h2>
+    <p>Savolingizni yozing yoki quyidagi takliflardan birini tanlang.</p>
+    <div class="quickPrompts">
+     <button data-prompt="Menga yangi loyiha uchun g‘oyalar ber">✦ G‘oyalar</button>
+     <button data-prompt="Ushbu mavzuni sodda tushuntirib ber">▤ O‘rganish</button>
+     <button data-prompt="Menga matn yozishda yordam ber">✎ Matn yozish</button>
+    </div>
+   </div>
+
+   <div class="messages" id="messages"></div>
+
+   <div class="composer">
+    <textarea id="prompt" placeholder="Dima AI’dan nimani so‘ramoqchisiz?" rows="2"></textarea>
+    <div class="composerTools">
+     <button class="miniTool" id="attachBtn" title="Fayl biriktirish">＋</button>
+     <button class="sendPurple" id="sendBtn" aria-label="Yuborish">↑</button>
+    </div>
+    <input type="file" id="fileInput" class="hide">
+   </div>
+   <div class="tiny" id="chatNotice" style="text-align:center">Dima AI javoblari sun’iy intellekt tomonidan yaratiladi.</div>
+
+   <div class="featureRow">
+    <div class="featureTile"><span>▧</span><b>Image Generator</b><span>Rasm yaratish imkoniyati</span></div>
+    <div class="featureTile"><span>▦</span><b>AI Presentation</b><span>Taqdimot rejasini tuzish</span></div>
+    <div class="featureTile"><span>⌘</span><b>Dev Assistant</b><span>Dasturlash bo‘yicha yordam</span></div>
+   </div>
+  </div>
+ </div>
+  </section>
+  
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" id="closeAuth" aria-label="Yopish">×</button>
+    <div class="logo modal-logo">D</div>
+    <h2 id="authTitle">Dima AI ga xush kelibsiz</h2>
+    <p class="muted" id="authSubtitle">Hisobingizga kiring yoki yangi hisob yarating.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="loginTab">Kirish</button>
+      <button class="auth-tab" id="signupTab">Ro‘yxatdan o‘tish</button>
     </div>
 
-    <div class="space-y-3">
+    <form id="authForm">
+      <label for="authName" id="nameLabel" class="hide">Ismingiz</label>
+      <input id="authName" class="field hide" type="text" placeholder="Ismingiz">
 
-      <label class="block text-xs">
-        Email
-        <input id="authEmail" type="email" autocomplete="email"
-          placeholder="Email manzilingiz"
-          class="w-full px-4 py-3 mt-1">
-      </label>
+      <label for="authEmail">Email</label>
+      <input id="authEmail" class="field" type="email" placeholder="email@example.com" required>
 
-      <label class="block text-xs">
-        Password
-        <input id="authPassword" type="password"
-          autocomplete="current-password"
-          placeholder="Parolingiz"
-          class="w-full px-4 py-3 mt-1">
-      </label>
+      <label for="authPassword">Parol</label>
+      <input id="authPassword" class="field" type="password" placeholder="Parolingiz" minlength="6" required>
 
-      <label id="confirmWrap" class="hide block text-xs">
-        Confirm password
-        <input id="authPassword2" type="password"
-          placeholder="Parolni takrorlang"
-          class="w-full px-4 py-3 mt-1">
-      </label>
+      <button class="primary-btn full-btn" id="authSubmit" type="submit">Kirish</button>
+      <p class="muted small-text" id="authMessage" aria-live="polite"></p>
+    </form>
 
-      <p id="authError" class="text-xs text-rose-300 min-h-4"></p>
-
-      <button id="authSubmit"
-        class="btn w-full rounded-full py-3 text-sm font-bold"
-        onclick="submitAuth()">
-        Login
-      </button>
-
-      <div class="text-center text-[10px] muted">
-        Or continue with
-      </div>
-
-      <div class="grid grid-cols-2 gap-2">
-        <button class="glass rounded-full py-2 text-xs"
-          onclick="toast('Google OAuth hali sozlanmagan.')">
-          <i class="fa-brands fa-google mr-1"></i> Google
-        </button>
-
-        <button class="glass rounded-full py-2 text-xs"
-          onclick="toast('Apple OAuth hali sozlanmagan.')">
-          <i class="fa-brands fa-apple mr-1"></i> Apple
-        </button>
-      </div>
-
-      <button id="authSwitch"
-        class="w-full text-xs text-violet-300 pt-2"
-        onclick="switchAuth()">
-        Akkauntingiz yo‘qmi? Create an account
-      </button>
-
-    </div>
+    <p class="muted small-text center">
+      Davom etish orqali foydalanish shartlariga rozilik bildirasiz.
+    </p>
   </div>
 </div>
 
-<!-- SETTINGS -->
-<div id="settingsModal" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-md"
-    style="background:#171020">
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+  <div class="modal-card">
+    <button class="modal-close" id="closeSettings">×</button>
+    <h2>⚙️ Sozlamalar</h2>
+    <p class="muted">Dima AI sozlamalarini boshqaring.</p>
 
-    <div class="flex justify-between mb-5">
-      <h2 class="text-xl font-bold">Configuration</h2>
-      <button onclick="closeModal('settingsModal')">×</button>
-    </div>
+    <label for="languageSelect">Til</label>
+    <select class="field" id="languageSelect">
+      <option value="uz">O‘zbekcha</option>
+      <option value="en">English</option>
+      <option value="ru">Русский</option>
+    </select>
 
-    <label class="text-xs">
-      Gemini API Key
-      <input id="apiKey" type="password"
-        class="w-full px-3 py-3 mt-2"
-        placeholder="API kalitini kiriting">
-    </label>
+    <label for="themeSelect">Ko‘rinish</label>
+    <select class="field" id="themeSelect">
+      <option value="dark">Qorong‘i</option>
+      <option value="light">Yorug‘</option>
+    </select>
 
-    <p class="text-[11px] text-amber-200/80 mt-3">
-      API kalitini hech kimga yubormang.
-      Ishlab chiqarish saytida uni server orqali himoyalash kerak.
-    </p>
+    <button class="primary-btn full-btn" id="saveSettings">Saqlash</button>
+  </div>
+</div>
 
-    <button
-      class="btn w-full rounded-xl py-3 mt-4 text-sm font-bold"
-      onclick="saveApiKey()">
-      Save Configuration
+<!-- PREMIUM MODAL -->
+<div class="modal" id="premiumModal">
+  <div class="modal-card premium-card">
+    <button class="modal-close" id="closePremium">×</button>
+    <div class="premium-icon">✦</div>
+    <h2>Dima AI Premium</h2>
+    <p class="muted">Premium imkoniyatlar haqida ma’lumot.</p>
+
+    <div class="premium-feature">✦ Kengaytirilgan AI imkoniyatlari</div>
+    <div class="premium-feature">✦ Katta hajmdagi suhbatlar</div>
+    <div class="premium-feature">✦ Qo‘shimcha ijodiy vositalar</div>
+
+    <button class="primary-btn full-btn" id="premiumInfoBtn">
+      Premium haqida
     </button>
-
+    <p class="muted small-text center">
+      Premium xarid va to‘lov tizimi hozircha ulanmagan.
+    </p>
   </div>
 </div>
 
-<!-- PREMIUM -->
-<div id="premiumModal" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-md"
-    style="background:#171020">
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <div class="flex justify-between">
-      <h2 class="text-xl font-bold text-amber-300">
-        <i class="fa-solid fa-crown mr-2"></i>
-        Dima AI Premium
-      </h2>
-      <button onclick="closeModal('premiumModal')">×</button>
-    </div>
+<script>
+/* =================================
+   DIMA AI — ASOSIY JAVASCRIPT
+================================= */
 
-    <p class="muted text-sm mt-2">
-      Premium imkoniyatlari uchun tarif.
-    </p>
+// 1. SUPABASE ULANISHI
+const SUPABASE_URL = "https://qjgnwremgeyajzpwybvb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_0NCWu1KZvXNN536AdoUpWw_o0c8Gb5V";
 
-    <div class="glass rounded-xl p-4 mt-5">
-      <p class="text-2xl font-bold">
-        49 000 so‘m
-        <span class="text-xs muted font-normal">/ oy</span>
-      </p>
-
-      <ul class="text-sm space-y-2 mt-4">
-        <li>✓ Kengaytirilgan AI imkoniyatlari</li>
-        <li>✓ Ko‘proq foydalanish limiti</li>
-        <li>✓ Premium foydalanuvchi maqomi</li>
-      </ul>
-    </div>
-
-    <button
-      class="btn w-full rounded-xl py-3 mt-4 font-bold"
-      onclick="toast('To‘lov provayderi hali ulanmagan. Premium faollashtirilmaydi.')">
-      To‘lov tizimi tez orada
-    </button>
-
-    <p class="text-[10px] muted mt-3">
-      Bu demo tarif oynasi. Hozircha to‘lov amalga oshirilmaydi.
-    </p>
-
-  </div>
-</div>
-
-<!-- ADMIN -->
-<div id="adminModal" class="modal">
-  <div class="glass rounded-2xl p-6 w-full max-w-md"
-    style="background:#171020">
-
-    <div class="flex justify-between">
-      <h2 class="font-bold text-amber-300">Admin Panel</h2>
-      <button onclick="closeModal('adminModal')">×</button>
-    </div>
-
-    <p class="text-sm mt-4">
-      Admin huquqi Supabase profilidagi role maydoni bilan tekshiriladi.
-    </p>
-
-    <p class="text-xs muted mt-2">
-      Global boshqaruv amallari uchun server tomondagi
-      himoyalangan API kerak.
-    </p>
-
-  </div>
-</div>
-
-<!-- TOAST -->
-<div id="toast"
-  class="fixed z-[100] bottom-5 left-1/2 -translate-x-1/2 glass rounded-full px-5 py-3 text-xs hide">
-  </div>
-  <script>
-const SUPABASE_URL='https://qjgnwremgeyajzpwybvb.supabase.co';
-const SUPABASE_KEY='sb_publishable_0NCWu1KZvXNN536AdoUpWw_o0c8Gb5V';
-
-const sb=window.supabase.createClient(
+const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
 
-let authMode='login';
-let user=null;
-let isAdmin=false;
-let apiKey='';
-let turns=[];
-let archive=[];
-let attached=null;
-let busy=false;
+// 2. ELEMENTLAR
+const $ = (id) => document.getElementById(id);
 
-/* TOAST */
-function toast(s){
-  let e=document.getElementById('toast');
-  e.textContent=s;
-  e.classList.remove('hide');
-  clearTimeout(toast.t);
-  toast.t=setTimeout(()=>e.classList.add('hide'),2800);
-}
+const authModal = $("authModal");
+const settingsModal = $("settingsModal");
+const premiumModal = $("premiumModal");
+const toastBox = $("toast");
 
-/* MODALS */
-function openModal(id){
-  document.getElementById(id).classList.add('open');
-}
+let currentUser = null;
+let currentSession = null;
+let isSignup = false;
+let chatHistory = [];
+let isSending = false;
 
-function closeModal(id){
-  document.getElementById(id).classList.remove('open');
-}
-
-/* SIDEBAR */
-function openSidebar(){
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('mobileShade').classList.add('open');
-}
-
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('mobileShade').classList.remove('open');
-}
-
-/* AUTH */
-function openAuth(mode){
-  authMode=mode;
-  updateAuthMode();
-  document.getElementById('authError').textContent='';
-  openModal('authModal');
-}
-
-function updateAuthMode(){
-  let r=authMode==='register';
-
-  document.getElementById('authTitle').textContent=
-    r?'Create Dima AI Account':'Welcome back';
-
-  document.getElementById('authSub').textContent=
-    r?'Yangi akkaunt yarating':'Akkauntingizga kiring';
-
-  document.getElementById('confirmWrap').classList.toggle('hide',!r);
-
-  document.getElementById('authSubmit').textContent=
-    r?'Sign Up':'Login';
-
-  document.getElementById('authSwitch').textContent=
-    r?'Already have an account? Login':
-    'Don’t have an account? Create an account';
-}
-
-function switchAuth(){
-  authMode=authMode==='login'?'register':'login';
-  updateAuthMode();
-}
-
-/* REGISTER / LOGIN */
-async function submitAuth(){
-
-  let email=document.getElementById('authEmail').value.trim();
-  let password=document.getElementById('authPassword').value;
-  let err=document.getElementById('authError');
-  let btn=document.getElementById('authSubmit');
-
-  err.textContent='';
-
-  if(!email||!password){
-    err.textContent='Email va parolni kiriting.';
+// 3. XABAR CHIQARISH
+function toast(message) {
+  if (!toastBox) {
+    alert(message);
     return;
   }
 
-  if(password.length<6){
-    err.textContent='Parol kamida 6 belgidan iborat bo‘lsin.';
-    return;
-  }
+  toastBox.textContent = message;
+  toastBox.classList.add("show");
 
-  if(
-    authMode==='register' &&
-    password!==document.getElementById('authPassword2').value
-  ){
-    err.textContent='Parollar mos emas.';
-    return;
-  }
+  clearTimeout(window.dimaToastTimer);
+  window.dimaToastTimer = setTimeout(() => {
+    toastBox.classList.remove("show");
+  }, 3000);
+}
 
-  btn.disabled=true;
-  btn.textContent='Kuting...';
+// 4. MODAL OCHISH VA YOPISH
+function openModal(modal) {
+  if (modal) modal.classList.add("show");
+}
 
-  try{
+function closeModal(modal) {
+  if (modal) modal.classList.remove("show");
+}
 
-    let r=authMode==='register'
-      ?await sb.auth.signUp({email,password})
-      :await sb.auth.signInWithPassword({email,password});
+function openAuth() {
+  openModal(authModal);
+}
 
-    if(r.error) throw r.error;
+$("closeAuth")?.addEventListener("click", () => closeModal(authModal));
+$("closeSettings")?.addEventListener("click", () => closeModal(settingsModal));
+$("closePremium")?.addEventListener("click", () => closeModal(premiumModal));
 
-    if(authMode==='register'&&!r.data.session){
-      err.textContent=
-        'Emailingizga tasdiqlash xati yuborildi. Tasdiqlab, keyin kiring.';
+$("settingsBtn")?.addEventListener("click", () => {
+  openModal(settingsModal);
+});
+
+$("premiumBtn")?.addEventListener("click", () => {
+  openModal(premiumModal);
+});
+
+// 5. KIRISH VA RO‘YXATDAN O‘TISH OYNASI
+$("loginBtn")?.addEventListener("click", openAuth);
+$("startBtn")?.addEventListener("click", openAuth);
+$("getStartedBtn")?.addEventListener("click", openAuth);
+
+function setAuthMode(signup) {
+  isSignup = signup;
+
+  $("loginTab")?.classList.toggle("active", !signup);
+  $("signupTab")?.classList.toggle("active", signup);
+
+  $("authTitle").textContent = signup
+    ? "Yangi hisob yarating"
+    : "Dima AI ga xush kelibsiz";
+
+  $("authSubtitle").textContent = signup
+    ? "Ma’lumotlaringizni kiriting."
+    : "Hisobingizga kiring.";
+
+  $("authSubmit").textContent = signup
+    ? "Hisob yaratish"
+    : "Kirish";
+
+  $("authName")?.classList.toggle("hide", !signup);
+  $("nameLabel")?.classList.toggle("hide", !signup);
+
+  $("authName").required = signup;
+  $("authMessage").textContent = "";
+}
+
+$("loginTab")?.addEventListener("click", () => setAuthMode(false));
+$("signupTab")?.addEventListener("click", () => setAuthMode(true));
+
+// 6. AUTH FORM
+$("authForm")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const email = $("authEmail").value.trim();
+  const password = $("authPassword").value;
+  const name = $("authName").value.trim();
+  const message = $("authMessage");
+  const submit = $("authSubmit");
+
+  submit.disabled = true;
+  submit.textContent = "Kuting...";
+  message.textContent = "";
+
+  try {
+    let result;
+
+    if (isSignup) {
+      result = await db.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name }
+        }
+      });
+    } else {
+      result = await db.auth.signInWithPassword({
+        email,
+        password
+      });
+    }
+
+    if (result.error) throw result.error;
+
+    if (isSignup && !result.data.session) {
+      message.textContent =
+        "Emailingizga tasdiqlash xabari yuborildi. Emailni tekshiring.";
+      toast("Emailni tasdiqlang.");
       return;
     }
 
-    await enterApp(r.data.user);
+    currentSession = result.data.session;
+    currentUser = result.data.user;
 
-  }catch(e){
+    closeModal(authModal);
+    updateAccountUI();
+    toast(isSignup ? "Hisob yaratildi!" : "Muvaffaqiyatli kirdingiz!");
 
-    err.textContent=e.message||'Xatolik yuz berdi.';
+  } catch (error) {
+    message.textContent = error.message || "Xatolik yuz berdi.";
+  } finally {
+    submit.disabled = false;
+    submit.textContent = isSignup ? "Hisob yaratish" : "Kirish";
+  }
+});
 
-  }finally{
+// 7. FOYDALANUVCHI HOLATINI TEKSHIRISH
+function updateAccountUI() {
+  const loginButton = $("loginBtn");
+  const startButton = $("startBtn");
+  const logoutButton = $("logoutBtn");
 
-    btn.disabled=false;
-    updateAuthMode();
-
+  if (currentUser) {
+    if (loginButton) loginButton.classList.add("hide");
+    if (startButton) startButton.classList.add("hide");
+    if (logoutButton) logoutButton.classList.remove("hide");
+  } else {
+    if (loginButton) loginButton.classList.remove("hide");
+    if (startButton) startButton.classList.remove("hide");
+    if (logoutButton) logoutButton.classList.add("hide");
   }
 }
 
-/* USER PROFILE AND ADMIN CHECK */
-async function enterApp(u){
+async function checkSession() {
+  const { data, error } = await db.auth.getSession();
 
-  user=u;
-  isAdmin=false;
-
-  let {data,error}=await sb
-    .from('profiles')
-    .select('role')
-    .eq('id',u.id)
-    .maybeSingle();
-
-  if(error) console.warn(error.message);
-
-  isAdmin=!!(data&&data.role==='admin');
-
-  closeModal('authModal');
-
-  document.getElementById('authHeaderBtn').classList.add('hide');
-  document.getElementById('logoutBtn').classList.remove('hide');
-
-  document.getElementById('sideEmail').textContent=
-    u.email||'Foydalanuvchi';
-
-  document.getElementById('adminBtn').classList.toggle('hide',!isAdmin);
-
-  toast(isAdmin?'Admin sifatida kirdingiz.':'Xush kelibsiz!');
-
-  closeSidebar();
-}
-
-/* LOGOUT */
-async function logout(){
-
-  await sb.auth.signOut();
-
-  user=null;
-  isAdmin=false;
-
-  document.getElementById('authHeaderBtn').classList.remove('hide');
-  document.getElementById('logoutBtn').classList.add('hide');
-  document.getElementById('adminBtn').classList.add('hide');
-  document.getElementById('sideEmail').textContent='Mehmon';
-  document.getElementById('sidePlan').textContent='Free Plan';
-
-  toast('Tizimdan chiqdingiz.');
-}
-
-/* NAVIGATION */
-function showView(view,button){
-
-  ['chat','archive','library'].forEach(v=>{
-    document.getElementById(v+'View').classList.toggle('hide',v!==view);
-  });
-
-  document.querySelectorAll('.navbtn[data-view]').forEach(b=>{
-    b.classList.remove('active');
-  });
-
-  if(button) button.classList.add('active');
-
-  closeSidebar();
-
-  if(view==='archive') renderArchive();
-}
-
-/* NEW CHAT */
-function newChat(){
-
-  if(turns.length){
-
-    archive.unshift({
-      title:
-        turns.find(x=>x.role==='user')?.parts?.[0]?.text?.slice(0,48)
-        ||'Yangi suhbat',
-      turns:[...turns]
-    });
-
-    document.getElementById('archiveCount').textContent=archive.length;
-  }
-
-  turns=[];
-
-  document.getElementById('chatMessages').innerHTML=`
-    <div id="welcome" class="m-auto text-center py-10">
-      <div class="w-14 h-14 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-600 mx-auto mb-5"></div>
-      <h1 class="text-2xl font-light">Ready to Create Something New?</h1>
-      <p class="muted text-sm mt-3">Dima AI bilan fikrlaringizni amalga oshiring.</p>
-    </div>
-  `;
-
-  showView('chat',document.querySelector('[data-view="chat"]'));
-}
-
-/* ARCHIVE */
-function renderArchive(){
-
-  let el=document.getElementById('archiveList');
-  el.innerHTML='';
-
-  if(!archive.length){
-    el.textContent='Hozircha arxiv bo‘sh.';
-    el.className='mt-5 muted text-sm';
+  if (error) {
+    toast("Hisobni tekshirishda xatolik.");
     return;
   }
 
-  archive.forEach(a=>{
+  currentSession = data.session;
+  currentUser = data.session?.user || null;
 
-    let b=document.createElement('button');
-    b.className='glass w-full text-left rounded-xl p-3 text-sm';
-    b.textContent=a.title;
-
-    b.onclick=()=>{
-
-      turns=[...a.turns];
-      document.getElementById('chatMessages').innerHTML='';
-
-      turns.forEach(t=>{
-        addMessage(
-          t.parts?.[0]?.text||'',
-          t.role==='user'?'user':'ai'
-        );
-      });
-
-      showView('chat',document.querySelector('[data-view="chat"]'));
-    };
-
-    el.appendChild(b);
-
-  });
+  updateAccountUI();
 }
 
-/* WORKSPACES */
-function newWorkspace(){
+db.auth.onAuthStateChange((_event, session) => {
+  currentSession = session;
+  currentUser = session?.user || null;
+  updateAccountUI();
+});
 
-  let name=prompt('Loyiha nomi:');
+checkSession();
 
-  if(!name) return;
+// 8. CHIQISH
+$("logoutBtn")?.addEventListener("click", async () => {
+  const { error } = await db.auth.signOut();
 
-  let b=document.createElement('button');
-  b.className='navbtn';
-  b.innerHTML='<i class="fa-regular fa-folder w-4"></i>';
-  b.append(document.createTextNode(name));
-
-  b.onclick=()=>{
-    setPrompt(name+' loyihasini rejalashtirib ber.');
-    showView('chat',document.querySelector('[data-view="chat"]'));
-  };
-
-  document.getElementById('projectList').appendChild(b);
-
-  closeSidebar();
-}
-
-/* PROMPT */
-function setPrompt(t){
-
-  document.getElementById('prompt').value=t;
-  document.getElementById('prompt').focus();
-
-  showView('chat',document.querySelector('[data-view="chat"]'));
-}
-
-/* FILE ATTACH */
-function attachFile(input){
-
-  attached=input.files?.[0]||null;
-
-  document.getElementById('attachedName').textContent=
-    attached?attached.name:'';
-
-  if(attached){
-    toast('Fayl tanlandi. Hozircha uning mazmuni AI ga yuborilmaydi.');
-  }
-}
-
-/* CHAT MESSAGE */
-function addMessage(text,who){
-
-  let w=document.getElementById('welcome');
-  if(w) w.remove();
-
-  let d=document.createElement('div');
-
-  d.className='msg '+(who==='user'?'user':'ai');
-  d.textContent=text;
-
-  document.getElementById('chatMessages').appendChild(d);
-
-  d.scrollIntoView({
-    behavior:'smooth',
-    block:'end'
-  });
-
-  return d;
-}
-
-/* SEND MESSAGE TO GEMINI */
-async function sendMessage(){
-
-  if(busy) return;
-
-  if(!user){
-    openAuth('login');
+  if (error) {
+    toast("Chiqishda xatolik: " + error.message);
     return;
   }
 
-  if(!apiKey){
-    toast('Gemini API kalitini Settings bo‘limida kiriting.');
-    openModal('settingsModal');
-    return;
-  }
+  currentUser = null;
+  currentSession = null;
+  updateAccountUI();
+  toast("Hisobdan chiqdingiz.");
+});
 
-  let input=document.getElementById('prompt');
-  let q=input.value.trim();
+// 9. CHAT XABARLARINI CHIQARISH
+function addMessage(text, sender) {
+  const messages = $("messages");
+  if (!messages) return;
 
-  if(!q) return;
+  const welcome = $("chatWelcome");
+  if (welcome) welcome.classList.add("hide");
 
-  input.value='';
-  busy=true;
+  const message = document.createElement("div");
+  message.className = "msg " + sender;
 
-  document.getElementById('sendBtn').disabled=true;
+  const content = document.createElement("div");
+  content.className = "msg-content";
+  content.textContent = text;
 
-  addMessage(q,'user');
+  message.appendChild(content);
+  messages.appendChild(message);
 
-  let pending=addMessage(
-    'Dima AI javob tayyorlamoqda…',
-    'ai'
-  );
+  messages.scrollTop = messages.scrollHeight;
+  return message;
+}
 
-  try{
+// 10. YANGI CHAT
+function newChat() {
+  chatHistory = [];
 
-    let model=document.getElementById('model').value;
+  if ($("messages")) $("messages").innerHTML = "";
+  $("chatWelcome")?.classList.remove("hide");
 
-    let res=await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/'
-      +encodeURIComponent(model)
-      +':generateContent?key='
-      +encodeURIComponent(apiKey),
-      {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
+  toast("Yangi suhbat boshlandi.");
+}
 
-          contents:[
-            ...turns,
-            {
-              role:'user',
-              parts:[{text:q}]
-            }
-          ],
+$("newChat")?.addEventListener("click", newChat);
 
+// 11. AI CHAT — API BILAN ULANISH
 async function sendMessage() {
-  if (busy) return;
+  if (isSending) return;
 
-  if (!user) {
-    openAuth('login');
+  const prompt = $("prompt");
+  const text = prompt?.value.trim();
+
+  if (!text) return;
+
+  if (!currentSession) {
+    toast("Avval hisobingizga kiring.");
+    openAuth();
     return;
   }
 
-  const input = document.getElementById('prompt');
-  const q = input.value.trim();
+  isSending = true;
 
-  if (!q) return;
+  const sendButton = $("sendBtn");
+  if (sendButton) sendButton.disabled = true;
 
-  input.value = '';
-  busy = true;
-  document.getElementById('sendBtn').disabled = true;
+  addMessage(text, "user");
+  prompt.value = "";
 
-  addMessage(q, 'user');
-
-  const pending = addMessage(
-    'Dima AI javob tayyorlamoqda…',
-    'ai'
-  );
+  const loading = addMessage("Dima AI javob tayyorlamoqda...", "assistant");
 
   try {
-    const { data, error } = await sb.auth.getSession();
-
-    if (error || !data.session?.access_token) {
-      throw new Error('Qayta tizimga kiring.');
-    }
-
-    const res = await fetch('/api/argon', {
-      method: 'POST',
+    const response = await fetch("/api/argon", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization':
-          'Bearer ' + data.session.access_token
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        prompt: q,
-        history: turns.slice(-12)
+        message: text,
+        history: chatHistory,
+        accessToken: currentSession.access_token
       })
     });
 
-    const result = await res.json();
+    const data = await response.json();
 
-    if (!res.ok) {
-      throw new Error(result.error || 'API xatosi.');
+    if (!response.ok) {
+      throw new Error(data.error || "AI serverda xatolik yuz berdi.");
     }
 
-    const answer = result.answer || 'Javob olinmadi.';
+    const answer =
+      data.reply ||
+      data.response ||
+      data.text ||
+      data.message ||
+      "AI javob qaytarmadi.";
 
-    pending.textContent = answer;
+    if (loading) {
+      loading.querySelector(".msg-content").textContent = answer;
+    }
 
-    turns.push(
-      { role: 'user', parts: [{ text: q }] },
-      { role: 'model', parts: [{ text: answer }] }
+    chatHistory.push(
+      { role: "user", parts: [{ text }] },
+      { role: "model", parts: [{ text: answer }] }
     );
 
-  } catch (e) {
-    pending.textContent = 'Xatolik: ' + e.message;
-    toast(e.message);
-
+  } catch (error) {
+    if (loading) {
+      loading.querySelector(".msg-content").textContent =
+        "Xatolik: " + error.message;
+    }
   } finally {
-    busy = false;
-    document.getElementById('sendBtn').disabled = false;
+    isSending = false;
+    if (sendButton) sendButton.disabled = false;
+    prompt?.focus();
   }
-                            }
-          
-
-/* API SETTINGS */
-function saveApiKey(){
-
-  apiKey=document.getElementById('apiKey').value.trim();
-
-  closeModal('settingsModal');
-
-  toast(
-    apiKey
-    ?'API kaliti shu sahifa sessiyasi uchun saqlandi.'
-    :'API kaliti kiritilmadi.'
-  );
 }
 
-/* EXPORT CHAT */
-function exportChat(){
+$("sendBtn")?.addEventListener("click", sendMessage);
 
-  if(!turns.length){
-    toast('Eksport qilish uchun chat bo‘sh.');
+$("prompt")?.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+// 12. TEZKOR SAVOLLAR
+document.querySelectorAll(".quickPrompts button, .quick-prompt").forEach((button) => {
+  button.addEventListener("click", () => {
+    const prompt = $("prompt");
+    if (!prompt) return;
+
+    prompt.value =
+      button.dataset.prompt ||
+      button.textContent.trim();
+
+    prompt.focus();
+  });
+});
+
+// 13. FAYL TANLASH
+$("attachBtn")?.addEventListener("click", () => {
+  $("fileInput")?.click();
+});
+
+$("fileInput")?.addEventListener("change", (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  toast("Tanlangan fayl: " + file.name);
+  toast("Faylni AI tahliliga yuborish funksiyasi hali ulanmagan.");
+  event.target.value = "";
+});
+
+// 14. CHATNI YUKLAB OLISH
+$("exportChat")?.addEventListener("click", () => {
+  const messages = $("messages");
+
+  if (!messages || !messages.innerText.trim()) {
+    toast("Yuklab olish uchun suhbat yo‘q.");
     return;
   }
 
-  let text=turns.map(t=>
-    (t.role==='user'?'Siz: ':'Dima AI: ')
-    +(t.parts?.[0]?.text||'')
-  ).join('\n\n');
+  const blob = new Blob([messages.innerText], {
+    type: "text/plain;charset=utf-8"
+  });
 
-  let blob=new Blob([text],{type:'text/plain'});
-  let url=URL.createObjectURL(blob);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
 
-  let a=document.createElement('a');
-  a.href=url;
-  a.download='dima-ai-chat.txt';
-  a.click();
+  link.href = url;
+  link.download = "dima-ai-chat.txt";
+  link.click();
 
   URL.revokeObjectURL(url);
-}
-
-/* ENTER TO SEND */
-document.getElementById('prompt').addEventListener('keydown',e=>{
-
-  if(e.key==='Enter'&&!e.shiftKey){
-    e.preventDefault();
-    sendMessage();
-  }
-
+  toast("Suhbat yuklab olindi.");
 });
 
-/* RESTORE SUPABASE SESSION */
-sb.auth.getSession().then(async({data,error})=>{
-
-  if(error) console.warn(error.message);
-
-  if(data?.session?.user){
-    await enterApp(data.session.user);
-  }
-
+// 15. TARIX, KUTUBXONA VA BOSHQA BO‘LIMLAR
+$("historyBtn")?.addEventListener("click", () => {
+  toast("Suhbatlar tarixi funksiyasi keyingi yangilanishda ulanadi.");
 });
 
+$("libraryBtn")?.addEventListener("click", () => {
+  toast("Kutubxona bo‘limi hozircha tayyorlanmoqda.");
+});
+
+$("imageBtn")?.addEventListener("click", () => {
+  toast("Rasm yaratish uchun alohida AI API ulash kerak.");
+});
+
+$("presentationBtn")?.addEventListener("click", () => {
+  toast("Prezentatsiya yaratish funksiyasi hali ulanmagan.");
+});
+
+$("devBtn")?.addEventListener("click", () => {
+  toast("Dasturlash rejimi tanlandi.");
+});
+
+// 16. PREMIUM
+$("premiumInfoBtn")?.addEventListener("click", () => {
+  toast("Premium to‘lov tizimi hali ulanmagan.");
+});
+
+// 17. SOZLAMALARNI SAQLASH
+$("saveSettings")?.addEventListener("click", () => {
+  const theme = $("themeSelect")?.value;
+
+  if (theme === "light") {
+    document.body.classList.add("light-theme");
+  } else {
+    document.body.classList.remove("light-theme");
+  }
+
+  toast("Sozlamalar qo‘llandi.");
+  closeModal(settingsModal);
+});
+
+// 18. MODEL TANLASH
+$("modelSelect")?.addEventListener("change", () => {
+  toast("Tanlangan model: " + $("modelSelect").selectedOptions[0].text);
+});
+
+// 19. SAHIFA YUKLANGANDA
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Dima AI ishga tushdi.");
+});
+
+console.log("Dima AI JavaScript yuklandi.");
 </script>
+
 </body>
 </html>
