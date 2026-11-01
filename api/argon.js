@@ -136,4 +136,4 @@ export default async function handler(req, res) {
       error: 'Serverda xatolik yuz berdi.'
     });
   }
-    }
+}
